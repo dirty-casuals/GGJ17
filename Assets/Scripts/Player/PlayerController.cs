@@ -41,12 +41,12 @@ public class PlayerController : MonoBehaviour {
         {
             switch (interactionHandle.eInteractionType)
             {
-                case InteractionPoint.InteractionPointType.IPT_FOOD_PRODUCT:
+                case Constants.InteractionPointType.IPT_FOOD_PRODUCT:
                 {
                     TaskPickupFoodItem(InteractGO);
                     break;
                 }
-                case InteractionPoint.InteractionPointType.IPT_CASHIER_TILL:
+                case Constants.InteractionPointType.IPT_CASHIER_TILL:
                 {
                     TaskProcessCustomerQueue();
                     break;

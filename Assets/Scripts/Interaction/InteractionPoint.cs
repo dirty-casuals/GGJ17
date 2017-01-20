@@ -4,16 +4,9 @@ using UnityEngine;
 
 public class InteractionPoint : MonoBehaviour
 {
-    public enum InteractionPointType
-    {
-        IPT_INVALID,
+    
 
-        IPT_CASHIER_TILL,
-        IPT_FOOD_PRODUCT,
-        IPT_FREEZER
-    };
-
-    public InteractionPointType eInteractionType;
+    public Constants.InteractionPointType eInteractionType;
     public float fInteractionRadius = 0.5f;
 
     private SphereCollider sCollision;
@@ -54,19 +47,19 @@ public class InteractionPoint : MonoBehaviour
     {
         switch(eInteractionType)
         {
-            case InteractionPointType.IPT_INVALID:
+            case Constants.InteractionPointType.IPT_INVALID:
                 Gizmos.color = Color.red;
             break;
 
-            case InteractionPointType.IPT_CASHIER_TILL:
+            case Constants.InteractionPointType.IPT_CASHIER_TILL:
                 Gizmos.color = new Color(255, 128, 0);
             break;
 
-            case InteractionPointType.IPT_FOOD_PRODUCT:
+            case Constants.InteractionPointType.IPT_FOOD_PRODUCT:
                 Gizmos.color = Color.green;
             break;
 
-            case InteractionPointType.IPT_FREEZER:
+            case Constants.InteractionPointType.IPT_FREEZER:
                 Gizmos.color = Color.blue;
             break;
         }

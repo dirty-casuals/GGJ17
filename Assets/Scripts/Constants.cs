@@ -15,6 +15,15 @@ public static class Constants
         PIT_ATTACK
     };
 
+    public enum InteractionPointType
+    {
+        IPT_INVALID,
+
+        IPT_CASHIER_TILL,
+        IPT_FOOD_PRODUCT,
+        IPT_FREEZER
+    };
+
     public const string HumanTag = "Pawn";
 
     public const int PlayerSpeedX = 6;
