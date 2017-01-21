@@ -6,6 +6,12 @@ public static class Constants
 {
     public const float TickInterval = 1.0f;
 
+    public enum PlayerState
+    {
+        PS_IDLE,
+        PS_USING_TILL,
+        PS_CARRYING_FOODITEM
+    };
 
     public enum InputType
     {
@@ -27,10 +33,26 @@ public static class Constants
         IPT_FREEZER
     };
 
+    public const int DefaultItemLayer = 0;
+    public const int CarriedFoodItemLayer = 8;
+
+    public const string PlaceableShelfTag = "FoodShelf";
+
     public const string PlayerTag = "Player";
     public const string PlayerCamPosTag = "PlayerCamPos";
+    public const string PlayerCarryPos = "PlayerHandPos";
 
     public const string CustomerRageBarTag = "RageBar";
+
+    public const string CustomerQueueTag = "CustomerQueue";
+
+
+    public const string IPProgressBarTag = "ProgressBar";
+    public const string IPProgressBarBGTag = "ProgressBarBG";
+    public const string IPProgressTextTag = "ProgressText";
+
+    public const float IPProgressTextBlinkTime = 0.75f;
+
 
     public const int PlayerSpeedX = 6;
     public const int PlayerSpeedZ = 6;
@@ -58,6 +80,10 @@ public static class Constants
     public const float CustomerRageInQueueIncreasePerTick = AvgQueueRageForGameFail / MaxCustomerWaitTime;
 
     public const float CustomerRageScaleFillRate = 2.5f;
+
+
+    public const float PlayerTillIncreasePerTick = 10.0f;
+    public const float PlayerTillProgressToReach = 100.0f;
     
 
     public const KeyCode upKey = KeyCode.W;
@@ -67,4 +93,10 @@ public static class Constants
 
     public const KeyCode interactionKey = KeyCode.E;
     public const KeyCode attackKey = KeyCode.Space;
+
+
+    public static float Normalise(float val, float min, float max)
+    {
+        return ( (val - min) / (max - min) );
+    }
 }

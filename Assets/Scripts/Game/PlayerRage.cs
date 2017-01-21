@@ -37,7 +37,7 @@ public class PlayerRage : MonoBehaviour
     public void Score_ProcessedCustomerItems(float fCustomerRage, float fCustomerWaitingTime)
     {
         //When putting items thru, the max score is decreased by customer rage and time waited
-        fPlayerScore += Constants.PlayerScoreIncreaseForProcessingItems - (fCustomerRage * (1 - NormalisedWaitingTime(fCustomerWaitingTime)));
+        fPlayerScore += Constants.PlayerScoreIncreaseForProcessingItems - (fCustomerRage * (1 - Constants.Normalise(fCustomerWaitingTime, 0, Constants.MaxCustomerWaitTime) ));
     }
 
 

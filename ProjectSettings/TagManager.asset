@@ -10,6 +10,12 @@ TagManager:
   - PlayerCamPos
   - RageBar
   - RageBarBG
+  - ProgressBar
+  - ProgressBarBG
+  - CustomerQueue
+  - ProgressText
+  - PlayerHandPos
+  - FoodShelf
   layers:
   - Default
   - TransparentFX
@@ -19,8 +25,8 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
+  - CarriedObject
+  - Shelf
   - 
   - 
   - 
