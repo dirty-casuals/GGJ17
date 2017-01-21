@@ -70,6 +70,7 @@ public static class StateNames
     public const string Init = "Init";
     public const string GotoItem = "GotoItem";
     public const string GotoTillQueue = "GotoTillQueue";
+    public const string WaitInQueue = "WaitInQueue";
     public const string Leave = "Leave";
 }
 
@@ -132,7 +133,7 @@ public class GotoTillQueueAIState : CustomerAIState
 {
     public override string state
     {
-        get { return StateNames.GotoItem; }
+        get { return StateNames.GotoTillQueue; }
     }
 
     public override void OnEnter()
@@ -143,9 +144,30 @@ public class GotoTillQueueAIState : CustomerAIState
 
     public override void Update()
     {
+        if( !customer.IsInQueue() )
+        {
+            Debug.Log( context.name );
+            customer.UpdateQueueLocation();
+        }
+        else
+        {
+            GotoState( StateNames.WaitInQueue );
+        }
+    }
+}
+
+public class WaitInQueueAIState : CustomerAIState
+{
+    public override string state
+    {
+        get { return StateNames.WaitInQueue; }
+    }
+
+    public override void Update()
+    {
         if( customer.IsInQueue() )
         {
-            customer.UpdateLocationInQueue();
+            customer.UpdateQueueLocation();
         }
         else
         {
@@ -195,6 +217,7 @@ public class CustomerAI : MonoBehaviour
         stateHandler.AddState( new InitAIState() );
         stateHandler.AddState( new GotoItemAIState() );
         stateHandler.AddState( new GotoTillQueueAIState() );
+        stateHandler.AddState( new WaitInQueueAIState() );
 
         stateHandler.GotoState( StateNames.Init );
     }
@@ -286,20 +309,20 @@ public class CustomerAI : MonoBehaviour
     public void GoToQueue( CustomerQueue queue )
     {
         this.queue = queue;
-        if( queue.AddCustomer( this ) )
-        {
-            UpdateLocationInQueue();
-        }
+        UpdateQueueLocation();
     }
 
-    public void UpdateLocationInQueue()
+    public void UpdateQueueLocation()
     {
         Vector3 targetLocation;
         int palceInQueue;
 
-        if( queue.GetCustomerQueueLocation( this, out targetLocation, out palceInQueue ) )
+        bool isInQueue = queue.GetCustomerQueueLocation( this, out targetLocation, out palceInQueue );
+        agent.SetDestination( targetLocation );
+
+        if( !isInQueue && Vector3.Distance( transform.position, targetLocation ) <= 1 )
         {
-            agent.SetDestination( targetLocation );
+            queue.AddCustomer( this );
         }
     }
 
