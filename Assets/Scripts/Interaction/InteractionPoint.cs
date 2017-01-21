@@ -4,7 +4,16 @@ using UnityEngine;
 
 public class InteractionPoint : MonoBehaviour
 {
-    
+    //Progress stuff - not all interaction points have this
+    private float fCurrentProgressForScaling;
+    private float fLastProgressForScaling;
+    private GameObject goProgressBar, goProgressBarBG, goProcessingText;
+    private float fProgress;
+    private float fProgressMax;
+    private float fProgressTextBlinkTimer;
+
+
+    private bool bInUse;
 
     public Constants.InteractionPointType eInteractionType;
     public float fInteractionRadius = 0.5f;
@@ -17,12 +26,90 @@ public class InteractionPoint : MonoBehaviour
 
         sCollision.radius = fInteractionRadius;
         sCollision.isTrigger = true;
+
+        foreach (Transform child in transform)
+        {
+            if (child.tag == Constants.IPProgressBarTag)
+            {
+                goProgressBar = child.gameObject;
+                fProgressMax = goProgressBar.transform.localScale.x;
+
+                Vector3 vNewScale = goProgressBar.transform.localScale;
+                vNewScale.x = 0;
+                goProgressBar.transform.localScale = vNewScale;
+            }
+
+            if (child.tag == Constants.IPProgressBarBGTag)
+            {
+                goProgressBarBG = child.gameObject;
+            }
+
+            if (child.tag == Constants.IPProgressTextTag)
+            {
+                goProcessingText = child.gameObject;
+                goProcessingText.SetActive(false);
+            }
+        }
 	}
+
+    public void SetInUse(bool inUse)
+    {
+        bInUse = inUse;
+    }
+
+    public bool InUse()
+    {
+        return bInUse;
+    }
+
+    public float GetProgress()
+    {
+        return fProgress;
+    }
+
+    public void AddProgress(float prog)
+    {
+        fProgress += prog;
+    }
+
+    public void ResetProgress()
+    {
+        fLastProgressForScaling = 0;
+        fCurrentProgressForScaling = 0;
+        fProgress = 0;
+        fProgressTextBlinkTimer = 0;
+    }
+
+    //We can use the UI as a measure instead so it looks like the bar has fully filled up
+    public bool HasProgressCompleted(bool bUseUI = true)
+    {
+        return bUseUI ? fCurrentProgressForScaling >= Constants.PlayerTillProgressToReach : fProgress >= Constants.PlayerTillProgressToReach;
+    }
 	
 	// Update is called once per frame
 	void Update ()
     {
-		
+        if (bInUse)
+        {
+            fLastProgressForScaling = fCurrentProgressForScaling;
+            fCurrentProgressForScaling = Mathf.Lerp(fCurrentProgressForScaling, fProgress, Constants.CustomerRageScaleFillRate * Time.deltaTime);
+
+            //Update the UI
+            if (fCurrentProgressForScaling != fLastProgressForScaling)
+            {
+                Vector3 vNewScale = goProgressBar.transform.localScale;
+                vNewScale.x = fProgressMax * Constants.Normalise(fCurrentProgressForScaling, 0, Constants.PlayerTillProgressToReach);
+                goProgressBar.transform.localScale = vNewScale;
+            }
+
+            fProgressTextBlinkTimer += Time.deltaTime;
+
+            if (fProgressTextBlinkTimer >= Constants.IPProgressTextBlinkTime)
+            {
+                fProgressTextBlinkTimer = 0;
+                goProcessingText.SetActive(!goProcessingText.activeSelf);
+            }
+        }
 	}
 
     void OnTriggerStay(Collider other)
@@ -35,7 +122,6 @@ public class InteractionPoint : MonoBehaviour
             }
         }
     }
-
     private void ProcessInteraction(GameObject other)
     {
         Debug.Log("Player Interacted with me");

@@ -10,6 +10,9 @@ TagManager:
   - PlayerCamPos
   - RageBar
   - RageBarBG
+  - ProgressBar
+  - ProgressBarBG
+  - CustomerQueue
   layers:
   - Default
   - TransparentFX

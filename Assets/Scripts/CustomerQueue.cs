@@ -2,6 +2,12 @@
 
 public class CustomerQueue : MonoBehaviour
 {
+    void Update()
+    {
+
+    }
+
+
     /// <summary>
     /// Returns the next customer or null if the queue is empty.
     /// </summary>    

@@ -40,8 +40,6 @@ public class CustomerRage : MonoBehaviour
                 vNewScale.x = 0;
                 goRageBar.transform.localScale = vNewScale;
 
-
-
                 break;
             }
         }
@@ -66,6 +64,7 @@ public class CustomerRage : MonoBehaviour
 
         if (fLastRageForScaling != fCurrentRageForScaling)
         {
+            //redo this
             goRageBar.transform.localScale += new Vector3(fCurrentRageForScaling, 0, 0);
         }
 	}
