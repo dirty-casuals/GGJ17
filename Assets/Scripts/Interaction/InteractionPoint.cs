@@ -42,11 +42,14 @@ public class InteractionPoint : MonoBehaviour
                 Vector3 vNewScale = goProgressBar.transform.localScale;
                 vNewScale.x = 0;
                 goProgressBar.transform.localScale = vNewScale;
+
+                goProgressBar.SetActive(false);
             }
 
             if (child.tag == Constants.IPProgressBarBGTag)
             {
                 goProgressBarBG = child.gameObject;
+                goProgressBarBG.SetActive(false);
             }
 
             if (child.tag == Constants.IPProgressTextTag)
@@ -121,6 +124,16 @@ public class InteractionPoint : MonoBehaviour
                 goShelfBeingPlacedOnTo = other.gameObject;
             }
         }
+
+        if (bInUse && other.tag == Constants.PlayerTag)
+        {
+            if(!goProgressBar.activeSelf && !goProgressBarBG.activeSelf &&
+               eInteractionType == Constants.InteractionPointType.IPT_CASHIER_TILL)
+            {
+                goProgressBar.SetActive(true);
+                goProgressBarBG.SetActive(true);
+            }
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -128,6 +141,16 @@ public class InteractionPoint : MonoBehaviour
         if(bInUse)
         {
             bCanBePlaced = false;
+        }
+
+        if (other.tag == Constants.PlayerTag)
+        {
+            if(goProgressBar.activeSelf && goProgressBarBG.activeSelf &&
+                eInteractionType == Constants.InteractionPointType.IPT_CASHIER_TILL)
+            {
+                goProgressBar.SetActive(false);
+                goProgressBarBG.SetActive(false);
+            }
         }
     }
 
@@ -184,9 +207,16 @@ public class InteractionPoint : MonoBehaviour
 
         if(goProcessingText)
             goProcessingText.SetActive(false);
+
+        if(goProgressBar)
+            goProgressBar.SetActive(false);
+        if(goProgressBarBG)
+            goProgressBarBG.SetActive(false);
        
         if(bOnlyClearProcessingText)
             return;
+
+        
 
         fLastProgressForScaling = 0;
         fCurrentProgressForScaling = 0;
@@ -216,7 +246,7 @@ public class InteractionPoint : MonoBehaviour
             }
 
             Vector3 shelfPos = goShelfBeingPlacedOnTo.transform.position;
-            Vector3 shelfScale = goShelfBeingPlacedOnTo.transform.localScale;
+            Vector3 shelfScale = goShelfBeingPlacedOnTo.GetComponent<BoxCollider>().size;
 
             //top side of shelf
             if(vNewPos.z > shelfPos.z)
