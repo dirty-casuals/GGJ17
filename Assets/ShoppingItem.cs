@@ -12,7 +12,7 @@ public class ShoppingItem : MonoBehaviour
 
     public Vector3 position { get { return transform.position; } }
 
-    void Start()
+    void Awake()
     {
         originalPlace = transform.position;
 
