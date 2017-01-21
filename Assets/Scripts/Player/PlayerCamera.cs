@@ -5,7 +5,6 @@ using UnityEngine;
 public class PlayerCamera : MonoBehaviour {
 
     private GameObject goPlayerHandle;
-    private GameObject goDesiredPosition;
 
 	// Use this for initialization
 	void Start () {
@@ -15,16 +14,6 @@ public class PlayerCamera : MonoBehaviour {
         {
             Debug.Assert(true, "Unable to find player GameObject! :(");
             Debug.Break();
-        }
-        else
-        {
-            goDesiredPosition = GameObject.FindGameObjectWithTag(Constants.PlayerCamPosTag);
-
-            if(!goDesiredPosition)
-            {
-                Debug.Assert(true, "Unable to find player cam pos GameObject! :(");
-                Debug.Break();
-            }
         }
 	}
 	
@@ -37,9 +26,9 @@ public class PlayerCamera : MonoBehaviour {
 
         Vector3 vNewPos = this.transform.position;
 
-        vNewPos.x = Mathf.Lerp(this.transform.position.x, goDesiredPosition.transform.position.x, Constants.PlayerCamFollowSpeed * Time.deltaTime);
-        vNewPos.y = Mathf.Lerp(this.transform.position.y, goDesiredPosition.transform.position.y, Constants.PlayerCamFollowSpeed * Time.deltaTime);
-        vNewPos.z = Mathf.Lerp(this.transform.position.z, goDesiredPosition.transform.position.z, Constants.PlayerCamFollowSpeed * Time.deltaTime);
+        vNewPos.x = Mathf.Lerp(this.transform.position.x, goPlayerHandle.transform.position.x,                                 Constants.PlayerCamFollowSpeed * Time.deltaTime);
+        vNewPos.y = Mathf.Lerp(this.transform.position.y, goPlayerHandle.transform.position.y + Constants.PlayerCameraOffsetY, Constants.PlayerCamFollowSpeed * Time.deltaTime);
+        vNewPos.z = Mathf.Lerp(this.transform.position.z, goPlayerHandle.transform.position.z + Constants.PlayerCameraOffsetZ, Constants.PlayerCamFollowSpeed * Time.deltaTime);
 
         this.transform.position = vNewPos;
 	}
