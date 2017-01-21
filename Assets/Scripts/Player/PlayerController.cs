@@ -5,18 +5,31 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour {
 
     Constants.PlayerState ePlayerState;
-    private GameObject goCurrentInteractionGO;
+    private GameObject goCurrentInteractionGO, goPlayerCarry;
     private CustomerQueue goCurrentQueueHandle;
     private InteractionPoint currentInteractionHandle;
 
     //till processing
     private float fTimeAtTill;
+    private float fTimeCarryingItem;
     
 
 	// Use this for initialization
-	void Start () {
-		
+	void Start ()
+    {
+        foreach (Transform child in transform)
+        {
+            if (child.tag == Constants.PlayerCarryPos)
+            {
+                goPlayerCarry = child.gameObject;
+            }
+        }
 	}
+
+    public bool IsAbleToInteract()
+    {
+        return (ePlayerState == Constants.PlayerState.PS_IDLE);
+    }
 	
 	// Update is called once per frame
 	void Update ()
@@ -28,6 +41,11 @@ public class PlayerController : MonoBehaviour {
             case Constants.PlayerState.PS_USING_TILL:
             {
                 TaskProcessCustomerQueue();
+                break;
+            }
+            case Constants.PlayerState.PS_CARRYING_FOODITEM:
+            {
+                TaskPickupFoodItem();
                 break;
             }
         }
@@ -45,7 +63,12 @@ public class PlayerController : MonoBehaviour {
             {
                 case Constants.InteractionPointType.IPT_FOOD_PRODUCT:
                 {
-                    TaskPickupFoodItem(InteractGO);
+                    ePlayerState = Constants.PlayerState.PS_CARRYING_FOODITEM;
+                    fTimeCarryingItem = 0;
+                    currentInteractionHandle.SetInUse(true);
+                    goCurrentInteractionGO.layer = Constants.CarriedFoodItemLayer;
+                    //InteractGO.GetComponent<HingeJoint>().connectedBody = goPlayerCarry.GetComponent<Rigidbody>();
+                    
                     break;
                 }
                 case Constants.InteractionPointType.IPT_CASHIER_TILL:
@@ -60,9 +83,18 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    void TaskPickupFoodItem(GameObject go)
+    void TaskPickupFoodItem()
     {
+        goCurrentInteractionGO.transform.position = goPlayerCarry.transform.position;
+        fTimeCarryingItem += Time.deltaTime;
 
+        if(currentInteractionHandle.CanBePlaced() && fTimeCarryingItem > 0.5f) //just make sure it isn't instantly placed back down
+        {
+            if (PlayerInput.QueryPlayerInput(Constants.InputType.PIT_INTERACT, true))
+            {
+                CleanupInteraction();
+            }
+        }
     }
 
     void TaskProcessCustomerQueue()
@@ -99,8 +131,12 @@ public class PlayerController : MonoBehaviour {
 
     void CleanupInteraction()
     {
+        goCurrentInteractionGO.layer = Constants.DefaultItemLayer;
+
         currentInteractionHandle.SetInUse(false);
         ePlayerState = Constants.PlayerState.PS_IDLE;
+
+        goCurrentInteractionGO = null;
         goCurrentQueueHandle = null;
         currentInteractionHandle = null;
     }

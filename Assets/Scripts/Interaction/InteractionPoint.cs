@@ -14,6 +14,8 @@ public class InteractionPoint : MonoBehaviour
 
 
     private bool bInUse;
+    private bool bCanBePlaced = false;
+
 
     public Constants.InteractionPointType eInteractionType;
     public float fInteractionRadius = 0.5f;
@@ -52,33 +54,7 @@ public class InteractionPoint : MonoBehaviour
         }
 	}
 
-    public void SetInUse(bool inUse)
-    {
-        bInUse = inUse;
-    }
 
-    public bool InUse()
-    {
-        return bInUse;
-    }
-
-    public float GetProgress()
-    {
-        return fProgress;
-    }
-
-    public void AddProgress(float prog)
-    {
-        fProgress += prog;
-    }
-
-    public void ResetProgress()
-    {
-        fLastProgressForScaling = 0;
-        fCurrentProgressForScaling = 0;
-        fProgress = 0;
-        fProgressTextBlinkTimer = 0;
-    }
 
     //We can use the UI as a measure instead so it looks like the bar has fully filled up
     public bool HasProgressCompleted(bool bUseUI = true)
@@ -89,7 +65,7 @@ public class InteractionPoint : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-        if (bInUse)
+        if (bInUse && eInteractionType == Constants.InteractionPointType.IPT_CASHIER_TILL)
         {
             fLastProgressForScaling = fCurrentProgressForScaling;
             fCurrentProgressForScaling = Mathf.Lerp(fCurrentProgressForScaling, fProgress, Constants.CustomerRageScaleFillRate * Time.deltaTime);
@@ -110,18 +86,44 @@ public class InteractionPoint : MonoBehaviour
                 goProcessingText.SetActive(!goProcessingText.activeSelf);
             }
         }
+        else if(bInUse && eInteractionType == Constants.InteractionPointType.IPT_FOOD_PRODUCT)
+        {
+            
+        }
 	}
+
+
 
     void OnTriggerStay(Collider other)
     {
-        if(other.tag == Constants.PlayerTag)
+        if (!bInUse)
         {
-            if(PlayerInput.QueryPlayerInput(Constants.InputType.PIT_INTERACT, true))
+            if (other.tag == Constants.PlayerTag)
             {
-                ProcessInteraction(other.gameObject);
+                if(other.GetComponent<PlayerController>().IsAbleToInteract())
+                {
+                    if (PlayerInput.QueryPlayerInput(Constants.InputType.PIT_INTERACT, true))
+                    {
+                        ProcessInteraction(other.gameObject);
+                    }
+                }
             }
         }
+        else
+        {
+            Debug.Log("Other tag: " + Constants.PlaceableShelfTag);
+            bCanBePlaced = (other.tag == Constants.PlaceableShelfTag);
+        }
     }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if(bInUse)
+        {
+            bCanBePlaced = false;
+        }
+    }
+
     private void ProcessInteraction(GameObject other)
     {
         Debug.Log("Player Interacted with me");
@@ -151,5 +153,32 @@ public class InteractionPoint : MonoBehaviour
         }
         
         Gizmos.DrawWireSphere(transform.position, fInteractionRadius);
+    }
+        public void SetInUse(bool inUse)
+    {
+        bInUse = inUse;
+    }
+    public bool InUse()
+    {
+        return bInUse;
+    }
+    public float GetProgress()
+    {
+        return fProgress;
+    }
+    public bool CanBePlaced()
+    {
+        return bCanBePlaced;
+    }
+    public void AddProgress(float prog)
+    {
+        fProgress += prog;
+    }
+    public void ResetProgress()
+    {
+        fLastProgressForScaling = 0;
+        fCurrentProgressForScaling = 0;
+        fProgress = 0;
+        fProgressTextBlinkTimer = 0;
     }
 }

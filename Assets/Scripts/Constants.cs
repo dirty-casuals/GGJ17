@@ -9,7 +9,8 @@ public static class Constants
     public enum PlayerState
     {
         PS_IDLE,
-        PS_USING_TILL
+        PS_USING_TILL,
+        PS_CARRYING_FOODITEM
     };
 
     public enum InputType
@@ -32,8 +33,14 @@ public static class Constants
         IPT_FREEZER
     };
 
+    public const int DefaultItemLayer = 0;
+    public const int CarriedFoodItemLayer = 8;
+
+    public const string PlaceableShelfTag = "FoodShelf";
+
     public const string PlayerTag = "Player";
     public const string PlayerCamPosTag = "PlayerCamPos";
+    public const string PlayerCarryPos = "PlayerHandPos";
 
     public const string CustomerRageBarTag = "RageBar";
 
