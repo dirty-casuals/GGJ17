@@ -36,7 +36,11 @@ public static class Constants
     public const int PlayerSpeedZ = 6;
 
     public const float PlayerCamFollowSpeed = 2.0f;
+    public const float PlayerRotationSpeed = 5.0f;
 
+
+    public const float PlayerCameraOffsetY = 10.0f;
+    public const float PlayerCameraOffsetZ = -5.0f;
 
 
     public const float AvgQueueRageForGameFail = 75.0f;

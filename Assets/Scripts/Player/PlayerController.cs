@@ -17,19 +17,23 @@ public class PlayerController : MonoBehaviour {
 		if(PlayerInput.QueryPlayerInput(Constants.InputType.PIT_UP))
         {
             this.transform.position += new Vector3(0, 0, Constants.PlayerSpeedZ) * Time.deltaTime;
+            this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, Quaternion.Euler(Vector3.up), Constants.PlayerRotationSpeed * Time.deltaTime);
         }
         else if(PlayerInput.QueryPlayerInput(Constants.InputType.PIT_DOWN))
         {
             this.transform.position -= new Vector3(0, 0, Constants.PlayerSpeedZ) * Time.deltaTime;
+            this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, Quaternion.Euler(Vector3.up*180), Constants.PlayerRotationSpeed * Time.deltaTime);
         }
 
         if(PlayerInput.QueryPlayerInput(Constants.InputType.PIT_LEFT))
         {
             this.transform.position -= new Vector3(Constants.PlayerSpeedX, 0, 0) * Time.deltaTime;
+            this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, Quaternion.Euler(Vector3.down*90), Constants.PlayerRotationSpeed * Time.deltaTime);
         }
         else if(PlayerInput.QueryPlayerInput(Constants.InputType.PIT_RIGHT))
         {
             this.transform.position += new Vector3(Constants.PlayerSpeedX, 0, 0) * Time.deltaTime;
+            this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, Quaternion.Euler(Vector3.up*90), Constants.PlayerRotationSpeed * Time.deltaTime);
         }
 	}
 
