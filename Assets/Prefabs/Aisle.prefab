@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 65700373518488228}
   - component: {fileID: 23793675095126450}
   - component: {fileID: 54603056219925684}
-  - component: {fileID: 65670946985612544}
+  - component: {fileID: 65349914216108794}
   m_Layer: 9
   m_Name: Aisle
   m_TagString: FoodShelf
@@ -53,7 +53,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1017913754314332}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 6, y: 2, z: -13}
+  m_LocalPosition: {x: -6, y: 2, z: -21}
   m_LocalScale: {x: 16, y: 4, z: 3}
   m_Children:
   - {fileID: 4826219757717546}
@@ -124,9 +124,9 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 126
   m_CollisionDetection: 0
---- !u!65 &65670946985612544
+--- !u!65 &65349914216108794
 BoxCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
