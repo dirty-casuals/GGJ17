@@ -178,7 +178,10 @@ public class PlayerController : MonoBehaviour, IPawn
     private void UpdatePlayerMovement()
     {
         if( QueryPlayerInput( Constants.InputType.PIT_CAMERA_ZOOM_OUT ) )
+        {
+            isMoving = false;
             return;
+        }
 
         Vector3 motion = Vector3.zero;
 
