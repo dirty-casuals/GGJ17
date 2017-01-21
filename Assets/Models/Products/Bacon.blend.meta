@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 663f6652bc86544d8a3b4201d1ca57be
-timeCreated: 1484995319
+guid: c61df1a58ddc54647bb6a53b8930b14e
+timeCreated: 1484997663
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -9,7 +9,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Bananas
+    4300000: Bacon
     7400000: Default Take
     9500000: //RootNode
   materials:
