@@ -78,7 +78,8 @@ public class PlayerController : MonoBehaviour, IPawn
     public void Score_ProcessedCustomerItems( float fCustomerRage, float fCustomerWaitingTime )
     {
         //When putting items thru, the max score is decreased by customer rage and time waited
-        fPlayerScore += Constants.PlayerScoreIncreaseForProcessingItems - (fCustomerRage * (1 - Constants.Normalise( fCustomerWaitingTime, 0, Constants.MaxCustomerWaitTime )));
+        fPlayerScore += Constants.PlayerScoreIncreaseForProcessingItems - (fCustomerRage * Constants.Normalise( fCustomerWaitingTime, 0, Constants.MaxCustomerWaitTime ));
+        GameObject.FindGameObjectWithTag( Constants.UIControllerTag ).GetComponent<UIController>().UpdateScore( fPlayerScore );
     }
     public void Rage_ProcessedCustomerItems()
     {
@@ -107,11 +108,11 @@ public class PlayerController : MonoBehaviour, IPawn
                 //done with the current customer!
                 if( currentInteractionScript.HasProgressCompleted() )
                 {
-                    currentInteractionScript.ResetProgress();
-                    goCurrentQueueHandle.ReleaseCurrentCustomer();
-
                     Rage_ProcessedCustomerItems();
                     Score_ProcessedCustomerItems( goCurrentQueueHandle.GetCurrentCustomerRage(), goCurrentQueueHandle.GetCurrentCustomerTimeInQueue() );
+
+                    currentInteractionScript.ResetProgress();
+                    goCurrentQueueHandle.ReleaseCurrentCustomer();
 
                     if( goCurrentQueueHandle.GetCustomerCount() <= 1 )
                     {
@@ -150,9 +151,12 @@ public class PlayerController : MonoBehaviour, IPawn
     //Getters
     public bool IsAbleToInteract()
     {
-        return (ePlayerState == Constants.PlayerState.PS_IDLE);
+        return (!QueryPlayerInput( Constants.InputType.PIT_CAMERA_ZOOM_OUT ) && ePlayerState == Constants.PlayerState.PS_IDLE);
     }
-
+    public bool IsServingCustomer()
+    {
+        return (ePlayerState == Constants.PlayerState.PS_USING_TILL);
+    }
 
     //Player movement and input
     public bool QueryPlayerInput( Constants.InputType eType, bool bJustPressed = false )
@@ -163,15 +167,19 @@ public class PlayerController : MonoBehaviour, IPawn
             case Constants.InputType.PIT_DOWN: { return (!bJustPressed) ? Input.GetKey( Constants.downKey ) : Input.GetKeyDown( Constants.downKey ); }
             case Constants.InputType.PIT_LEFT: { return (!bJustPressed) ? Input.GetKey( Constants.leftKey ) : Input.GetKeyDown( Constants.leftKey ); }
             case Constants.InputType.PIT_RIGHT: { return (!bJustPressed) ? Input.GetKey( Constants.rightKey ) : Input.GetKeyDown( Constants.rightKey ); }
-
             case Constants.InputType.PIT_INTERACT: { return (!bJustPressed) ? Input.GetKey( Constants.interactionKey ) : Input.GetKeyDown( Constants.interactionKey ); }
             case Constants.InputType.PIT_ATTACK: { return (!bJustPressed) ? Input.GetKey( Constants.attackKey ) : Input.GetKeyDown( Constants.attackKey ); }
+
+            case Constants.InputType.PIT_CAMERA_ZOOM_OUT: { return (!bJustPressed) ? Input.GetKey( Constants.zoomKey ) : Input.GetKeyDown( Constants.zoomKey ); }
         }
 
         return false;
     }
     private void UpdatePlayerMovement()
     {
+        if( QueryPlayerInput( Constants.InputType.PIT_CAMERA_ZOOM_OUT ) )
+            return;
+
         Vector3 motion = Vector3.zero;
 
         if( QueryPlayerInput( Constants.InputType.PIT_UP ) )
@@ -207,6 +215,7 @@ public class PlayerController : MonoBehaviour, IPawn
         currentInteractionGameObject.layer = Constants.DefaultItemLayer;
 
         currentInteractionScript.SetInUse( false );
+        currentInteractionScript.ResetProgress( true );
         ePlayerState = Constants.PlayerState.PS_IDLE;
 
         fTaskTime = 0;

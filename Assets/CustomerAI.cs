@@ -317,7 +317,7 @@ public class CustomerAI : MonoBehaviour, IPawn
     {
         HashSet<ShoppingItem> itemIds = new HashSet<ShoppingItem>();
 
-        int numTargets = Random.Range(2,3);
+        int numTargets = 1;//Random.Range(2,3);
         while( itemIds.Count <= numTargets )
         {
             int id = Random.Range(0, ShoppingItem.items.Length-1 );
@@ -436,6 +436,12 @@ public class CustomerAI : MonoBehaviour, IPawn
     public bool IsInQueue()
     {
         return queue != null && queue.Contains( this );
+    }
+
+    public bool IsBeingServed()
+    {
+        //Current customer and is player interacting
+        return (queue.GetCurrentCustomer() == this && queue.IsPlayerUsingTill());
     }
 
     public void GoToGate()

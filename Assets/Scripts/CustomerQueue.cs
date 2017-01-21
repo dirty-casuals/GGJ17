@@ -20,6 +20,11 @@ public class CustomerQueue : MonoBehaviour
         }
     }
 
+    public bool IsPlayerUsingTill()
+    {
+        return this.GetComponent<InteractionPoint>().InUse();
+    }
+
     /// <summary>
     /// Returns the queue the player deals with
     /// </summary>
