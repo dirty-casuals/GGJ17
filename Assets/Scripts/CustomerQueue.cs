@@ -4,10 +4,21 @@ using UnityEngine;
 
 public class CustomerQueue : MonoBehaviour
 {
+    Transform queueStart;
     float customerSpacing = 1.4f;
 
     List<CustomerAI> customerQueue = new List<CustomerAI>();
 
+
+    private void Start()
+    {
+        queueStart = transform.FindChild( "QueueStart" );
+
+        if( queueStart == null )
+        {
+            queueStart = transform;
+        }
+    }
 
     /// <summary>
     /// Returns the queue the player deals with
@@ -74,7 +85,7 @@ public class CustomerQueue : MonoBehaviour
 
         }
 
-        location = transform.position + transform.forward * position * customerSpacing;
+        location = queueStart.position + queueStart.forward * position * customerSpacing;
         return isInQueue;
     }
 
