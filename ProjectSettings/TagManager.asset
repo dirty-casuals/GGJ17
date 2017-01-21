@@ -19,6 +19,7 @@ TagManager:
   - ShelfHeightGO
   - ScoreUI
   - UIController
+  - InteractionPrompt
   layers:
   - Default
   - TransparentFX
@@ -30,7 +31,7 @@ TagManager:
   - 
   - CarriedObject
   - Shelf
-  - 
+  - InteractionUI
   - 
   - 
   - 

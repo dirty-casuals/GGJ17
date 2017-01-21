@@ -181,7 +181,9 @@ public class InteractionPoint : MonoBehaviour
     {
 
         fProgressTextBlinkTimer = Constants.IPProgressTextBlinkTime; //so it instantly comes on
-        goProcessingText.SetActive(false);
+
+        if(goProcessingText)
+            goProcessingText.SetActive(false);
        
         if(bOnlyClearProcessingText)
             return;

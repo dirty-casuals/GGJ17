@@ -59,6 +59,8 @@ public static class Constants
     public const string ScoreUITag = "ScoreUI";
     public const string UIControllerTag = "UIController";
 
+    public const string PlayerInteractionPromptTag = "InteractionPrompt";
+
     public const float IPProgressTextBlinkTime = 0.75f;
 
 
