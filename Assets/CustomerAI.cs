@@ -7,7 +7,7 @@ public class StateHandler
     public Object context { get; private set; }
     private Dictionary<string, AIState> stateMap;
 
-    private string currentState;
+    public string currentState { get; private set; }
 
     public StateHandler( Object context )
     {
@@ -228,7 +228,7 @@ public class CustomerAI : MonoBehaviour, IPawn
     public bool isDead { get; private set; }
 
     const int SIGHT_RADIUS = 1;
-    const int DISTANCE_FROM_DESTINATION = 1;
+    const int DISTANCE_FROM_DESTINATION = 2;
     StateHandler stateHandler;
     NavMeshAgent agent;
 
@@ -259,8 +259,12 @@ public class CustomerAI : MonoBehaviour, IPawn
         }
     }
 
+    public string currentState
+    {
+        get { return stateHandler.currentState; }
+    }
 
-    private ShoppingItem currentItem
+    public ShoppingItem currentItem
     {
         get
         {
@@ -313,14 +317,14 @@ public class CustomerAI : MonoBehaviour, IPawn
     {
         stateHandler = new StateHandler( this );
         stateHandler.AddState( new InitAIState() );
-        stateHandler.AddState( new GotoItemAIState() );        
+        stateHandler.AddState( new GotoItemAIState() );
         stateHandler.AddState( new GotoTillQueueAIState() );
         stateHandler.AddState( new TakeItemAIState() );
         stateHandler.AddState( new WaitInQueueAIState() );
         stateHandler.AddState( new LeaveStoreAIState() );
 
         stateHandler.GotoState( StateNames.Init );
-    }
+    }    
 
     public void SetRandomItemTargets()
     {
