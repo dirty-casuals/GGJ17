@@ -49,10 +49,16 @@ public class PlayerController : MonoBehaviour, IPawn
         }
 
         if(!goCarryPosition)
+        {
+            Debug.LogError("failed here!");
             Debug.Break();
+        }
 
         if(!goInteractPrompt)
+        {
+            Debug.LogError("failed here!");
             Debug.Break();
+        }
 
         goInteractPrompt.SetActive(false);
     }

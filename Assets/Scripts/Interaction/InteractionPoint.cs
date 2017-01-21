@@ -103,6 +103,7 @@ public class InteractionPoint : MonoBehaviour
     {
         if (!bInUse)
         {
+            //Is a player near me?
             if (other.tag == Constants.PlayerTag)
             {
                 PlayerController controllerHandle = other.GetComponent<PlayerController>();
@@ -115,6 +116,7 @@ public class InteractionPoint : MonoBehaviour
                 }
             }
         }
+        //in use and we're a food product, we're being carried and placed onto a shelf
         else if(eInteractionType == Constants.InteractionPointType.IPT_FOOD_PRODUCT)
         {
             bCanBePlaced = (other.tag == Constants.PlaceableShelfTag);
@@ -125,13 +127,17 @@ public class InteractionPoint : MonoBehaviour
             }
         }
 
+        //cashier progress bar
         if (bInUse && other.tag == Constants.PlayerTag)
         {
-            if(!goProgressBar.activeSelf && !goProgressBarBG.activeSelf &&
-               eInteractionType == Constants.InteractionPointType.IPT_CASHIER_TILL)
+            if(goProgressBar && goProgressBarBG)
             {
-                goProgressBar.SetActive(true);
-                goProgressBarBG.SetActive(true);
+                if(!goProgressBar.activeSelf && !goProgressBarBG.activeSelf &&
+                   eInteractionType == Constants.InteractionPointType.IPT_CASHIER_TILL)
+                {
+                    goProgressBar.SetActive(true);
+                    goProgressBarBG.SetActive(true);
+                }
             }
         }
     }
@@ -145,11 +151,14 @@ public class InteractionPoint : MonoBehaviour
 
         if (other.tag == Constants.PlayerTag)
         {
-            if(goProgressBar.activeSelf && goProgressBarBG.activeSelf &&
-                eInteractionType == Constants.InteractionPointType.IPT_CASHIER_TILL)
+            if(goProgressBar && goProgressBarBG)
             {
-                goProgressBar.SetActive(false);
-                goProgressBarBG.SetActive(false);
+                if(goProgressBar.activeSelf && goProgressBarBG.activeSelf &&
+                    eInteractionType == Constants.InteractionPointType.IPT_CASHIER_TILL)
+                {
+                    goProgressBar.SetActive(false);
+                    goProgressBarBG.SetActive(false);
+                }
             }
         }
     }
