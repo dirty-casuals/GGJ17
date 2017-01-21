@@ -69,6 +69,7 @@ public static class StateNames
 {
     public const string Init = "Init";
     public const string GotoItem = "GotoItem";
+    public const string TakeItem = "TakeItem";
     public const string GotoTillQueue = "GotoTillQueue";
     public const string WaitInQueue = "WaitInQueue";
     public const string Leave = "Leave";
@@ -107,23 +108,56 @@ public class GotoItemAIState : CustomerAIState
         {
             if( customer.SeesItem() )
             {
-                customer.TakeItem();
-                customer.SetNextItem();
-
-                if( customer.NeedsMoreItems() )
-                {
-                    GotoState( StateNames.GotoItem );
-                }
-                else
-                {
-                    GotoState( StateNames.GotoTillQueue );
-                }
+                GotoState( StateNames.TakeItem );
             }
             else
             {
                 customer.SetNextExpectedItemLocation();
                 GotoState( StateNames.GotoItem );
             }
+        }
+    }
+}
+
+
+public class TakeItemAIState : CustomerAIState
+{
+    private float itemTime = 0.5f;
+
+    public override string state
+    {
+        get { return StateNames.TakeItem; }
+    }
+
+    public override void OnEnter()
+    {
+        customer.TakeItem();
+        itemTime = 2.0f;
+    }
+
+    public override void Update()
+    {
+        if( itemTime > 0 )
+        {
+            itemTime -= Time.deltaTime;
+            if( itemTime <= 0 )
+            {
+                MoveOn();
+            }
+        }
+    }
+
+    private void MoveOn()
+    {
+        customer.SetNextItem();
+
+        if( customer.NeedsMoreItems() )
+        {
+            GotoState( StateNames.GotoItem );
+        }
+        else
+        {
+            GotoState( StateNames.GotoTillQueue );
         }
     }
 }
@@ -183,7 +217,7 @@ public class LeaveStoreAIState : CustomerAIState
     }
 
     public override void OnEnter()
-    {        
+    {
         customer.GoToGate();
     }
 }
@@ -270,10 +304,11 @@ public class CustomerAI : MonoBehaviour, IPawn
     {
         stateHandler = new StateHandler( this );
         stateHandler.AddState( new InitAIState() );
-        stateHandler.AddState( new GotoItemAIState() );
+        stateHandler.AddState( new GotoItemAIState() );        
         stateHandler.AddState( new GotoTillQueueAIState() );
+        stateHandler.AddState( new TakeItemAIState() );
         stateHandler.AddState( new WaitInQueueAIState() );
-        stateHandler.AddState( new LeaveStoreAIState() );        
+        stateHandler.AddState( new LeaveStoreAIState() );
 
         stateHandler.GotoState( StateNames.Init );
     }
@@ -359,7 +394,7 @@ public class CustomerAI : MonoBehaviour, IPawn
 
     public void TakeItem()
     {
-        if( onPickup!=null )
+        if( onPickup != null )
         {
             onPickup();
         }
@@ -412,7 +447,7 @@ public class CustomerAI : MonoBehaviour, IPawn
     public void Die()
     {
         isDead = true;
-        agent.Stop();        
+        agent.Stop();
         stateHandler.GotoState( null );
 
         if( queue != null && queue.Contains( this ) )
