@@ -69,6 +69,7 @@ public static class StateNames
 {
     public const string Init = "Init";
     public const string GotoItem = "GotoItem";
+    public const string TakeItem = "TakeItem";
     public const string GotoTillQueue = "GotoTillQueue";
     public const string WaitInQueue = "WaitInQueue";
     public const string Leave = "Leave";
@@ -107,23 +108,56 @@ public class GotoItemAIState : CustomerAIState
         {
             if( customer.SeesItem() )
             {
-                customer.TakeItem();
-                customer.SetNextItem();
-
-                if( customer.NeedsMoreItems() )
-                {
-                    GotoState( StateNames.GotoItem );
-                }
-                else
-                {
-                    GotoState( StateNames.GotoTillQueue );
-                }
+                GotoState( StateNames.TakeItem );
             }
             else
             {
                 customer.SetNextExpectedItemLocation();
                 GotoState( StateNames.GotoItem );
             }
+        }
+    }
+}
+
+
+public class TakeItemAIState : CustomerAIState
+{
+    private float itemTime = 0.5f;
+
+    public override string state
+    {
+        get { return StateNames.TakeItem; }
+    }
+
+    public override void OnEnter()
+    {
+        customer.TakeItem();
+        itemTime = 2.0f;
+    }
+
+    public override void Update()
+    {
+        if( itemTime > 0 )
+        {
+            itemTime -= Time.deltaTime;
+            if( itemTime <= 0 )
+            {
+                MoveOn();
+            }
+        }
+    }
+
+    private void MoveOn()
+    {
+        customer.SetNextItem();
+
+        if( customer.NeedsMoreItems() )
+        {
+            GotoState( StateNames.GotoItem );
+        }
+        else
+        {
+            GotoState( StateNames.GotoTillQueue );
         }
     }
 }
@@ -183,13 +217,13 @@ public class LeaveStoreAIState : CustomerAIState
     }
 
     public override void OnEnter()
-    {        
+    {
         customer.GoToGate();
     }
 }
 
 
-public class CustomerAI : MonoBehaviour
+public class CustomerAI : MonoBehaviour, IPawn
 {
     public bool isDead { get; private set; }
 
@@ -234,8 +268,18 @@ public class CustomerAI : MonoBehaviour
         }
     }
 
+    public float speed
+    {
+        get
+        {
+            return agent.velocity.magnitude;
+        }
+    }
+
     public Vector3 itemExtectedLocation;
 
+    public event System.Action onPickup;
+    public event System.Action onItemSwipe;
 
     private void Start()
     {
@@ -260,10 +304,11 @@ public class CustomerAI : MonoBehaviour
     {
         stateHandler = new StateHandler( this );
         stateHandler.AddState( new InitAIState() );
-        stateHandler.AddState( new GotoItemAIState() );
+        stateHandler.AddState( new GotoItemAIState() );        
         stateHandler.AddState( new GotoTillQueueAIState() );
+        stateHandler.AddState( new TakeItemAIState() );
         stateHandler.AddState( new WaitInQueueAIState() );
-        stateHandler.AddState( new LeaveStoreAIState() );        
+        stateHandler.AddState( new LeaveStoreAIState() );
 
         stateHandler.GotoState( StateNames.Init );
     }
@@ -290,7 +335,11 @@ public class CustomerAI : MonoBehaviour
 
     private bool AtItemLocation( ShoppingItem item )
     {
-        return Vector3.Distance( transform.position, itemExtectedLocation ) < SIGHT_RADIUS;
+        Vector3 charPosition = transform.position;
+        Vector3 searchPosition = itemExtectedLocation;
+        charPosition.y = 0;
+        searchPosition.y = 0;
+        return Vector3.Distance( charPosition, searchPosition ) < SIGHT_RADIUS;
     }
 
     public bool SeesItem()
@@ -300,7 +349,11 @@ public class CustomerAI : MonoBehaviour
 
     bool SeesItem( ShoppingItem item )
     {
-        return Vector3.Distance( transform.position, item.position ) < SIGHT_RADIUS;
+        Vector3 charPosition = transform.position;
+        Vector3 itemPosition = item.position;
+        charPosition.y = 0;
+        itemPosition.y = 0;
+        return Vector3.Distance( charPosition, itemPosition ) < SIGHT_RADIUS;
     }
 
     public bool NeedsMoreItems()
@@ -341,6 +394,11 @@ public class CustomerAI : MonoBehaviour
 
     public void TakeItem()
     {
+        if( onPickup != null )
+        {
+            onPickup();
+        }
+
         // pretend this does a thing
         // TODO: actually take item from stock
     }
@@ -395,7 +453,7 @@ public class CustomerAI : MonoBehaviour
     public void Die()
     {
         isDead = true;
-        agent.Stop();        
+        agent.Stop();
         stateHandler.GotoState( null );
 
         if( queue != null && queue.Contains( this ) )
