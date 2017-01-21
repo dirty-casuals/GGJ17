@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 201089b8d7bd442e59d8a29554ab9173
-timeCreated: 1484999869
+guid: a26b43de725324354827c1434a71a5b4
+timeCreated: 1485004993
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -37,7 +37,6 @@ ModelImporter:
     400028: Upper_Leg_R
     4300000: Character
     7400000: Default Take
-    7400002: Idle1
     9500000: //RootNode
     13700000: Character
   materials:
