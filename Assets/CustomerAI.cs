@@ -191,6 +191,8 @@ public class LeaveStoreAIState : CustomerAIState
 
 public class CustomerAI : MonoBehaviour
 {
+    public bool isDead { get; private set; }
+
     const int SIGHT_RADIUS = 1;
     const int DISTANCE_FROM_DESTINATION = 1;
     StateHandler stateHandler;
@@ -218,6 +220,14 @@ public class CustomerAI : MonoBehaviour
         SetupStates();
     }
 
+    private void FixedUpdate()
+    {
+        if( Random.value < 0.0001f * Time.fixedDeltaTime )
+        {
+            Die(); // of heart attack
+        }
+    }
+
     private void Update()
     {
         stateHandler.Update();
@@ -230,7 +240,7 @@ public class CustomerAI : MonoBehaviour
         stateHandler.AddState( new GotoItemAIState() );
         stateHandler.AddState( new GotoTillQueueAIState() );
         stateHandler.AddState( new WaitInQueueAIState() );
-        stateHandler.AddState( new LeaveStoreAIState() );
+        stateHandler.AddState( new LeaveStoreAIState() );        
 
         stateHandler.GotoState( StateNames.Init );
     }
@@ -344,9 +354,21 @@ public class CustomerAI : MonoBehaviour
         return queue != null && queue.Contains( this );
     }
 
-    internal void GoToGate()
+    public void GoToGate()
     {
         GameObject gate = GameObject.FindWithTag( "Gate" );
         agent.SetDestination( gate.transform.position );
+    }
+
+    public void Die()
+    {
+        isDead = true;
+        agent.Stop();        
+        stateHandler.GotoState( null );
+
+        if( queue != null && queue.Contains( this ) )
+        {
+            queue.ReleaseCustomer( this );
+        }
     }
 }

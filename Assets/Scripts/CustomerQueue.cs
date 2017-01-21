@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class CustomerQueue : MonoBehaviour
@@ -41,13 +42,21 @@ public class CustomerQueue : MonoBehaviour
 
     /// <summary>
     /// Lets the customer go and brings the next one.
-    /// </summary>    
+    /// </summary>
     public void ReleaseCurrentCustomer()
     {
         if( customerQueue.Count > 0 )
         {
             customerQueue.RemoveAt( 0 );
         }
+    }
+
+    /// <summary>
+    /// Let the specified customer go.
+    /// </summary>
+    public void ReleaseCustomer( CustomerAI customerAI )
+    {
+        customerQueue.Remove( customerAI );
     }
 
     /// <summary>
@@ -75,7 +84,7 @@ public class CustomerQueue : MonoBehaviour
     /// </summary>
     public bool AddCustomer( CustomerAI customer )
     {
-        customerQueue.Add( customer );
+        customerQueue.Add( customer );        
         return true;
     }
 
@@ -93,5 +102,5 @@ public class CustomerQueue : MonoBehaviour
     public int GetCustomerCount()
     {
         return customerQueue.Count;
-    }
+    }    
 }
