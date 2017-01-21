@@ -2,23 +2,290 @@
 using UnityEngine;
 using UnityEngine.AI;
 
+public class StateHandler
+{
+    public Object context { get; private set; }
+    private Dictionary<string, AIState> stateMap;
+
+    private string currentState;
+
+    public StateHandler( Object context )
+    {
+        stateMap = new Dictionary<string, AIState>();
+        this.context = context;
+    }
+
+    public void GotoState( string nextState )
+    {
+        string prevState = currentState;
+        currentState = nextState;
+
+        if( !string.IsNullOrEmpty( prevState ) )
+            stateMap[prevState].OnExit();
+
+        if( !string.IsNullOrEmpty( nextState ) )
+            stateMap[nextState].OnEnter();
+
+        Debug.LogFormat( "Going to state {0}", nextState );
+    }
+
+    public void AddState( AIState state )
+    {
+        stateMap[state.state] = state;
+        state.stateHandler = this;
+    }
+
+    public void Update()
+    {
+        if( !string.IsNullOrEmpty( currentState ) )
+        {
+            stateMap[currentState].Update();
+        }
+    }
+}
+
+public abstract class AIState
+{
+    public StateHandler stateHandler { get; set; }
+    public Object context { get { return stateHandler.context; } }
+
+    public abstract string state { get; }
+    public virtual void OnEnter() { }
+    public virtual void OnExit() { }
+    public virtual void Update() { }
+
+    public virtual void GotoState( string state )
+    {
+        stateHandler.GotoState( state );
+    }
+}
+
+public abstract class CustomerAIState : AIState
+{
+    public CustomerAI customer { get { return context as CustomerAI; } }
+}
+
+public static class StateNames
+{
+    public const string Init = "Init";
+    public const string GotoItem = "GotoItem";
+    public const string GotoTillQueue = "GotoTillQueue";
+}
+
+public class InitAIState : CustomerAIState
+{
+    public override string state
+    {
+        get { return StateNames.Init; }
+    }
+
+    public override void OnEnter()
+    {
+        customer.SetRandomItemTargets();
+        customer.SetFirstItem();
+        GotoState( StateNames.GotoItem );
+    }
+}
+
+public class GotoItemAIState : CustomerAIState
+{
+    public override string state
+    {
+        get { return StateNames.GotoItem; }
+    }
+
+    public override void OnEnter()
+    {
+        customer.GoToCurrentItemExpectedLocation();
+    }
+
+    public override void Update()
+    {
+        if( customer.AtItemLocation() )
+        {
+            if( customer.SeesItem() )
+            {
+                customer.TakeItem();
+                customer.SetNextItem();
+
+                if( customer.NeedsMoreItems() )
+                {
+                    GotoState( StateNames.GotoItem );
+                }
+                else
+                {
+                    //GotoState( StateNames.GotoTillQueue );
+                }
+            }
+            else
+            {
+                customer.SetNextExpectedItemLocation();
+                GotoState( StateNames.GotoItem );
+            }
+        }
+    }
+}
+
+/*
+public class GotoTillQueue : CustomerAIState
+{
+    private Trans
+    public override string state
+    {
+        get { return StateNames.GotoItem; }
+    }
+
+    public override void OnEnter()
+    {
+        customer.GoToCurrentItemExpectedLocation();
+    }
+
+}
+*/
+
 public class CustomerAI : MonoBehaviour
 {
     private const int SIGHT_RADIUS = 1;
     private const int DISTANCE_FROM_DESTINATION = 1;
     NavMeshAgent agent;
+    StateHandler stateHandler;
 
-    ShoppingItem[] targetItems;
+    private ShoppingItem[] targetItems;
+    public int currentItemIdx = -1;
 
-    private int currentItemIdx = -1;
+    private ShoppingItem currentItem
+    {
+        get
+        {
+            return GetItem( currentItemIdx );
+        }
+    }
 
-    // Use this for initialization
-    void Start()
+    public Vector3 itemExtectedLocation;
+
+
+    private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        SetRandomItemTargets();
-        GotoNextTarget();
+        SetupStates();        
+    }
 
+    private void Update()
+    {
+        stateHandler.Update();
+    }
+
+    private void SetupStates()
+    {
+        stateHandler = new StateHandler( this );
+        stateHandler.AddState( new InitAIState() );
+        stateHandler.AddState( new GotoItemAIState() );
+
+        stateHandler.GotoState( StateNames.Init );
+    }
+
+    public void SetRandomItemTargets()
+    {
+        HashSet<ShoppingItem> itemIds = new HashSet<ShoppingItem>();
+
+        int numTargets = Random.Range(2,3);
+        while( itemIds.Count <= numTargets )
+        {
+            int id = Random.Range(0, ShoppingItem.items.Length-1 );
+            itemIds.Add( ShoppingItem.items[id] );
+        }
+
+        targetItems = new ShoppingItem[itemIds.Count];
+        itemIds.CopyTo( targetItems );
+    }
+
+    public bool AtItemLocation()
+    {
+        return AtItemLocation( currentItem );
+    }
+
+    private bool AtItemLocation( ShoppingItem item )
+    {
+        return Vector3.Distance( transform.position, itemExtectedLocation ) < SIGHT_RADIUS;
+    }
+
+    public bool SeesItem()
+    {
+        return SeesItem( currentItem );
+    }
+
+    bool SeesItem( ShoppingItem item )
+    {
+        return Vector3.Distance( transform.position, item.position ) < SIGHT_RADIUS;
+    }
+
+    public bool NeedsMoreItems()
+    {
+        return currentItemIdx < targetItems.Length;
+    }
+
+    public void GoToCurrentItemExpectedLocation()
+    {
+        agent.SetDestination( itemExtectedLocation );
+    }
+
+    public void SetFirstItem()
+    {
+        currentItemIdx = 0;
+        if( currentItem )
+        {
+            itemExtectedLocation = currentItem.originalPlace;
+        }
+    }
+
+    public void SetNextItem()
+    {
+        currentItemIdx += 1;
+        if( currentItem )
+        {
+            itemExtectedLocation = currentItem.originalPlace;
+        }
+    }
+
+    private ShoppingItem GetItem( int itemIndex )
+    {
+        if( itemIndex >= 0 && itemIndex < targetItems.Length )
+            return targetItems[itemIndex];
+        else
+            return null;
+    }
+
+    public void TakeItem()
+    {
+        // pretend this does a thing
+        // TODO: actually take item from stock
+    }
+
+    internal void SetNextExpectedItemLocation()
+    {
+        int idx = Random.Range( 0, ShoppingItem.items.Length );
+        ShoppingItem item = ShoppingItem.items[idx];
+        itemExtectedLocation = item.position;
+    }
+}
+
+
+/*
+ 
+    // Update is called once per frame
+    void Update()
+    {
+        if( agent.remainingDistance <= DISTANCE_FROM_DESTINATION )
+        {
+            if( LookingForItem() && SeesItem() )
+            {
+                GotoNextTarget();
+            }
+            else if( !LookingForItem() )
+            {
+                GotoNextTarget();
+            }
+        }
     }
 
     private void GotoNextTarget()
@@ -40,50 +307,4 @@ public class CustomerAI : MonoBehaviour
         }
     }
 
-    private void SetRandomItemTargets()
-    {
-        HashSet<ShoppingItem> itemIds = new HashSet<ShoppingItem>();
-
-        int numTargets = Random.Range(2,3);
-        while( itemIds.Count <= numTargets )
-        {
-            int id = Random.Range(0, ShoppingItem.items.Length-1 );
-            itemIds.Add( ShoppingItem.items[id] );
-        }
-
-        targetItems = new ShoppingItem[itemIds.Count];
-        itemIds.CopyTo( targetItems );
-    }
-
-    bool SeesItem()
-    {        
-        ShoppingItem targetItem = targetItems[currentItemIdx];
-        return SeesItem( targetItem );
-    }
-
-    bool SeesItem( ShoppingItem item )
-    {
-        return Vector3.Distance( transform.position, item.position ) < SIGHT_RADIUS;
-    }
-
-    private bool LookingForItem()
-    {
-        return currentItemIdx < targetItems.Length;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if( agent.remainingDistance <= DISTANCE_FROM_DESTINATION )
-        {
-            if( LookingForItem() && SeesItem() )
-            {
-                GotoNextTarget();
-            }
-            else if( !LookingForItem() )
-            {
-                GotoNextTarget();
-            }
-        }
-    }
-}
+    */
