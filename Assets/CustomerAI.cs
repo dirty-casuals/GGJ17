@@ -146,7 +146,6 @@ public class GotoTillQueueAIState : CustomerAIState
     {
         if( !customer.IsInQueue() )
         {
-            Debug.Log( context.name );
             customer.UpdateQueueLocation();
         }
         else
@@ -173,6 +172,19 @@ public class WaitInQueueAIState : CustomerAIState
         {
             GotoState( StateNames.Leave );
         }
+    }
+}
+
+public class LeaveStoreAIState : CustomerAIState
+{
+    public override string state
+    {
+        get { return StateNames.Leave; }
+    }
+
+    public override void OnEnter()
+    {        
+        customer.GoToGate();
     }
 }
 
@@ -218,6 +230,7 @@ public class CustomerAI : MonoBehaviour
         stateHandler.AddState( new GotoItemAIState() );
         stateHandler.AddState( new GotoTillQueueAIState() );
         stateHandler.AddState( new WaitInQueueAIState() );
+        stateHandler.AddState( new LeaveStoreAIState() );
 
         stateHandler.GotoState( StateNames.Init );
     }
@@ -329,5 +342,11 @@ public class CustomerAI : MonoBehaviour
     public bool IsInQueue()
     {
         return queue != null && queue.Contains( this );
+    }
+
+    internal void GoToGate()
+    {
+        GameObject gate = GameObject.FindWithTag( "Gate" );
+        agent.SetDestination( gate.transform.position );
     }
 }
