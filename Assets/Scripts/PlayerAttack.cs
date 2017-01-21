@@ -82,7 +82,7 @@ public class PlayerAttack : MonoBehaviour {
         }
     }
 
-    void OnTriggerLeave(Collider other)
+    void OnTriggerExit(Collider other)
     {
         if(other.tag == Constants.CustomerTag)
         {

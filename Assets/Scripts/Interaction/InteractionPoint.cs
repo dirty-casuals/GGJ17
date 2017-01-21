@@ -12,6 +12,11 @@ public class InteractionPoint : MonoBehaviour
     private float fProgressMax;
     private float fProgressTextBlinkTimer = Constants.IPProgressTextBlinkTime; //so it instantly comes on
 
+    private Vector3 vCustomInterUIPoint = new Vector3(-1, -1, -1);
+    public Vector3 CustomInteraction
+    {
+        get { return vCustomInterUIPoint; }
+    }
 
     private bool bInUse;
 
@@ -57,6 +62,11 @@ public class InteractionPoint : MonoBehaviour
                 goProcessingText = child.gameObject;
                 goProcessingText.SetActive(false);
             }
+
+            if(child.tag == Constants.CustomInteractionUIPointTag)
+            {
+                vCustomInterUIPoint = child.transform.position;
+            }
         }
 	}
 
@@ -97,15 +107,20 @@ public class InteractionPoint : MonoBehaviour
         }
 	}
 
-
-
     void OnTriggerStay(Collider other)
     {
+        if(other.tag == Constants.PlayerKillAreaTag)
+        {
+            Debug.Log("PlayerKillAreaTag");
+            return;
+        }
+
         if (!bInUse)
         {
             //Is a player near me?
             if (other.tag == Constants.PlayerTag)
             {
+                Debug.Log("PlayerTag");
                 PlayerController controllerHandle = other.GetComponent<PlayerController>();
                 if(controllerHandle && controllerHandle.IsAbleToInteract())
                 {

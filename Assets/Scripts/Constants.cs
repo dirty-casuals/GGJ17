@@ -41,6 +41,8 @@ public static class Constants
     public const string PlaceableShelfTag = "FoodShelf";
     public const string ShelfHeightTag = "ShelfHeightGO";
 
+    public const string CustomInteractionUIPointTag = "CustomInteractionButtonPlacement";
+
     public const string PlayerTag = "Player";
     public const string PlayerKillAreaTag = "PlayerKillArea";
     public const string CustomerTag = "Pawn";

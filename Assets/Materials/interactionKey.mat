@@ -91,7 +91,7 @@ Material:
       second: 15
     - first:
         name: _Cutoff
-      second: 0.5
+      second: 0.46
     - first:
         name: _DetailNormalMapScale
       second: 1
@@ -103,7 +103,7 @@ Material:
       second: 1
     - first:
         name: _Glossiness
-      second: 0.5
+      second: 0
     - first:
         name: _GlossyReflections
       second: 1
