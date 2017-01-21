@@ -25,7 +25,7 @@ public class LoadingMenuUI : MonoBehaviour
 
     private void LoadDeferredScene()
     {
-        string scene = SceneLoadManagement.Instance.GetDeferredSceneToLoad();
+        string scene = SceneLoadManagement.Instance.DeferredSceneName;
         if(string.IsNullOrEmpty(scene)) return;
 
         sceneLoading = SceneManager.LoadSceneAsync(scene);
@@ -38,10 +38,10 @@ public class LoadingMenuUI : MonoBehaviour
         readyButton.SetActive(false);
         while(sceneLoading.progress < 0.9f)
         {
-            yield return new WaitForEndOfFrame();
+            yield return new WaitForFixedUpdate();
         }
         yield return StartCoroutine(FillLoadingBar());
-        readyButton.SetActive(true);
+        ActivateReadyButton();
     }
 
     private IEnumerator FillLoadingBar()
@@ -56,6 +56,18 @@ public class LoadingMenuUI : MonoBehaviour
             yield return new WaitForSeconds(fillIncrement);
         }
         SetLoadingBar(1.0f);
+    }
+
+    private void ActivateReadyButton()
+    {
+        bool immediate = SceneLoadManagement.Instance.LoadImmediate;
+        SceneLoadManagement.Instance.ResetLoadingState();
+        if(immediate)
+        {
+            sceneLoading.allowSceneActivation = true;
+            return;
+        }
+        readyButton.SetActive(true);
     }
 
     private void SetLoadingBar(float fill)
