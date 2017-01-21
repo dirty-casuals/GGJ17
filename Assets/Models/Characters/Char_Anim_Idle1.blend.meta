@@ -1,17 +1,45 @@
 fileFormatVersion: 2
-guid: 663f6652bc86544d8a3b4201d1ca57be
-timeCreated: 1484995319
+guid: 201089b8d7bd442e59d8a29554ab9173
+timeCreated: 1484999869
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: //RootNode
-    400000: //RootNode
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: Bananas
+    100000: Armature
+    100002: //RootNode
+    100004: Character
+    100006: Chest
+    100008: Control
+    100010: Head
+    100012: Lower_Arm_L
+    100014: Lower_Arm_R
+    100016: Lower_Leg_L
+    100018: Lower_Leg_R
+    100020: Stomach
+    100022: Upper_Arm_L
+    100024: Upper_Arm_R
+    100026: Upper_Leg_L
+    100028: Upper_Leg_R
+    400000: Armature
+    400002: //RootNode
+    400004: Character
+    400006: Chest
+    400008: Control
+    400010: Head
+    400012: Lower_Arm_L
+    400014: Lower_Arm_R
+    400016: Lower_Leg_L
+    400018: Lower_Leg_R
+    400020: Stomach
+    400022: Upper_Arm_L
+    400024: Upper_Arm_R
+    400026: Upper_Leg_L
+    400028: Upper_Leg_R
+    4300000: Character
     7400000: Default Take
+    7400002: Idle1
     9500000: //RootNode
+    13700000: Character
   materials:
     importMaterials: 0
     materialName: 0
@@ -55,7 +83,7 @@ ModelImporter:
     normalSmoothAngle: 60
     normalImportMode: 0
     tangentImportMode: 3
-  importAnimation: 0
+  importAnimation: 1
   copyAvatar: 0
   humanDescription:
     serializedVersion: 2
@@ -74,7 +102,7 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 0
+  animationType: 2
   humanoidOversampling: 1
   additionalBone: 0
   userData: 
