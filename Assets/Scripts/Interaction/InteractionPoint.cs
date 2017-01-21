@@ -14,7 +14,9 @@ public class InteractionPoint : MonoBehaviour
 
 
     private bool bInUse;
+
     private bool bCanBePlaced = false;
+    public GameObject goShelfBeingPlacedOnTo;
 
 
     public Constants.InteractionPointType eInteractionType;
@@ -109,10 +111,14 @@ public class InteractionPoint : MonoBehaviour
                 }
             }
         }
-        else
+        else if(eInteractionType == Constants.InteractionPointType.IPT_FOOD_PRODUCT)
         {
-            Debug.Log("Other tag: " + Constants.PlaceableShelfTag);
             bCanBePlaced = (other.tag == Constants.PlaceableShelfTag);
+
+            if(bCanBePlaced)
+            {
+                goShelfBeingPlacedOnTo = other.gameObject;
+            }
         }
     }
 

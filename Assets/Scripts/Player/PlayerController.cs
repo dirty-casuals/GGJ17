@@ -73,8 +73,15 @@ public class PlayerController : MonoBehaviour {
                 }
                 case Constants.InteractionPointType.IPT_CASHIER_TILL:
                 {
-                    ePlayerState = Constants.PlayerState.PS_USING_TILL;
                     goCurrentQueueHandle = goCurrentInteractionGO.GetComponent<CustomerQueue>();
+                    if(goCurrentQueueHandle.GetCustomerCount() == 0)
+                    {
+                        CleanupInteraction();
+                        return;
+                    }
+
+                    ePlayerState = Constants.PlayerState.PS_USING_TILL;
+                    
                     currentInteractionHandle.SetInUse(true);
                     fTimeAtTill = 0;
                     break;
@@ -92,8 +99,55 @@ public class PlayerController : MonoBehaviour {
         {
             if (PlayerInput.QueryPlayerInput(Constants.InputType.PIT_INTERACT, true))
             {
+                AlignFoodItemWithShelf();
                 CleanupInteraction();
             }
+        }
+    }
+
+    void AlignFoodItemWithShelf()
+    {
+        //Match it to the shelf height
+        if(currentInteractionHandle.goShelfBeingPlacedOnTo != null)
+        {
+            Vector3 vNewPos = goCurrentInteractionGO.transform.position;
+                    
+            //Height
+            foreach (Transform child in currentInteractionHandle.goShelfBeingPlacedOnTo.transform)
+            {
+                if (child.tag == Constants.ShelfHeightTag)
+                {
+                    vNewPos.y = child.gameObject.transform.position.y;
+                    break;
+                }
+            }
+
+            Vector3 shelfPos = currentInteractionHandle.goShelfBeingPlacedOnTo.transform.position;
+            Vector3 shelfScale = currentInteractionHandle.goShelfBeingPlacedOnTo.transform.localScale;
+
+            //top side of shelf
+            if(vNewPos.z > shelfPos.z)
+            {
+                vNewPos.z = shelfPos.z + shelfScale.z / 2;
+            }
+            else
+            {
+                vNewPos.z = shelfPos.z - shelfScale.z / 2;
+            }
+
+            //make sure the thing is on the shelf - more to the right
+            if(vNewPos.x > shelfPos.x + (shelfScale.x / 2))
+            {
+                vNewPos.x = (shelfPos.x + (shelfScale.x / 2)) - goCurrentInteractionGO.transform.localScale.x;
+            }
+            else if(vNewPos.x < shelfPos.x - (shelfScale.x / 2))
+            {
+                vNewPos.x = (shelfPos.x - (shelfScale.x / 2)) + goCurrentInteractionGO.transform.localScale.x;
+            }
+
+           
+
+            goCurrentInteractionGO.transform.position = vNewPos;
         }
     }
 
@@ -119,6 +173,12 @@ public class PlayerController : MonoBehaviour {
                     goCurrentQueueHandle.ReleaseCurrentCustomer();
 
                     //this.GetComponent<PlayerRage>().Score_ProcessedCustomerItems();
+
+
+                    if(goCurrentQueueHandle.GetCustomerCount() == 0)
+                    {
+                        CleanupInteraction();
+                    }
                 }
             }
         }

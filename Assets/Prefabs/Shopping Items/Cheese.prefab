@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 135894743539321546}
   - component: {fileID: 23835263701762308}
   - component: {fileID: 114695470491868464}
+  - component: {fileID: 114750689817616562}
   m_Layer: 0
   m_Name: Cheese
   m_TagString: Untagged
@@ -37,7 +38,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1513532260021248}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 11.55, y: 1.61, z: 17.47}
+  m_LocalPosition: {x: -16.2, y: 1.61, z: -6.49}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -56,7 +57,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: b4a874c7e4fb618489113bf95955f5f8, type: 2}
+  - {fileID: 2100000, guid: 69868d97b357bfe44a50d49d30d6a97f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -93,6 +94,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   originalPlace: {x: 0, y: 0, z: 0}
+--- !u!114 &114750689817616562
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1513532260021248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10a2b948d3fedf140bdbde00d911853a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  goShelfBeingPlacedOnTo: {fileID: 0}
+  eInteractionType: 2
+  fInteractionRadius: 1.44
 --- !u!135 &135894743539321546
 SphereCollider:
   m_ObjectHideFlags: 1

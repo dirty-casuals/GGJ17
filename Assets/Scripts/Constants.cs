@@ -37,6 +37,7 @@ public static class Constants
     public const int CarriedFoodItemLayer = 8;
 
     public const string PlaceableShelfTag = "FoodShelf";
+    public const string ShelfHeightTag = "ShelfHeightGO";
 
     public const string PlayerTag = "Player";
     public const string PlayerCamPosTag = "PlayerCamPos";
