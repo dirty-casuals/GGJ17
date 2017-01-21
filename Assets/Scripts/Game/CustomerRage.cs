@@ -31,17 +31,20 @@ public class CustomerRage : MonoBehaviour
 
         foreach (Transform child in transform)
         {
-            if (child.tag == Constants.CustomerRageBarTag)
+            foreach (Transform childChildren in child)
             {
-                goRageBar = child.gameObject;
-                sprRageBar = child.GetComponent<Sprite>();
-                fRageBarMaxXScale = goRageBar.transform.localScale.x;
+                if (childChildren.tag == Constants.CustomerRageBarTag)
+                {
+                    goRageBar = childChildren.gameObject;
+                    sprRageBar = childChildren.GetComponent<Sprite>();
+                    fRageBarMaxXScale = goRageBar.transform.localScale.x;
 
-                Vector3 vNewScale = goRageBar.transform.localScale;
-                vNewScale.x = 0;
-                goRageBar.transform.localScale = vNewScale;
+                    Vector3 vNewScale = goRageBar.transform.localScale;
+                    vNewScale.x = 0;
+                    goRageBar.transform.localScale = vNewScale;
 
-                break;
+                    break;
+                }
             }
         }
 	}
@@ -49,7 +52,7 @@ public class CustomerRage : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-        if (aiHandle.IsInQueue())
+        if (aiHandle.IsInQueue() && !aiHandle.IsBeingServed())
         {
             fTimer += Time.deltaTime;
 
@@ -65,8 +68,9 @@ public class CustomerRage : MonoBehaviour
 
         if (fLastRageForScaling != fCurrentRageForScaling)
         {
-            //redo this
-            goRageBar.transform.localScale += new Vector3(fCurrentRageForScaling, 0, 0);
+            Vector3 vNewScale = goRageBar.transform.localScale;
+            vNewScale.x = fRageBarMaxXScale * Constants.Normalise(fCurrentRageForScaling, 0, Constants.PlayerTillProgressToReach);
+            goRageBar.transform.localScale = vNewScale;
         }
 	}
 

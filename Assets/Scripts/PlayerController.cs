@@ -65,7 +65,8 @@ public class PlayerController : MonoBehaviour
     public void Score_ProcessedCustomerItems(float fCustomerRage, float fCustomerWaitingTime)
     {
         //When putting items thru, the max score is decreased by customer rage and time waited
-        fPlayerScore += Constants.PlayerScoreIncreaseForProcessingItems - (fCustomerRage * (1 - Constants.Normalise(fCustomerWaitingTime, 0, Constants.MaxCustomerWaitTime) ));
+        fPlayerScore += Constants.PlayerScoreIncreaseForProcessingItems - ( fCustomerRage * Constants.Normalise(fCustomerWaitingTime, 0, Constants.MaxCustomerWaitTime) );
+        GameObject.FindGameObjectWithTag(Constants.UIControllerTag).GetComponent<UIController>().UpdateScore(fPlayerScore);
     }
     public void Rage_ProcessedCustomerItems()
     {
@@ -94,12 +95,12 @@ public class PlayerController : MonoBehaviour
                 //done with the current customer!
                 if (currentInteractionScript.HasProgressCompleted())
                 {
+                    Rage_ProcessedCustomerItems();
+                    Score_ProcessedCustomerItems(goCurrentQueueHandle.GetCurrentCustomerRage(), goCurrentQueueHandle.GetCurrentCustomerTimeInQueue());
+
                     currentInteractionScript.ResetProgress();
                     goCurrentQueueHandle.ReleaseCurrentCustomer();
 
-                    Rage_ProcessedCustomerItems();
-                    Score_ProcessedCustomerItems(goCurrentQueueHandle.GetCurrentCustomerRage(), goCurrentQueueHandle.GetCurrentCustomerTimeInQueue());
-                    
                     if(goCurrentQueueHandle.GetCustomerCount() <= 1)
                     {
                         CleanupInteraction();
@@ -137,9 +138,12 @@ public class PlayerController : MonoBehaviour
     //Getters
     public bool IsAbleToInteract()
     {
-        return (ePlayerState == Constants.PlayerState.PS_IDLE);
+        return (!QueryPlayerInput(Constants.InputType.PIT_CAMERA_ZOOM_OUT) && ePlayerState == Constants.PlayerState.PS_IDLE);
     }
-
+    public bool IsServingCustomer()
+    {
+        return (ePlayerState == Constants.PlayerState.PS_USING_TILL);
+    }
 
     //Player movement and input
     public bool QueryPlayerInput(Constants.InputType eType, bool bJustPressed = false)
@@ -153,32 +157,37 @@ public class PlayerController : MonoBehaviour
 
             case Constants.InputType.PIT_INTERACT: {  return (!bJustPressed) ? Input.GetKey(Constants.interactionKey) : Input.GetKeyDown(Constants.interactionKey); }
             case Constants.InputType.PIT_ATTACK: {  return (!bJustPressed) ? Input.GetKey(Constants.attackKey) : Input.GetKeyDown(Constants.attackKey); }
+
+            case Constants.InputType.PIT_CAMERA_ZOOM_OUT: {  return (!bJustPressed) ? Input.GetKey(Constants.zoomKey) : Input.GetKeyDown(Constants.zoomKey); }
         }
 
         return false;
     }
     private void UpdatePlayerMovement()
     {
-        if(QueryPlayerInput(Constants.InputType.PIT_UP))
+        if(!QueryPlayerInput(Constants.InputType.PIT_CAMERA_ZOOM_OUT))
         {
-            this.transform.position += new Vector3(0, 0, Constants.PlayerSpeedZ) * Time.deltaTime;
-            this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, Quaternion.Euler(Vector3.up), Constants.PlayerRotationSpeed * Time.deltaTime);
-        }
-        else if(QueryPlayerInput(Constants.InputType.PIT_DOWN))
-        {
-            this.transform.position -= new Vector3(0, 0, Constants.PlayerSpeedZ) * Time.deltaTime;
-            this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, Quaternion.Euler(Vector3.up*180), Constants.PlayerRotationSpeed * Time.deltaTime);
-        }
+            if(QueryPlayerInput(Constants.InputType.PIT_UP))
+            {
+                this.transform.position += new Vector3(0, 0, Constants.PlayerSpeedZ) * Time.deltaTime;
+                this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, Quaternion.Euler(Vector3.up), Constants.PlayerRotationSpeed * Time.deltaTime);
+            }
+            else if(QueryPlayerInput(Constants.InputType.PIT_DOWN))
+            {
+                this.transform.position -= new Vector3(0, 0, Constants.PlayerSpeedZ) * Time.deltaTime;
+                this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, Quaternion.Euler(Vector3.up*180), Constants.PlayerRotationSpeed * Time.deltaTime);
+            }
 
-        if(QueryPlayerInput(Constants.InputType.PIT_LEFT))
-        {
-            this.transform.position -= new Vector3(Constants.PlayerSpeedX, 0, 0) * Time.deltaTime;
-            this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, Quaternion.Euler(Vector3.down*90), Constants.PlayerRotationSpeed * Time.deltaTime);
-        }
-        else if(QueryPlayerInput(Constants.InputType.PIT_RIGHT))
-        {
-            this.transform.position += new Vector3(Constants.PlayerSpeedX, 0, 0) * Time.deltaTime;
-            this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, Quaternion.Euler(Vector3.up*90), Constants.PlayerRotationSpeed * Time.deltaTime);
+            if(QueryPlayerInput(Constants.InputType.PIT_LEFT))
+            {
+                this.transform.position -= new Vector3(Constants.PlayerSpeedX, 0, 0) * Time.deltaTime;
+                this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, Quaternion.Euler(Vector3.down*90), Constants.PlayerRotationSpeed * Time.deltaTime);
+            }
+            else if(QueryPlayerInput(Constants.InputType.PIT_RIGHT))
+            {
+                this.transform.position += new Vector3(Constants.PlayerSpeedX, 0, 0) * Time.deltaTime;
+                this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, Quaternion.Euler(Vector3.up*90), Constants.PlayerRotationSpeed * Time.deltaTime);
+            }
         }
     }
 
@@ -188,6 +197,8 @@ public class PlayerController : MonoBehaviour
         currentInteractionGameObject.layer = Constants.DefaultItemLayer;
 
         currentInteractionScript.SetInUse(false);
+        currentInteractionScript.ResetProgress(true);
+
         ePlayerState = Constants.PlayerState.PS_IDLE;
 
         fTaskTime = 0;

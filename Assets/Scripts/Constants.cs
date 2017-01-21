@@ -21,7 +21,9 @@ public static class Constants
         PIT_RIGHT,
 
         PIT_INTERACT,
-        PIT_ATTACK
+        PIT_ATTACK,
+
+        PIT_CAMERA_ZOOM_OUT
     };
 
     public enum InteractionPointType
@@ -54,18 +56,26 @@ public static class Constants
 
     public const string PlayerInteractionFunction = "HandleInteraction";
 
+    public const string ScoreUITag = "ScoreUI";
+    public const string UIControllerTag = "UIController";
+
     public const float IPProgressTextBlinkTime = 0.75f;
 
 
     public const int PlayerSpeedX = 6;
     public const int PlayerSpeedZ = 6;
 
+    public const int CameraSpeedX = 24;
+    public const int CameraSpeedZ = 24;
+
     public const float PlayerCamFollowSpeed = 2.0f;
     public const float PlayerRotationSpeed = 5.0f;
 
 
-    public const float PlayerCameraOffsetY = 15.0f;
-    public const float PlayerCameraOffsetZ = -2.5f;
+    public const float PlayerCameraOffsetY = 10.0f;
+    public const float PlayerCameraOffsetZ = -3.5f;
+
+    public const float PlayerCameraZoomOutOffsetY = 30.0f;
 
 
     public const float AvgQueueRageForGameFail = 75.0f;
@@ -95,8 +105,8 @@ public static class Constants
     public const KeyCode rightKey = KeyCode.D;
 
     public const KeyCode interactionKey = KeyCode.E;
-    public const KeyCode attackKey = KeyCode.Space;
-
+    public const KeyCode attackKey = KeyCode.Q;
+    public const KeyCode zoomKey = KeyCode.Space;
 
     public static float Normalise(float val, float min, float max)
     {

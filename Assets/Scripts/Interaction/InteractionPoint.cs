@@ -10,7 +10,7 @@ public class InteractionPoint : MonoBehaviour
     private GameObject goProgressBar, goProgressBarBG, goProcessingText;
     private float fProgress;
     private float fProgressMax;
-    private float fProgressTextBlinkTimer;
+    private float fProgressTextBlinkTimer = Constants.IPProgressTextBlinkTime; //so it instantly comes on
 
 
     private bool bInUse;
@@ -176,12 +176,24 @@ public class InteractionPoint : MonoBehaviour
     {
         fProgress += prog;
     }
-    public void ResetProgress()
+
+    public void ResetProgress(bool bOnlyClearProcessingText = false)
     {
+
+        fProgressTextBlinkTimer = Constants.IPProgressTextBlinkTime; //so it instantly comes on
+        goProcessingText.SetActive(false);
+       
+        if(bOnlyClearProcessingText)
+            return;
+
         fLastProgressForScaling = 0;
         fCurrentProgressForScaling = 0;
         fProgress = 0;
-        fProgressTextBlinkTimer = 0;
+
+        Vector3 vNewScale = goProgressBar.transform.localScale;
+        vNewScale.x = 0;
+        goProgressBar.transform.localScale = vNewScale;
+        
     }
 
     public void PlaceItemBackOntoShelf()
