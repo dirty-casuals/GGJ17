@@ -24,9 +24,10 @@ GameObject:
   - component: {fileID: 195539076514927602}
   - component: {fileID: 114613529697847910}
   - component: {fileID: 114068603881618428}
+  - component: {fileID: 114536178309071384}
   m_Layer: 0
   m_Name: Customer
-  m_TagString: Untagged
+  m_TagString: Pawn
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -615,6 +616,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2472336435b8d74c8c492595864c55a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114536178309071384
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1066826628557866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10a2b948d3fedf140bdbde00d911853a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  goShelfBeingPlacedOnTo: {fileID: 0}
+  eInteractionType: 3
+  fInteractionRadius: 1.1
 --- !u!114 &114613529697847910
 MonoBehaviour:
   m_ObjectHideFlags: 1

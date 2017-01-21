@@ -55,10 +55,16 @@ public class PlayerController : MonoBehaviour, IPawn
         }
 
         if(!goCarryPosition)
+        {
+            Debug.LogError("failed here!");
             Debug.Break();
+        }
 
         if(!goInteractPrompt)
+        {
+            Debug.LogError("failed here!");
             Debug.Break();
+        }
 
         goInteractPrompt.SetActive(false);
     }
@@ -308,8 +314,20 @@ public class PlayerController : MonoBehaviour, IPawn
                 //If we're in an interaction point
                 if(other.GetComponent<InteractionPoint>())
                 {
-                    goInteractPrompt.transform.position = other.transform.position + new Vector3(0,1,0);
-                    goInteractPrompt.SetActive(true);
+                    //Have to do this as 
+                    //if(Vector3.Distance(this.transform.position, other.transform.position) < other.GetComponent<InteractionPoint>().fInteractionRadius)
+                   // {
+                        //either default placement, or a custom one
+                        if(other.GetComponent<InteractionPoint>().CustomInteraction == new Vector3(-1,-1,-1))
+                        {
+                            goInteractPrompt.transform.position = other.transform.position + new Vector3(0,1,0);
+                        }
+                        else
+                        {
+                            goInteractPrompt.transform.position = other.GetComponent<InteractionPoint>().CustomInteraction;
+                        }
+                        goInteractPrompt.SetActive(true);
+                   // }
                 }
             }
         }

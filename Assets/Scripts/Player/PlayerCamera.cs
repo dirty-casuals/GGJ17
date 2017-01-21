@@ -14,7 +14,7 @@ public class PlayerCamera : MonoBehaviour {
 
         if(!goPlayerHandle)
         {
-            Debug.Assert(true, "Unable to find player GameObject! :(");
+            Debug.LogError("failed here!");
             Debug.Break();
         }
 

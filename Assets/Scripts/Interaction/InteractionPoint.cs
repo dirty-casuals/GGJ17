@@ -12,6 +12,11 @@ public class InteractionPoint : MonoBehaviour
     private float fProgressMax;
     private float fProgressTextBlinkTimer = Constants.IPProgressTextBlinkTime; //so it instantly comes on
 
+    private Vector3 vCustomInterUIPoint = new Vector3(-1, -1, -1);
+    public Vector3 CustomInteraction
+    {
+        get { return vCustomInterUIPoint; }
+    }
 
     private bool bInUse;
 
@@ -57,6 +62,11 @@ public class InteractionPoint : MonoBehaviour
                 goProcessingText = child.gameObject;
                 goProcessingText.SetActive(false);
             }
+
+            if(child.tag == Constants.CustomInteractionUIPointTag)
+            {
+                vCustomInterUIPoint = child.transform.position;
+            }
         }
 	}
 
@@ -97,14 +107,20 @@ public class InteractionPoint : MonoBehaviour
         }
 	}
 
-
-
     void OnTriggerStay(Collider other)
     {
+        if(other.tag == Constants.PlayerKillAreaTag)
+        {
+            Debug.Log("PlayerKillAreaTag");
+            return;
+        }
+
         if (!bInUse)
         {
+            //Is a player near me?
             if (other.tag == Constants.PlayerTag)
             {
+                Debug.Log("PlayerTag");
                 PlayerController controllerHandle = other.GetComponent<PlayerController>();
                 if(controllerHandle && controllerHandle.IsAbleToInteract())
                 {
@@ -115,6 +131,7 @@ public class InteractionPoint : MonoBehaviour
                 }
             }
         }
+        //in use and we're a food product, we're being carried and placed onto a shelf
         else if(eInteractionType == Constants.InteractionPointType.IPT_FOOD_PRODUCT)
         {
             bCanBePlaced = (other.tag == Constants.PlaceableShelfTag);
@@ -125,13 +142,17 @@ public class InteractionPoint : MonoBehaviour
             }
         }
 
+        //cashier progress bar
         if (bInUse && other.tag == Constants.PlayerTag)
         {
-            if(!goProgressBar.activeSelf && !goProgressBarBG.activeSelf &&
-               eInteractionType == Constants.InteractionPointType.IPT_CASHIER_TILL)
+            if(goProgressBar && goProgressBarBG)
             {
-                goProgressBar.SetActive(true);
-                goProgressBarBG.SetActive(true);
+                if(!goProgressBar.activeSelf && !goProgressBarBG.activeSelf &&
+                   eInteractionType == Constants.InteractionPointType.IPT_CASHIER_TILL)
+                {
+                    goProgressBar.SetActive(true);
+                    goProgressBarBG.SetActive(true);
+                }
             }
         }
     }
@@ -145,11 +166,14 @@ public class InteractionPoint : MonoBehaviour
 
         if (other.tag == Constants.PlayerTag)
         {
-            if(goProgressBar.activeSelf && goProgressBarBG.activeSelf &&
-                eInteractionType == Constants.InteractionPointType.IPT_CASHIER_TILL)
+            if(goProgressBar && goProgressBarBG)
             {
-                goProgressBar.SetActive(false);
-                goProgressBarBG.SetActive(false);
+                if(goProgressBar.activeSelf && goProgressBarBG.activeSelf &&
+                    eInteractionType == Constants.InteractionPointType.IPT_CASHIER_TILL)
+                {
+                    goProgressBar.SetActive(false);
+                    goProgressBarBG.SetActive(false);
+                }
             }
         }
     }

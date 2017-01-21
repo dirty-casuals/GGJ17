@@ -20,6 +20,9 @@ TagManager:
   - ScoreUI
   - UIController
   - InteractionPrompt
+  - PlayerKillArea
+  - KillPrompt
+  - CustomInteractionButtonPlacement
   layers:
   - Default
   - TransparentFX
@@ -32,9 +35,9 @@ TagManager:
   - CarriedObject
   - Shelf
   - InteractionUI
-  - 
-  - 
-  - 
+  - KillArea
+  - Tills
+  - Customer
   - 
   - 
   - 

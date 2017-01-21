@@ -17,6 +17,7 @@ public class UIController : MonoBehaviour {
 
                 if(!scoreText)
                 {
+                    Debug.LogError("failed here!");
                     Debug.Break();
                 }
                 
