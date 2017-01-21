@@ -31,7 +31,13 @@ public class PlayerController : MonoBehaviour, IPawn
         get { return isMoving ? Constants.PlayerSpeedZ : 0; }
     }
 
-    public event Action onPickup;
+    public bool isHoldingItem
+    {
+        get; private set;
+    }
+
+    public event Action onPickupItem;
+    public event Action onLeaveItem;
     public event Action onItemSwipe;
 
     void Start()
@@ -142,13 +148,21 @@ public class PlayerController : MonoBehaviour, IPawn
         currentInteractionGameObject.transform.position = goCarryPosition.transform.position;
         fTaskTime += Time.deltaTime;
 
+        // Announce we're picking up
+        if( !isHoldingItem )
+        {
+            isHoldingItem = true;
+
+            if( onPickupItem != null )
+                onPickupItem();
+        }
+    
         //Placing back down - timer to make sure we can't immediately place back down
         if( currentInteractionScript.CanBePlaced() && fTaskTime > 0.5f )
         {
             if( QueryPlayerInput( Constants.InputType.PIT_INTERACT, true ) )
             {
                 ProcessPutItemOnShelf();
-
             }
         }
     }
@@ -156,6 +170,15 @@ public class PlayerController : MonoBehaviour, IPawn
     {
         currentInteractionScript.PlaceItemBackOntoShelf();
         CleanupInteraction();
+
+        // Announce we're picking up
+        if( isHoldingItem )
+        {
+            isHoldingItem = false;
+
+            if( onLeaveItem != null )
+                onLeaveItem();
+        }
     }
 
     //Getters
