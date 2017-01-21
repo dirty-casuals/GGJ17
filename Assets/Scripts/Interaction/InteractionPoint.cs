@@ -27,7 +27,7 @@ public class InteractionPoint : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
-        if(other.tag == Constants.HumanTag)
+        if(other.tag == Constants.PlayerTag)
         {
             if(PlayerInput.QueryPlayerInput(Constants.InputType.PIT_INTERACT, true))
             {

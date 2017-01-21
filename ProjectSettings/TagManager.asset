@@ -7,6 +7,9 @@ TagManager:
   - Checkout
   - Gate
   - Pawn
+  - PlayerCamPos
+  - RageBar
+  - RageBarBG
   layers:
   - Default
   - TransparentFX
