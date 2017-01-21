@@ -222,7 +222,7 @@ public class CustomerAI : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if( Random.value < 0.0001f * Time.fixedDeltaTime )
+        if( Random.value < 0.000001f * Time.fixedDeltaTime )
         {
             Die(); // of heart attack
         }
