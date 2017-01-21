@@ -51,6 +51,23 @@ public class CustomerQueue : MonoBehaviour
         }
     }
 
+    public float GetCurrentCustomerRage()
+    {
+        if( customerQueue.Count > 0 )
+        {
+            return customerQueue[0].Rage;
+        }
+        return -1.0f;
+    }
+    public float GetCurrentCustomerTimeInQueue()
+    {
+        if( customerQueue.Count > 0 )
+        {
+            return customerQueue[0].TimeInQueue;
+        }
+        return -1.0f;
+    }
+
     /// <summary>
     /// Let the specified customer go.
     /// </summary>

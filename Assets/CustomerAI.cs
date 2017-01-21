@@ -202,6 +202,29 @@ public class CustomerAI : MonoBehaviour
     int currentItemIdx = -1;
     CustomerQueue queue;
 
+    float fCustomerRage = 0; //Current rage 0-100
+    float fCustomerQueueTime = 0; //Time in the queue
+
+    public float Rage
+    {
+        get
+        {
+            return fCustomerRage;
+        }
+        set
+        {
+            fCustomerRage = value;
+        }
+    }
+
+    public float TimeInQueue
+    {
+        get
+        {
+            return fCustomerQueueTime;
+        }
+    }
+
 
     private ShoppingItem currentItem
     {
@@ -346,7 +369,10 @@ public class CustomerAI : MonoBehaviour
         if( !isInQueue && Vector3.Distance( transform.position, targetLocation ) <= 1 )
         {
             queue.AddCustomer( this );
+            fCustomerQueueTime = 0;
         }
+
+        fCustomerQueueTime += Time.deltaTime;
     }
 
     public bool IsInQueue()

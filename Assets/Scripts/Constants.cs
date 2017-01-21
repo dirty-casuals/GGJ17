@@ -52,6 +52,8 @@ public static class Constants
     public const string IPProgressBarBGTag = "ProgressBarBG";
     public const string IPProgressTextTag = "ProgressText";
 
+    public const string PlayerInteractionFunction = "HandleInteraction";
+
     public const float IPProgressTextBlinkTime = 0.75f;
 
 
@@ -62,8 +64,8 @@ public static class Constants
     public const float PlayerRotationSpeed = 5.0f;
 
 
-    public const float PlayerCameraOffsetY = 10.0f;
-    public const float PlayerCameraOffsetZ = -5.0f;
+    public const float PlayerCameraOffsetY = 15.0f;
+    public const float PlayerCameraOffsetZ = -2.5f;
 
 
     public const float AvgQueueRageForGameFail = 75.0f;

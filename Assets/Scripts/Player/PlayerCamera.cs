@@ -6,7 +6,6 @@ public class PlayerCamera : MonoBehaviour {
 
     private GameObject goPlayerHandle;
 
-	// Use this for initialization
 	void Start () {
 		goPlayerHandle = GameObject.FindGameObjectWithTag(Constants.PlayerTag);
 
@@ -17,13 +16,8 @@ public class PlayerCamera : MonoBehaviour {
         }
 	}
 	
-	// Update is called once per frame
 	void Update ()
     {
-		//PlayerCamFollowSpeed
-
-        //this.transform.position 
-
         Vector3 vNewPos = this.transform.position;
 
         vNewPos.x = Mathf.Lerp(this.transform.position.x, goPlayerHandle.transform.position.x,                                 Constants.PlayerCamFollowSpeed * Time.deltaTime);

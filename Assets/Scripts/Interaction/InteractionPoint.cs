@@ -24,13 +24,14 @@ public class InteractionPoint : MonoBehaviour
 
     private SphereCollider sCollision;
 
-	// Use this for initialization
-	void Start () {
+	void Start ()
+    {
         sCollision = gameObject.AddComponent<SphereCollider>();
 
         sCollision.radius = fInteractionRadius;
         sCollision.isTrigger = true;
 
+        //get the ui elements
         foreach (Transform child in transform)
         {
             if (child.tag == Constants.IPProgressBarTag)
@@ -55,7 +56,6 @@ public class InteractionPoint : MonoBehaviour
             }
         }
 	}
-
 
 
     //We can use the UI as a measure instead so it looks like the bar has fully filled up
@@ -102,11 +102,12 @@ public class InteractionPoint : MonoBehaviour
         {
             if (other.tag == Constants.PlayerTag)
             {
-                if(other.GetComponent<PlayerController>().IsAbleToInteract())
+                PlayerController controllerHandle = other.GetComponent<PlayerController>();
+                if(controllerHandle && controllerHandle.IsAbleToInteract())
                 {
-                    if (PlayerInput.QueryPlayerInput(Constants.InputType.PIT_INTERACT, true))
+                    if (controllerHandle.QueryPlayerInput(Constants.InputType.PIT_INTERACT, true))
                     {
-                        ProcessInteraction(other.gameObject);
+                        other.SendMessage(Constants.PlayerInteractionFunction, this.gameObject);
                     }
                 }
             }
@@ -130,11 +131,6 @@ public class InteractionPoint : MonoBehaviour
         }
     }
 
-    private void ProcessInteraction(GameObject other)
-    {
-        Debug.Log("Player Interacted with me");
-        other.SendMessage("HandleInteraction", this.gameObject);
-    }
 
 
     void OnDrawGizmosSelected()
@@ -160,7 +156,7 @@ public class InteractionPoint : MonoBehaviour
         
         Gizmos.DrawWireSphere(transform.position, fInteractionRadius);
     }
-        public void SetInUse(bool inUse)
+    public void SetInUse(bool inUse)
     {
         bInUse = inUse;
     }
@@ -186,5 +182,49 @@ public class InteractionPoint : MonoBehaviour
         fCurrentProgressForScaling = 0;
         fProgress = 0;
         fProgressTextBlinkTimer = 0;
+    }
+
+    public void PlaceItemBackOntoShelf()
+    {
+        //Match it to the shelf height
+        if(goShelfBeingPlacedOnTo != null)
+        {
+            Vector3 vNewPos = this.transform.position;
+                    
+            //Height
+            foreach (Transform child in goShelfBeingPlacedOnTo.transform)
+            {
+                if (child.tag == Constants.ShelfHeightTag)
+                {
+                    vNewPos.y = child.gameObject.transform.position.y;
+                    break;
+                }
+            }
+
+            Vector3 shelfPos = goShelfBeingPlacedOnTo.transform.position;
+            Vector3 shelfScale = goShelfBeingPlacedOnTo.transform.localScale;
+
+            //top side of shelf
+            if(vNewPos.z > shelfPos.z)
+            {
+                vNewPos.z = shelfPos.z + shelfScale.z / 2;
+            }
+            else
+            {
+                vNewPos.z = shelfPos.z - shelfScale.z / 2;
+            }
+
+            //make sure the thing is on the shelf - more to the right
+            if(vNewPos.x > shelfPos.x + (shelfScale.x / 2))
+            {
+                vNewPos.x = (shelfPos.x + (shelfScale.x / 2)) - this.transform.localScale.x;
+            }
+            else if(vNewPos.x < shelfPos.x - (shelfScale.x / 2))
+            {
+                vNewPos.x = (shelfPos.x - (shelfScale.x / 2)) + this.transform.localScale.x;
+            }
+
+            this.transform.position = vNewPos;
+        }
     }
 }
