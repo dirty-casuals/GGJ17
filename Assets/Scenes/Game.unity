@@ -396,51 +396,9 @@ Prefab:
       propertyPath: m_Name
       value: Aisle (6)
       objectReference: {fileID: 0}
-    - target: {fileID: 4239146260488746, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_LocalScale.x
-      value: 63
-      objectReference: {fileID: 0}
-    - target: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_NavMeshLayer
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_TagString
-      value: FoodShelf
-      objectReference: {fileID: 0}
-    - target: {fileID: 65700373518488228, guid: a4022c790ef66cb4c9c054268fbf040a,
-        type: 2}
-      propertyPath: m_IsTrigger
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
   m_IsPrefabParent: 0
---- !u!1 &348056356 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a,
-    type: 2}
-  m_PrefabInternal: {fileID: 328460666}
---- !u!65 &348056360
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 348056356}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &412746977 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4239146260488746, guid: a4022c790ef66cb4c9c054268fbf040a,
@@ -485,7 +443,13 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 54971341828926516, guid: 0ef318327124c464999d2331b4b30f43,
+        type: 2}
+      propertyPath: m_Constraints
+      value: 126
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 114598623306447790, guid: 0ef318327124c464999d2331b4b30f43, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 0ef318327124c464999d2331b4b30f43, type: 2}
   m_IsPrefabParent: 0
 --- !u!1001 &498685955
@@ -581,23 +545,6 @@ Transform:
   m_PrefabParentObject: {fileID: 4917225399307526, guid: 9453d12607e73974694b2c399b90cebb,
     type: 2}
   m_PrefabInternal: {fileID: 593182990}
---- !u!1 &606246079 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a,
-    type: 2}
-  m_PrefabInternal: {fileID: 1838102808}
---- !u!65 &606246083
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 606246079}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.99999994, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &691394391 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4239146260488746, guid: a4022c790ef66cb4c9c054268fbf040a,
@@ -650,27 +597,6 @@ Prefab:
     - target: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
       propertyPath: m_Name
       value: Aisle (7)
-      objectReference: {fileID: 0}
-    - target: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_NavMeshLayer
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_TagString
-      value: FoodShelf
-      objectReference: {fileID: 0}
-    - target: {fileID: 65700373518488228, guid: a4022c790ef66cb4c9c054268fbf040a,
-        type: 2}
-      propertyPath: m_IsTrigger
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
@@ -893,47 +819,9 @@ Prefab:
       propertyPath: m_Name
       value: Aisle (11)
       objectReference: {fileID: 0}
-    - target: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_NavMeshLayer
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_TagString
-      value: FoodShelf
-      objectReference: {fileID: 0}
-    - target: {fileID: 65700373518488228, guid: a4022c790ef66cb4c9c054268fbf040a,
-        type: 2}
-      propertyPath: m_IsTrigger
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
   m_IsPrefabParent: 0
---- !u!1 &908845487 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a,
-    type: 2}
-  m_PrefabInternal: {fileID: 695252366}
---- !u!65 &908845491
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 908845487}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &930372594
 Prefab:
   m_ObjectHideFlags: 0
@@ -1143,23 +1031,6 @@ Transform:
   m_PrefabParentObject: {fileID: 4239146260488746, guid: a4022c790ef66cb4c9c054268fbf040a,
     type: 2}
   m_PrefabInternal: {fileID: 867972221}
---- !u!1 &1013526329 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a,
-    type: 2}
-  m_PrefabInternal: {fileID: 867972221}
---- !u!65 &1013526333
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1013526329}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1026413275
 GameObject:
   m_ObjectHideFlags: 0
@@ -1290,23 +1161,6 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
   m_IsPrefabParent: 0
---- !u!1 &1106381513 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a,
-    type: 2}
-  m_PrefabInternal: {fileID: 2005246985}
---- !u!65 &1106381517
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1106381513}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1110180709 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a,
@@ -1318,23 +1172,6 @@ BoxCollider:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1110180709}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!1 &1129188888 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a,
-    type: 2}
-  m_PrefabInternal: {fileID: 2067622216}
---- !u!65 &1129188892
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1129188888}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
@@ -1389,27 +1226,6 @@ Prefab:
       propertyPath: m_Name
       value: Aisle (2)
       objectReference: {fileID: 0}
-    - target: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_NavMeshLayer
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_TagString
-      value: FoodShelf
-      objectReference: {fileID: 0}
-    - target: {fileID: 65700373518488228, guid: a4022c790ef66cb4c9c054268fbf040a,
-        type: 2}
-      propertyPath: m_IsTrigger
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
   m_IsPrefabParent: 0
@@ -1451,6 +1267,10 @@ Prefab:
     - target: {fileID: 4448115684736114, guid: 11949f48c01910c45baaa20a80395489, type: 2}
       propertyPath: m_RootOrder
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1082981074231632, guid: 11949f48c01910c45baaa20a80395489, type: 2}
+      propertyPath: m_Icon
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 11949f48c01910c45baaa20a80395489, type: 2}
@@ -1810,35 +1630,6 @@ Prefab:
       propertyPath: m_Name
       value: Aisle (12)
       objectReference: {fileID: 0}
-    - target: {fileID: 4239146260488746, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_LocalScale.x
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 4239146260488746, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_LocalScale.z
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_NavMeshLayer
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_TagString
-      value: FoodShelf
-      objectReference: {fileID: 0}
-    - target: {fileID: 65700373518488228, guid: a4022c790ef66cb4c9c054268fbf040a,
-        type: 2}
-      propertyPath: m_IsTrigger
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
   m_IsPrefabParent: 0
@@ -1889,27 +1680,6 @@ Prefab:
     - target: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
       propertyPath: m_Name
       value: Aisle (4)
-      objectReference: {fileID: 0}
-    - target: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_NavMeshLayer
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_TagString
-      value: FoodShelf
-      objectReference: {fileID: 0}
-    - target: {fileID: 65700373518488228, guid: a4022c790ef66cb4c9c054268fbf040a,
-        type: 2}
-      propertyPath: m_IsTrigger
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
@@ -2011,51 +1781,9 @@ Prefab:
       propertyPath: m_RootOrder
       value: 6
       objectReference: {fileID: 0}
-    - target: {fileID: 4239146260488746, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_LocalScale.x
-      value: 38
-      objectReference: {fileID: 0}
-    - target: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_NavMeshLayer
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_TagString
-      value: FoodShelf
-      objectReference: {fileID: 0}
-    - target: {fileID: 65700373518488228, guid: a4022c790ef66cb4c9c054268fbf040a,
-        type: 2}
-      propertyPath: m_IsTrigger
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
   m_IsPrefabParent: 0
---- !u!1 &1920987681 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a,
-    type: 2}
-  m_PrefabInternal: {fileID: 1742927000}
---- !u!65 &1920987685
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1920987681}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &2005246985
 Prefab:
   m_ObjectHideFlags: 0
@@ -2099,27 +1827,6 @@ Prefab:
       propertyPath: m_Name
       value: Aisle (5)
       objectReference: {fileID: 0}
-    - target: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_NavMeshLayer
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_TagString
-      value: FoodShelf
-      objectReference: {fileID: 0}
-    - target: {fileID: 65700373518488228, guid: a4022c790ef66cb4c9c054268fbf040a,
-        type: 2}
-      propertyPath: m_IsTrigger
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
   m_IsPrefabParent: 0
@@ -2128,23 +1835,6 @@ Transform:
   m_PrefabParentObject: {fileID: 4239146260488746, guid: a4022c790ef66cb4c9c054268fbf040a,
     type: 2}
   m_PrefabInternal: {fileID: 1742927000}
---- !u!1 &2025094337 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a,
-    type: 2}
-  m_PrefabInternal: {fileID: 1195772174}
---- !u!65 &2025094341
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2025094337}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &2067622216
 Prefab:
   m_ObjectHideFlags: 0
@@ -2187,27 +1877,6 @@ Prefab:
     - target: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
       propertyPath: m_Name
       value: Aisle (8)
-      objectReference: {fileID: 0}
-    - target: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_NavMeshLayer
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
-      propertyPath: m_TagString
-      value: FoodShelf
-      objectReference: {fileID: 0}
-    - target: {fileID: 65700373518488228, guid: a4022c790ef66cb4c9c054268fbf040a,
-        type: 2}
-      propertyPath: m_IsTrigger
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a4022c790ef66cb4c9c054268fbf040a, type: 2}
@@ -2259,23 +1928,6 @@ Transform:
   m_PrefabParentObject: {fileID: 4024006514890032, guid: b5fba2f789a0df44796cdfdf89ffe55a,
     type: 2}
   m_PrefabInternal: {fileID: 2121195816}
---- !u!1 &2133903688 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1017913754314332, guid: a4022c790ef66cb4c9c054268fbf040a,
-    type: 2}
-  m_PrefabInternal: {fileID: 1661230179}
---- !u!65 &2133903692
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2133903688}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &2146490594
 Prefab:
   m_ObjectHideFlags: 0

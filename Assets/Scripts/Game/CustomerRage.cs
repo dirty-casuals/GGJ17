@@ -11,10 +11,9 @@ public class CustomerRage : MonoBehaviour
 
     public bool bDebugDisableAmbientRageIncrease = false;
 
-    public bool bIsInQueue = false;
-    public float fCustomerRage = 0; //actual customer rage
+    
 
-
+    private CustomerAI aiHandle;
 
 
 
@@ -28,6 +27,8 @@ public class CustomerRage : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
+        aiHandle = this.GetComponent<CustomerAI>();
+
         foreach (Transform child in transform)
         {
             if (child.tag == Constants.CustomerRageBarTag)
@@ -48,19 +49,19 @@ public class CustomerRage : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-        if (bIsInQueue)
+        if (aiHandle.IsInQueue())
         {
             fTimer += Time.deltaTime;
 
             if (fTimer > Constants.TickInterval && !bDebugDisableAmbientRageIncrease)
             {
                 fTimer = 0.0f;
-                fCustomerRage += Constants.CustomerRageInQueueIncreasePerTick;
+                aiHandle.Rage += Constants.CustomerRageInQueueIncreasePerTick;
             }
         }
 
         fLastRageForScaling = fCurrentRageForScaling;
-        fCurrentRageForScaling = Mathf.Lerp(fCurrentRageForScaling, fCustomerRage, Constants.CustomerRageScaleFillRate * Time.deltaTime);
+        fCurrentRageForScaling = Mathf.Lerp(fCurrentRageForScaling, aiHandle.Rage, Constants.CustomerRageScaleFillRate * Time.deltaTime);
 
         if (fLastRageForScaling != fCurrentRageForScaling)
         {
@@ -71,6 +72,6 @@ public class CustomerRage : MonoBehaviour
 
     public void Rage_FoundOutOfStockItem()
     {
-        fCustomerRage += Constants.CustomerRageIncreaseOutOfStockItem;
+        aiHandle.Rage += Constants.CustomerRageIncreaseOutOfStockItem;
     }
 }
