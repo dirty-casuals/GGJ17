@@ -70,6 +70,7 @@ public static class StateNames
     public const string Init = "Init";
     public const string GotoItem = "GotoItem";
     public const string GotoTillQueue = "GotoTillQueue";
+    public const string Leave = "Leave";
 }
 
 public class InitAIState : CustomerAIState
@@ -114,7 +115,7 @@ public class GotoItemAIState : CustomerAIState
                 }
                 else
                 {
-                    //GotoState( StateNames.GotoTillQueue );
+                    GotoState( StateNames.GotoTillQueue );
                 }
             }
             else
@@ -126,10 +127,9 @@ public class GotoItemAIState : CustomerAIState
     }
 }
 
-/*
-public class GotoTillQueue : CustomerAIState
+
+public class GotoTillQueueAIState : CustomerAIState
 {
-    private Trans
     public override string state
     {
         get { return StateNames.GotoItem; }
@@ -137,21 +137,35 @@ public class GotoTillQueue : CustomerAIState
 
     public override void OnEnter()
     {
-        customer.GoToCurrentItemExpectedLocation();
+        CustomerQueue queue = GameObject.FindObjectOfType<CustomerQueue>();
+        customer.GoToQueue( queue );
     }
 
+    public override void Update()
+    {
+        if( customer.IsInQueue() )
+        {
+            customer.UpdateLocationInQueue();
+        }
+        else
+        {
+            GotoState( StateNames.Leave );
+        }
+    }
 }
-*/
+
 
 public class CustomerAI : MonoBehaviour
 {
-    private const int SIGHT_RADIUS = 1;
-    private const int DISTANCE_FROM_DESTINATION = 1;
-    NavMeshAgent agent;
+    const int SIGHT_RADIUS = 1;
+    const int DISTANCE_FROM_DESTINATION = 1;
     StateHandler stateHandler;
+    NavMeshAgent agent;
 
-    private ShoppingItem[] targetItems;
-    public int currentItemIdx = -1;
+    ShoppingItem[] targetItems;
+    int currentItemIdx = -1;
+    CustomerQueue queue;
+
 
     private ShoppingItem currentItem
     {
@@ -167,7 +181,7 @@ public class CustomerAI : MonoBehaviour
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        SetupStates();        
+        SetupStates();
     }
 
     private void Update()
@@ -180,6 +194,7 @@ public class CustomerAI : MonoBehaviour
         stateHandler = new StateHandler( this );
         stateHandler.AddState( new InitAIState() );
         stateHandler.AddState( new GotoItemAIState() );
+        stateHandler.AddState( new GotoTillQueueAIState() );
 
         stateHandler.GotoState( StateNames.Init );
     }
@@ -267,44 +282,29 @@ public class CustomerAI : MonoBehaviour
         ShoppingItem item = ShoppingItem.items[idx];
         itemExtectedLocation = item.position;
     }
+
+    public void GoToQueue( CustomerQueue queue )
+    {
+        this.queue = queue;
+        if( queue.AddCustomer( this ) )
+        {
+            UpdateLocationInQueue();
+        }
+    }
+
+    public void UpdateLocationInQueue()
+    {
+        Vector3 targetLocation;
+        int palceInQueue;
+
+        if( queue.GetCustomerQueueLocation( this, out targetLocation, out palceInQueue ) )
+        {
+            agent.SetDestination( targetLocation );
+        }
+    }
+
+    public bool IsInQueue()
+    {
+        return queue != null && queue.Contains( this );
+    }
 }
-
-
-/*
- 
-    // Update is called once per frame
-    void Update()
-    {
-        if( agent.remainingDistance <= DISTANCE_FROM_DESTINATION )
-        {
-            if( LookingForItem() && SeesItem() )
-            {
-                GotoNextTarget();
-            }
-            else if( !LookingForItem() )
-            {
-                GotoNextTarget();
-            }
-        }
-    }
-
-    private void GotoNextTarget()
-    {
-        currentItemIdx++;
-        if( currentItemIdx < targetItems.Length )
-        {
-            agent.SetDestination( targetItems[currentItemIdx].position );
-        }
-        else if( currentItemIdx == targetItems.Length )
-        {
-            GameObject till = GameObject.FindGameObjectWithTag( "Checkout" );
-            agent.SetDestination( till.transform.position );
-        }
-        else
-        {
-            GameObject exit = GameObject.FindGameObjectWithTag( "Gate" );
-            agent.SetDestination( exit.transform.position );
-        }
-    }
-
-    */

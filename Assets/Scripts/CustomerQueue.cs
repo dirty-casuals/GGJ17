@@ -1,7 +1,13 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class CustomerQueue : MonoBehaviour
 {
+    float customerSpacing = 1.4f;
+
+    List<CustomerAI> customerQueue = new List<CustomerAI>();
+
+
     /// <summary>
     /// Returns the queue the player deals with
     /// </summary>
@@ -16,6 +22,11 @@ public class CustomerQueue : MonoBehaviour
     /// </summary>    
     public CustomerAI GetCurrentCustomer()
     {
+        if( customerQueue.Count > 0 )
+        {
+            return customerQueue[0];
+        }
+
         return null;
     }
 
@@ -33,6 +44,10 @@ public class CustomerQueue : MonoBehaviour
     /// </summary>    
     public void ReleaseCurrentCustomer()
     {
+        if( customerQueue.Count > 0 )
+        {
+            customerQueue.RemoveAt( 0 );
+        }
     }
 
     /// <summary>
@@ -41,9 +56,17 @@ public class CustomerQueue : MonoBehaviour
     /// </summary>   
     public bool GetCustomerQueueLocation( CustomerAI customer, out Vector3 location, out int position )
     {
-        position = -1;
-        location = transform.position;
-        return false;
+        position = customerQueue.FindIndex( c => { return c == customer; } );
+        bool isInQueue = position >= 0; 
+
+        if( !isInQueue )
+        {
+            position = GetCustomerCount();
+
+        }
+
+        location = transform.position + transform.forward * position * customerSpacing;
+        return isInQueue;
     }
 
 
@@ -52,6 +75,23 @@ public class CustomerQueue : MonoBehaviour
     /// </summary>
     public bool AddCustomer( CustomerAI customer )
     {
-        return false;
+        customerQueue.Add( customer );
+        return true;
+    }
+
+    /// <summary>
+    /// Returns if the customer is in the queue.
+    /// </summary>
+    public bool Contains( CustomerAI customer )
+    {
+        return customerQueue.Contains( customer );
+    }
+
+    /// <summary>
+    /// Returns the number of customers in the queue
+    /// </summary>
+    public int GetCustomerCount()
+    {
+        return customerQueue.Count;
     }
 }
