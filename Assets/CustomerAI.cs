@@ -276,9 +276,18 @@ public class CustomerAI : MonoBehaviour, IPawn
         }
     }
 
+    public bool isHoldingItem
+    {
+        get
+        {
+            return false;
+        }
+    }
+
     public Vector3 itemExtectedLocation;
 
-    public event System.Action onPickup;
+    public event System.Action onPickupItem;
+    public event System.Action onLeaveItem;
     public event System.Action onItemSwipe;
 
     private void Start()
@@ -394,9 +403,9 @@ public class CustomerAI : MonoBehaviour, IPawn
 
     public void TakeItem()
     {
-        if( onPickup != null )
+        if( onPickupItem != null )
         {
-            onPickup();
+            onPickupItem();
         }
 
         // pretend this does a thing

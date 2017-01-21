@@ -5,7 +5,7 @@ public class SceneLoadManagement : MonoBehaviour
 {
     private const string gameobjectName = "SceneManager";
     private static SceneLoadManagement _instance;
-    private string _deferredSceneName;
+    private string _deferredSceneName = SceneNames.GameScene;
     private bool _loadImmediate;
 
     private void Awake()

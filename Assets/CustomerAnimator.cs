@@ -6,7 +6,9 @@ public class CustomerAnimator : MonoBehaviour
 {
     private static string ANIM_SPEED = "Speed";
     private static string ANIM_PICKUP = "Pickup";
+    private static string ANIM_LEAVE = "Leave";
     private static string ANIM_SWIPE = "Swipe";
+    private static string ANIM_HOLDING = "Holding";
     private static string ANIM_IDLE_BLEND = "Idle Blend";
 
     Animator animator;
@@ -20,13 +22,19 @@ public class CustomerAnimator : MonoBehaviour
         pawn = GetComponentInParent<IPawn>();        
         animator = GetComponent<Animator>();
 
-        pawn.onPickup += OnItemPickup;
+        pawn.onPickupItem += OnPickupItem;
+        pawn.onLeaveItem += OnLeaveItem;
         pawn.onItemSwipe += OnItemSwipe;
 
         StartCoroutine( ChangeIdleBlend() );
-    }    
+    }
 
-    private void OnItemPickup()
+    private void OnLeaveItem()
+    {
+        animator.SetTrigger( ANIM_LEAVE );
+    }
+
+    private void OnPickupItem()
     {
         animator.SetTrigger( ANIM_PICKUP );
     }
@@ -39,6 +47,7 @@ public class CustomerAnimator : MonoBehaviour
     void Update()
     {
         animator.SetFloat( ANIM_SPEED, pawn.speed );
+        animator.SetBool( ANIM_HOLDING, pawn.isHoldingItem );
     }
 
     private IEnumerator ChangeIdleBlend()
