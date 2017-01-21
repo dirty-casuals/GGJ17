@@ -189,7 +189,7 @@ public class LeaveStoreAIState : CustomerAIState
 }
 
 
-public class CustomerAI : MonoBehaviour
+public class CustomerAI : MonoBehaviour, IPawn
 {
     public bool isDead { get; private set; }
 
@@ -234,8 +234,18 @@ public class CustomerAI : MonoBehaviour
         }
     }
 
+    public float speed
+    {
+        get
+        {
+            return agent.velocity.magnitude;
+        }
+    }
+
     public Vector3 itemExtectedLocation;
 
+    public event System.Action onPickup;
+    public event System.Action onItemSwipe;
 
     private void Start()
     {
@@ -349,6 +359,11 @@ public class CustomerAI : MonoBehaviour
 
     public void TakeItem()
     {
+        if( onPickup!=null )
+        {
+            onPickup();
+        }
+
         // pretend this does a thing
         // TODO: actually take item from stock
     }
