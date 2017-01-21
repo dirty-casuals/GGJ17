@@ -1,19 +1,20 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IPawn
 {
+    private CharacterController controller;
     private Constants.PlayerState ePlayerState; //what is the player doing
 
     private GameObject goCarryPosition; //Position where the player carries stuff
-    private GameObject goInteractPrompt;
 
     private GameObject currentInteractionGameObject; //Gameobject that the player is interacting with
     private InteractionPoint currentInteractionScript; //Handle to the interaction script
 
     private CustomerQueue goCurrentQueueHandle; //Queue handle if the interaction is with a queue
-    
+
 
     public float fPlayerRage = Constants.PlayerStartingRage;
     public float fPlayerScore = 0;
@@ -22,64 +23,63 @@ public class PlayerController : MonoBehaviour
     private float fTaskTime;
     private float fRageTimer = 0.0f;
 
-	
-	void Start ()
+    private bool isMoving = false;
+
+    public float speed
     {
-        goInteractPrompt = GameObject.FindGameObjectWithTag(Constants.PlayerInteractionPromptTag);
+        get { return isMoving ? Constants.PlayerSpeedZ : 0; }
+    }
+
+    public event Action onPickup;
+    public event Action onItemSwipe;
+
+    void Start()
+    {
+        controller = GetComponent<CharacterController>();
 
         //Find and store the hand position
-		foreach (Transform child in transform)
+        foreach( Transform child in transform )
         {
-            if (child.tag == Constants.PlayerCarryPos)
+            if( child.tag == Constants.PlayerCarryPos )
             {
                 goCarryPosition = child.gameObject;
             }
         }
+    }
 
-        if(!goCarryPosition)
-            Debug.Break();
-
-        if(!goInteractPrompt)
-            Debug.Break();
-
-        goInteractPrompt.SetActive(false);
-	}
-
-
-	
-	void Update ()
+    void Update()
     {
-		UpdatePlayerMovement();
+        UpdatePlayerMovement();
 
-        switch (ePlayerState)
+        switch( ePlayerState )
         {
             case Constants.PlayerState.PS_USING_TILL:
-            {
-                ProcessCashierTask();
-                break;
-            }
+                {
+                    ProcessCashierTask();
+                    break;
+                }
             case Constants.PlayerState.PS_CARRYING_FOODITEM:
-            {
-                ProcessCarryTask();
-                break;
-            }
+                {
+                    ProcessCarryTask();
+                    break;
+                }
         }
 
         fRageTimer += Time.deltaTime;
 
-        if(fRageTimer > Constants.TickInterval)
+        if( fRageTimer > Constants.TickInterval )
         {
             fRageTimer = 0.0f;
             fPlayerRage += Constants.PlayerRageIncreasePerTick;
         }
-	}
+    }
 
     //Rage
-    public void Score_ProcessedCustomerItems(float fCustomerRage, float fCustomerWaitingTime)
+    public void Score_ProcessedCustomerItems( float fCustomerRage, float fCustomerWaitingTime )
     {
         //When putting items thru, the max score is decreased by customer rage and time waited
-        fPlayerScore += Constants.PlayerScoreIncreaseForProcessingItems - ( fCustomerRage * Constants.Normalise(fCustomerWaitingTime, 0, Constants.MaxCustomerWaitTime) );
-        GameObject.FindGameObjectWithTag(Constants.UIControllerTag).GetComponent<UIController>().UpdateScore(fPlayerScore);
+        fPlayerScore += Constants.PlayerScoreIncreaseForProcessingItems - (fCustomerRage * Constants.Normalise( fCustomerWaitingTime, 0, Constants.MaxCustomerWaitTime ));
+        GameObject.FindGameObjectWithTag( Constants.UIControllerTag ).GetComponent<UIController>().UpdateScore( fPlayerScore );
     }
     public void Rage_ProcessedCustomerItems()
     {
@@ -93,28 +93,28 @@ public class PlayerController : MonoBehaviour
     //Tasking
     private void ProcessCashierTask()
     {
-        if (currentInteractionGameObject)
+        if( currentInteractionGameObject )
         {
             //If we've moved away from the interaction till, we stop processing it
-            if (Vector3.Distance(currentInteractionGameObject.transform.position, this.transform.position) > currentInteractionScript.fInteractionRadius)
+            if( Vector3.Distance( currentInteractionGameObject.transform.position, this.transform.position ) > currentInteractionScript.fInteractionRadius )
             {
                 CleanupInteraction();
             }
             else
             {
                 fTaskTime += Time.deltaTime;
-                currentInteractionScript.AddProgress(Constants.PlayerTillIncreasePerTick * Time.deltaTime);
+                currentInteractionScript.AddProgress( Constants.PlayerTillIncreasePerTick * Time.deltaTime );
 
                 //done with the current customer!
-                if (currentInteractionScript.HasProgressCompleted())
+                if( currentInteractionScript.HasProgressCompleted() )
                 {
                     Rage_ProcessedCustomerItems();
-                    Score_ProcessedCustomerItems(goCurrentQueueHandle.GetCurrentCustomerRage(), goCurrentQueueHandle.GetCurrentCustomerTimeInQueue());
+                    Score_ProcessedCustomerItems( goCurrentQueueHandle.GetCurrentCustomerRage(), goCurrentQueueHandle.GetCurrentCustomerTimeInQueue() );
 
                     currentInteractionScript.ResetProgress();
                     goCurrentQueueHandle.ReleaseCurrentCustomer();
 
-                    if(goCurrentQueueHandle.GetCustomerCount() <= 1)
+                    if( goCurrentQueueHandle.GetCustomerCount() <= 1 )
                     {
                         CleanupInteraction();
                     }
@@ -133,12 +133,12 @@ public class PlayerController : MonoBehaviour
         fTaskTime += Time.deltaTime;
 
         //Placing back down - timer to make sure we can't immediately place back down
-        if(currentInteractionScript.CanBePlaced() && fTaskTime > 0.5f)
+        if( currentInteractionScript.CanBePlaced() && fTaskTime > 0.5f )
         {
-            if (QueryPlayerInput(Constants.InputType.PIT_INTERACT, true))
+            if( QueryPlayerInput( Constants.InputType.PIT_INTERACT, true ) )
             {
                 ProcessPutItemOnShelf();
-                
+
             }
         }
     }
@@ -151,7 +151,7 @@ public class PlayerController : MonoBehaviour
     //Getters
     public bool IsAbleToInteract()
     {
-        return (!QueryPlayerInput(Constants.InputType.PIT_CAMERA_ZOOM_OUT) && ePlayerState == Constants.PlayerState.PS_IDLE);
+        return (!QueryPlayerInput( Constants.InputType.PIT_CAMERA_ZOOM_OUT ) && ePlayerState == Constants.PlayerState.PS_IDLE);
     }
     public bool IsServingCustomer()
     {
@@ -159,48 +159,53 @@ public class PlayerController : MonoBehaviour
     }
 
     //Player movement and input
-    public bool QueryPlayerInput(Constants.InputType eType, bool bJustPressed = false)
+    public bool QueryPlayerInput( Constants.InputType eType, bool bJustPressed = false )
     {
-        switch(eType)
+        switch( eType )
         {
-            case Constants.InputType.PIT_UP: {  return (!bJustPressed) ? Input.GetKey(Constants.upKey) : Input.GetKeyDown(Constants.upKey); }
-            case Constants.InputType.PIT_DOWN: {  return (!bJustPressed) ? Input.GetKey(Constants.downKey) : Input.GetKeyDown(Constants.downKey); }
-            case Constants.InputType.PIT_LEFT: {  return (!bJustPressed) ? Input.GetKey(Constants.leftKey) : Input.GetKeyDown(Constants.leftKey); }
-            case Constants.InputType.PIT_RIGHT: {  return (!bJustPressed) ? Input.GetKey(Constants.rightKey) : Input.GetKeyDown(Constants.rightKey); }
+            case Constants.InputType.PIT_UP: { return (!bJustPressed) ? Input.GetKey( Constants.upKey ) : Input.GetKeyDown( Constants.upKey ); }
+            case Constants.InputType.PIT_DOWN: { return (!bJustPressed) ? Input.GetKey( Constants.downKey ) : Input.GetKeyDown( Constants.downKey ); }
+            case Constants.InputType.PIT_LEFT: { return (!bJustPressed) ? Input.GetKey( Constants.leftKey ) : Input.GetKeyDown( Constants.leftKey ); }
+            case Constants.InputType.PIT_RIGHT: { return (!bJustPressed) ? Input.GetKey( Constants.rightKey ) : Input.GetKeyDown( Constants.rightKey ); }
+            case Constants.InputType.PIT_INTERACT: { return (!bJustPressed) ? Input.GetKey( Constants.interactionKey ) : Input.GetKeyDown( Constants.interactionKey ); }
+            case Constants.InputType.PIT_ATTACK: { return (!bJustPressed) ? Input.GetKey( Constants.attackKey ) : Input.GetKeyDown( Constants.attackKey ); }
 
-            case Constants.InputType.PIT_INTERACT: {  return (!bJustPressed) ? Input.GetKey(Constants.interactionKey) : Input.GetKeyDown(Constants.interactionKey); }
-            case Constants.InputType.PIT_ATTACK: {  return (!bJustPressed) ? Input.GetKey(Constants.attackKey) : Input.GetKeyDown(Constants.attackKey); }
-
-            case Constants.InputType.PIT_CAMERA_ZOOM_OUT: {  return (!bJustPressed) ? Input.GetKey(Constants.zoomKey) : Input.GetKeyDown(Constants.zoomKey); }
+            case Constants.InputType.PIT_CAMERA_ZOOM_OUT: { return (!bJustPressed) ? Input.GetKey( Constants.zoomKey ) : Input.GetKeyDown( Constants.zoomKey ); }
         }
 
         return false;
     }
     private void UpdatePlayerMovement()
     {
-        if(!QueryPlayerInput(Constants.InputType.PIT_CAMERA_ZOOM_OUT))
-        {
-            if(QueryPlayerInput(Constants.InputType.PIT_UP))
-            {
-                this.transform.position += new Vector3(0, 0, Constants.PlayerSpeedZ) * Time.deltaTime;
-                this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, Quaternion.Euler(Vector3.up), Constants.PlayerRotationSpeed * Time.deltaTime);
-            }
-            else if(QueryPlayerInput(Constants.InputType.PIT_DOWN))
-            {
-                this.transform.position -= new Vector3(0, 0, Constants.PlayerSpeedZ) * Time.deltaTime;
-                this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, Quaternion.Euler(Vector3.up*180), Constants.PlayerRotationSpeed * Time.deltaTime);
-            }
+        if( QueryPlayerInput( Constants.InputType.PIT_CAMERA_ZOOM_OUT ) )
+            return;
 
-            if(QueryPlayerInput(Constants.InputType.PIT_LEFT))
-            {
-                this.transform.position -= new Vector3(Constants.PlayerSpeedX, 0, 0) * Time.deltaTime;
-                this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, Quaternion.Euler(Vector3.down*90), Constants.PlayerRotationSpeed * Time.deltaTime);
-            }
-            else if(QueryPlayerInput(Constants.InputType.PIT_RIGHT))
-            {
-                this.transform.position += new Vector3(Constants.PlayerSpeedX, 0, 0) * Time.deltaTime;
-                this.transform.localRotation = Quaternion.Lerp(this.transform.localRotation, Quaternion.Euler(Vector3.up*90), Constants.PlayerRotationSpeed * Time.deltaTime);
-            }
+        Vector3 motion = Vector3.zero;
+
+        if( QueryPlayerInput( Constants.InputType.PIT_UP ) )
+            motion.z += 1;
+
+        if( QueryPlayerInput( Constants.InputType.PIT_DOWN ) )
+            motion.z -= 1;
+
+        if( QueryPlayerInput( Constants.InputType.PIT_LEFT ) )
+            motion.x -= 1;
+
+        if( QueryPlayerInput( Constants.InputType.PIT_RIGHT ) )
+            motion.x += 1;
+
+        motion.Normalize();
+        controller.SimpleMove( motion * Constants.PlayerSpeedZ );
+
+        isMoving = (motion.magnitude > 0);
+
+        if( isMoving )
+        {
+            Quaternion targetRotation = Quaternion.LookRotation( motion );
+            transform.rotation =
+                Quaternion.Slerp( transform.rotation,
+                                  targetRotation,
+                                  Time.deltaTime * Constants.PlayerRotationSpeed );
         }
     }
 
@@ -209,9 +214,8 @@ public class PlayerController : MonoBehaviour
     {
         currentInteractionGameObject.layer = Constants.DefaultItemLayer;
 
-        currentInteractionScript.SetInUse(false);
-        currentInteractionScript.ResetProgress(true);
-
+        currentInteractionScript.SetInUse( false );
+        currentInteractionScript.ResetProgress( true );
         ePlayerState = Constants.PlayerState.PS_IDLE;
 
         fTaskTime = 0;
@@ -220,80 +224,40 @@ public class PlayerController : MonoBehaviour
         goCurrentQueueHandle = null;
         currentInteractionScript = null;
     }
-    void HandleInteraction(GameObject InteractGO)
+    void HandleInteraction( GameObject InteractGO )
     {
         currentInteractionScript = InteractGO.GetComponent<InteractionPoint>();
 
-        if(currentInteractionScript)
+        if( currentInteractionScript )
         {
             currentInteractionGameObject = InteractGO;
-            currentInteractionScript.SetInUse(true);
+            currentInteractionScript.SetInUse( true );
             fTaskTime = 0;
 
-            switch (currentInteractionScript.eInteractionType)
+            switch( currentInteractionScript.eInteractionType )
             {
                 case Constants.InteractionPointType.IPT_FOOD_PRODUCT:
-                {
-                    ePlayerState = Constants.PlayerState.PS_CARRYING_FOODITEM;
-                    currentInteractionGameObject.layer = Constants.CarriedFoodItemLayer;
-
-                    break;
-                }
-                case Constants.InteractionPointType.IPT_CASHIER_TILL:
-                {
-                    goCurrentQueueHandle = currentInteractionGameObject.GetComponent<CustomerQueue>();
-                    
-                    //Exit out if there isn't anyone in the queue
-                    if(goCurrentQueueHandle.GetCustomerCount() == 0)
                     {
-                        CleanupInteraction();
-                        return;
+                        ePlayerState = Constants.PlayerState.PS_CARRYING_FOODITEM;
+                        currentInteractionGameObject.layer = Constants.CarriedFoodItemLayer;
+
+                        break;
                     }
+                case Constants.InteractionPointType.IPT_CASHIER_TILL:
+                    {
+                        goCurrentQueueHandle = currentInteractionGameObject.GetComponent<CustomerQueue>();
 
-                    ePlayerState = Constants.PlayerState.PS_USING_TILL;
-                    
-                    break;
-                }
-            }
-        }
-    }
+                        //Exit out if there isn't anyone in the queue
+                        if( goCurrentQueueHandle.GetCustomerCount() == 0 )
+                        {
+                            CleanupInteraction();
+                            return;
+                        }
 
-    void OnTriggerStay(Collider other)
-    {
-        //if idle and prompt is not up
-        if(ePlayerState == Constants.PlayerState.PS_IDLE)
-        {
-            if(!goInteractPrompt.activeSelf)
-            {
-                //If we're in an interaction point
-                if(other.GetComponent<InteractionPoint>())
-                {
-                    goInteractPrompt.transform.position = other.transform.position + new Vector3(0,1,0);
-                    goInteractPrompt.SetActive(true);
-                }
-            }
-        }
-        else
-        {
-            if(goInteractPrompt.activeSelf)
-            {
-                //If we're in an interaction point
-                if(other.GetComponent<InteractionPoint>())
-                {
-                    goInteractPrompt.SetActive(false);
-                }
-            }
-        }
-    }
+                        ePlayerState = Constants.PlayerState.PS_USING_TILL;
 
-    void OnTriggerExit(Collider other)
-    {
-        if(goInteractPrompt.activeSelf)
-        {
-            //If we're in an interaction point
-            if(other.GetComponent<InteractionPoint>())
-            {
-                goInteractPrompt.SetActive(false);
+                        break;
+                    }
             }
         }
     }
