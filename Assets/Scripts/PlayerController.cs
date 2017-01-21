@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour, IPawn
     private Constants.PlayerState ePlayerState; //what is the player doing
 
     private GameObject goCarryPosition; //Position where the player carries stuff
+    private GameObject goInteractPrompt;
 
     private GameObject currentInteractionGameObject; //Gameobject that the player is interacting with
     private InteractionPoint currentInteractionScript; //Handle to the interaction script
@@ -36,6 +37,7 @@ public class PlayerController : MonoBehaviour, IPawn
     void Start()
     {
         controller = GetComponent<CharacterController>();
+        goInteractPrompt = GameObject.FindGameObjectWithTag(Constants.PlayerInteractionPromptTag);
 
         //Find and store the hand position
         foreach( Transform child in transform )
@@ -45,6 +47,14 @@ public class PlayerController : MonoBehaviour, IPawn
                 goCarryPosition = child.gameObject;
             }
         }
+
+        if(!goCarryPosition)
+            Debug.Break();
+
+        if(!goInteractPrompt)
+            Debug.Break();
+
+        goInteractPrompt.SetActive(false);
     }
 
     void Update()
@@ -261,6 +271,46 @@ public class PlayerController : MonoBehaviour, IPawn
 
                         break;
                     }
+            }
+        }
+    }
+
+    void OnTriggerStay(Collider other)
+    {
+        //if idle and prompt is not up
+        if(ePlayerState == Constants.PlayerState.PS_IDLE)
+        {
+            if(!goInteractPrompt.activeSelf)
+            {
+                //If we're in an interaction point
+                if(other.GetComponent<InteractionPoint>())
+                {
+                    goInteractPrompt.transform.position = other.transform.position + new Vector3(0,1,0);
+                    goInteractPrompt.SetActive(true);
+                }
+            }
+        }
+        else
+        {
+            if(goInteractPrompt.activeSelf)
+            {
+                //If we're in an interaction point
+                if(other.GetComponent<InteractionPoint>())
+                {
+                    goInteractPrompt.SetActive(false);
+                }
+            }
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if(goInteractPrompt.activeSelf)
+        {
+            //If we're in an interaction point
+            if(other.GetComponent<InteractionPoint>())
+            {
+                goInteractPrompt.SetActive(false);
             }
         }
     }
