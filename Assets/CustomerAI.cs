@@ -267,7 +267,11 @@ public class CustomerAI : MonoBehaviour
 
     private bool AtItemLocation( ShoppingItem item )
     {
-        return Vector3.Distance( transform.position, itemExtectedLocation ) < SIGHT_RADIUS;
+        Vector3 charPosition = transform.position;
+        Vector3 searchPosition = itemExtectedLocation;
+        charPosition.y = 0;
+        searchPosition.y = 0;
+        return Vector3.Distance( charPosition, searchPosition ) < SIGHT_RADIUS;
     }
 
     public bool SeesItem()
@@ -277,7 +281,11 @@ public class CustomerAI : MonoBehaviour
 
     bool SeesItem( ShoppingItem item )
     {
-        return Vector3.Distance( transform.position, item.position ) < SIGHT_RADIUS;
+        Vector3 charPosition = transform.position;
+        Vector3 itemPosition = item.position;
+        charPosition.y = 0;
+        itemPosition.y = 0;
+        return Vector3.Distance( charPosition, itemPosition ) < SIGHT_RADIUS;
     }
 
     public bool NeedsMoreItems()
