@@ -5,7 +5,8 @@ public class SceneLoadManagement : MonoBehaviour
 {
     private const string gameobjectName = "SceneManager";
     private static SceneLoadManagement _instance;
-    private string deferredSceneName;
+    private string _deferredSceneName;
+    private bool _loadImmediate;
 
     private void Awake()
     {
@@ -14,6 +15,9 @@ public class SceneLoadManagement : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    public bool LoadImmediate { get { return _loadImmediate; } }
+    public string DeferredSceneName { get { return _deferredSceneName; } }
 
     public static SceneLoadManagement Instance
     {
@@ -32,12 +36,22 @@ public class SceneLoadManagement : MonoBehaviour
     // the specified deferred scene for loading
     public void LoadNewScene(string sceneName)
     {
-        deferredSceneName = sceneName;
+        _deferredSceneName = sceneName;
         SceneManager.LoadScene(SceneNames.LoadingScene);
     }
 
-    public string GetDeferredSceneToLoad()
+    // LoadNewSceneImmediate loads the loading scene
+    // and loads new scene immediately
+    public void LoadNewSceneImmediate(string sceneName)
     {
-        return deferredSceneName;
+        _loadImmediate = true;
+        _deferredSceneName = sceneName;
+        SceneManager.LoadScene(SceneNames.LoadingScene);
+    }
+
+    public void ResetLoadingState()
+    {
+        _loadImmediate = false;
+        _deferredSceneName = "";
     }
 }
