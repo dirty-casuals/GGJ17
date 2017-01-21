@@ -3,6 +3,15 @@
 public class CustomerQueue : MonoBehaviour
 {
     /// <summary>
+    /// Returns the queue the player deals with
+    /// </summary>
+    /// <returns></returns>
+    public static CustomerQueue GetPlayerOperatedQueue()
+    {
+        return FindObjectOfType<CustomerQueue>();
+    }
+
+    /// <summary>
     /// Returns the next customer or null if the queue is empty.
     /// </summary>    
     public CustomerAI GetCurrentCustomer()
@@ -30,10 +39,19 @@ public class CustomerQueue : MonoBehaviour
     /// Returns true if the customer is in the que and sets his world space location and position in line
     /// Returns false if the cusomer is not in the queue;
     /// </summary>   
-    public bool GetCustomerQueuLocation( CustomerAI customer, out Vector3 location, out int position )
+    public bool GetCustomerQueueLocation( CustomerAI customer, out Vector3 location, out int position )
     {
         position = -1;
         location = transform.position;
+        return false;
+    }
+
+
+    /// <summary>
+    /// Adds a customer to the queue. Returns true if the customer could be added;
+    /// </summary>
+    public bool AddCustomer( CustomerAI customer )
+    {
         return false;
     }
 }
