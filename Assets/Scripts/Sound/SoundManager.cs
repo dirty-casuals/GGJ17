@@ -6,6 +6,8 @@ public class SoundManager : MonoBehaviour
 {
     [SerializeField]
     private AudioClip[] songs;
+    [SerializeField]
+    private bool walkThroughTracks;
     private const string objectName = "SoundManager";
     private const float songDuration = 60.0f;
     private static SoundManager _instance;
@@ -31,6 +33,10 @@ public class SoundManager : MonoBehaviour
 
     private void Update()
     {
+        if( !walkThroughTracks )
+        {
+            return;
+        }
         songTimer -= Time.deltaTime;
         if( songTimer < 0.0f )
         {
