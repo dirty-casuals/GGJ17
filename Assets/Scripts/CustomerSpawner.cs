@@ -76,7 +76,7 @@ public class CustomerSpawner : MonoBehaviour
 
     private void SpawnCustomer()
     {
-        Instantiate( customerPrefab );
+        Instantiate( customerPrefab, transform.position, transform.rotation );
     }
 
     private float Variation( float variation )
