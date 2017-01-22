@@ -32,6 +32,8 @@ public static class Constants
 
         IPT_CASHIER_TILL,
         IPT_FOOD_PRODUCT,
+        IPT_FOOD_RESTOCK,
+        IPT_FOOD_BIN,
         IPT_FREEZER
     };
 

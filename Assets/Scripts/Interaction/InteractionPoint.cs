@@ -24,16 +24,24 @@ public class InteractionPoint : MonoBehaviour
     private bool bShelfToPlaceDepthFlipped = false;
     public GameObject goShelfBeingPlacedOnTo;
 
+    public GameObject resupplyItemPrefabOverride = null;
+
 
     public Constants.InteractionPointType eInteractionType;
     public float fInteractionRadius = 0.5f;
+    public Vector3 vInteractionOffset;
 
     private SphereCollider sCollision;
+
+    public void DoStart()
+    {
+        Start();
+    }
 
 	void Start ()
     {
         sCollision = gameObject.AddComponent<SphereCollider>();
-
+        sCollision.center = vInteractionOffset;
         sCollision.radius = fInteractionRadius;
         sCollision.isTrigger = true;
 
@@ -68,6 +76,11 @@ public class InteractionPoint : MonoBehaviour
             {
                 vCustomInterUIPoint = child.transform.position;
             }
+        }
+
+        if(eInteractionType == Constants.InteractionPointType.IPT_FOOD_BIN)
+        {
+            bInUse = true;
         }
 	}
 
@@ -148,7 +161,30 @@ public class InteractionPoint : MonoBehaviour
             
             if(bCanBePlaced)
             {
+                if(other.GetComponent<InteractionPoint>())
+                {
+                    if(other.GetComponent<InteractionPoint>().eInteractionType == Constants.InteractionPointType.IPT_FOOD_BIN)
+                    {
+                        bCanBePlaced = false;
+                        return;
+                    }
+                }
+
                 goShelfBeingPlacedOnTo = other.gameObject;
+            }
+        }
+        else
+        {
+            if (other.tag == Constants.PlayerTag)
+            {
+                PlayerController controllerHandle = other.GetComponent<PlayerController>();
+                if(controllerHandle.IsCarryingFoodItem() && eInteractionType == Constants.InteractionPointType.IPT_FOOD_BIN)
+                {
+                    if (controllerHandle.QueryPlayerInput(Constants.InputType.PIT_INTERACT, true))
+                    {
+                        other.SendMessage(Constants.PlayerInteractionFunction, this.gameObject);
+                    }
+                }
             }
         }
 
@@ -215,7 +251,7 @@ public class InteractionPoint : MonoBehaviour
             break;
         }
         
-        Gizmos.DrawWireSphere(transform.position, fInteractionRadius);
+        Gizmos.DrawWireSphere(transform.position + vInteractionOffset, fInteractionRadius * 2);
     }
     public void SetInUse(bool inUse)
     {
