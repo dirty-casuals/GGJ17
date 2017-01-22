@@ -13,6 +13,7 @@ public enum GameMode
 public class DifficultyParams : ScriptableObject
 {
     public float numberOfWaves = 10;
+    public int minCustomerCount = 2;
     public GameMode gameMode = GameMode.Normal;
 
     public AnimationCurve timeBetweenWaves;

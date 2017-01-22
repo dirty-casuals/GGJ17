@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CustomerSpawner : MonoBehaviour
 {
+    private const float SCAN_CUSTOMERS_REFRASH_RATE = 2;
+
     public GameObject customerPrefab;    
     public DifficultyParams difficultyParams;
     int currentWave = 0;
@@ -58,6 +60,13 @@ public class CustomerSpawner : MonoBehaviour
 
 
             yield return new WaitForSeconds( timeBetweenWaves );
+
+            int numCustomers = 100;
+            while( numCustomers > difficultyParams.minCustomerCount )
+            {
+                numCustomers = FindObjectsOfType<CustomerAI>().Length;
+                yield return new WaitForSeconds( SCAN_CUSTOMERS_REFRASH_RATE );
+            }
         }
     }
 
