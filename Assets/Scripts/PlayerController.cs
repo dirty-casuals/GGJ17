@@ -12,6 +12,13 @@ public class PlayerController : MonoBehaviour, IPawn
     private GameObject goInteractPrompt;
     private GameObject goPlacementErrorPrompt;
 
+
+    private GameObject goRageBar;
+    private Sprite sprRageBar;
+    private float fRageBarMaxXScale;
+    private float fCurrentRageForScaling = 0;
+    private float fLastRageForScaling = 0;
+
     private InteractionPoint pointLockedTo;
 
     public InteractionPoint InteractionLockedTo
@@ -66,6 +73,22 @@ public class PlayerController : MonoBehaviour, IPawn
             {
                 goCarryPosition = child.gameObject;
             }
+
+            foreach (Transform childChildren in child)
+            {
+                if (childChildren.tag == Constants.CustomerRageBarTag)
+                {
+                    goRageBar = childChildren.gameObject;
+                    sprRageBar = childChildren.GetComponent<Sprite>();
+                    fRageBarMaxXScale = goRageBar.transform.localScale.x;
+
+                    Vector3 vNewScale = goRageBar.transform.localScale;
+                    vNewScale.x = 0;
+                    goRageBar.transform.localScale = vNewScale;
+
+                    break;
+                }
+            }
         }
 
         if(!goCarryPosition)
@@ -114,6 +137,16 @@ public class PlayerController : MonoBehaviour, IPawn
         {
             fRageTimer = 0.0f;
             fPlayerRage += Constants.PlayerRageIncreasePerTick;
+        }
+
+        fLastRageForScaling = fCurrentRageForScaling;
+        fCurrentRageForScaling = Mathf.Lerp(fCurrentRageForScaling, fPlayerRage, Constants.CustomerRageScaleFillRate * Time.deltaTime);
+
+        if (fLastRageForScaling != fCurrentRageForScaling)
+        {
+            Vector3 vNewScale = goRageBar.transform.localScale;
+            vNewScale.x = fRageBarMaxXScale * Constants.Normalise(fCurrentRageForScaling, 0, Constants.PlayerTillProgressToReach);
+            goRageBar.transform.localScale = vNewScale;
         }
 
         if(fItemPlacementErrorTimer > 0)
