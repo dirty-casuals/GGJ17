@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4191503185782690}
   - component: {fileID: 212225393243946370}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ItemTwo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -107,7 +107,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4823757475463722}
   - component: {fileID: 212079399045623646}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Bubble
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -210,7 +210,8 @@ GameObject:
   - component: {fileID: 4014579535440944}
   - component: {fileID: 114740321825168650}
   - component: {fileID: 65516006000098596}
-  m_Layer: 0
+  - component: {fileID: 114047870197679924}
+  m_Layer: 10
   m_Name: Thoughts
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -262,7 +263,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4968403266867004}
   - component: {fileID: 212074231497727212}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ItemThree
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -326,7 +327,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4218215637415656}
   - component: {fileID: 212692182961769024}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ItemOne
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -357,7 +358,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4703952594973510}
   - component: {fileID: 212245696558880870}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: AngryThoughts
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -647,7 +648,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1066826628557866}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.14, y: 0.8, z: -26.562}
+  m_LocalPosition: {x: 0.9246411, y: -0.5, z: -12.349075}
   m_LocalScale: {x: 1, y: 0.8, z: 1}
   m_Children:
   - {fileID: 4014579535440944}
@@ -911,6 +912,17 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114047870197679924
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1334822488338950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f710cf9319f2a54d9a767097a33d582, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114068603881618428
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1164,7 +1176,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.021963067, y: -0.4327593, z: -0.016595155}
+  m_ConnectedAnchor: {x: 0.021963155, y: -0.43275902, z: -0.016594201}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 1, z: 0}
   m_TwistLimitSpring:
@@ -1206,7 +1218,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.021931745, y: 0.43278638, z: -0.016332759}
+  m_ConnectedAnchor: {x: 0.021931745, y: 0.43278643, z: -0.016332759}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 1, z: 0}
   m_TwistLimitSpring:
@@ -1248,7 +1260,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.36610013, y: -0.00000008622355, z: -0.0000008212314}
+  m_ConnectedAnchor: {x: -0.3661002, y: 0.000000032985426, z: 0.00000013235501}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 1, z: 0}
   m_TwistLimitSpring:
@@ -1290,7 +1302,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.19446445, y: -0.20732118, z: 0.005581662}
+  m_ConnectedAnchor: {x: 0.19446447, y: -0.2073216, z: 0.0055807084}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 1, z: 0}
   m_TwistLimitSpring:
@@ -1332,7 +1344,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.50027347, y: -0.00000004287834, z: -0.00000071525574}
+  m_ConnectedAnchor: {x: -0.5002736, y: 0.000000016726204, z: 0.00000023841858}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 1, z: 0}
   m_TwistLimitSpring:
@@ -1374,7 +1386,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.19446449, y: 0.2073216, z: 0.0055816323}
+  m_ConnectedAnchor: {x: 0.19446452, y: 0.20732154, z: 0.0055806786}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 1, z: 0}
   m_TwistLimitSpring:
@@ -1414,8 +1426,8 @@ NavMeshAgent:
   m_GameObject: {fileID: 1066826628557866}
   m_Enabled: 1
   m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
+  m_Speed: 4
+  m_Acceleration: 6
   avoidancePriority: 50
   m_AngularSpeed: 120
   m_StoppingDistance: 0
@@ -1456,7 +1468,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 15
   m_Sprite: {fileID: 21300000, guid: cfa9f732f5528464eb676dbc9211793b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1491,7 +1503,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 12
   m_Sprite: {fileID: 21300000, guid: 708f2913c6bfc4640b7588b5a9c74d1a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1561,7 +1573,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 15
   m_Sprite: {fileID: 21300000, guid: cfa9f732f5528464eb676dbc9211793b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1596,7 +1608,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 15
   m_Sprite: {fileID: 21300000, guid: b6973a5c2d78346c399c54b7ec66e795, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1666,7 +1678,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 15
   m_Sprite: {fileID: 21300000, guid: cfa9f732f5528464eb676dbc9211793b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

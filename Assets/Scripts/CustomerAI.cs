@@ -452,7 +452,6 @@ public class CustomerAI : MonoBehaviour, IPawn
         charPosition.y = 0;
         itemPosition.y = 0;
         bool isInSight = Vector3.Distance( charPosition, itemPosition ) < SIGHT_RADIUS;
-        bool isPickable = item.CanBePickedUp();
         bool isOnShelf = item.IsOnShelf();
         bool isInStock = item.Quantity > 0;
 
@@ -460,7 +459,7 @@ public class CustomerAI : MonoBehaviour, IPawn
         {
             GetComponent<CustomerRage>().Rage_FoundOutOfStockItem();
         }
-        return isInSight && isPickable && isOnShelf && isInStock;
+        return isInSight && isOnShelf && isInStock;
     }
 
     public bool NeedsMoreItems()

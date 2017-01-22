@@ -31,6 +31,7 @@ TagManager:
   - ShelfLineB
   - PlacementExclusionZones
   - ItemQuantity
+  - EndScore
   layers:
   - Default
   - TransparentFX

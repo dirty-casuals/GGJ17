@@ -32,11 +32,6 @@ public class ShoppingItem : MonoBehaviour
         return (!this.GetComponent<InteractionPoint>().InUse());
     }
 
-    public bool CanBePickedUp()
-    {
-        return (IsOnShelf() && Quantity >= 1);
-    }
-
     void Awake()
     {
         originalPlace = transform.position;

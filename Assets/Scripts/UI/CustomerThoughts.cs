@@ -2,6 +2,8 @@
 
 public class CustomerThoughts : MonoBehaviour
 {
+    private PlayerController playerhandle;
+
     [SerializeField]
     private CustomerAI aiHandle;
     [SerializeField]
@@ -13,8 +15,19 @@ public class CustomerThoughts : MonoBehaviour
     private const float rageThreshold = 70.0f;
     private int currentItem = 0;
 
+    private float fScaleTimer = 0;
+    bool bBlowingUp, bShrinkingDown;
+
     private void Start()
     {
+        playerhandle = GameObject.FindGameObjectWithTag(Constants.PlayerTag).GetComponent<PlayerController>();
+
+        if(!playerhandle)
+        {
+            Debug.LogError("bad here");
+            Debug.Break();
+        }
+
         SetupItemThoughts();
     }
 
@@ -25,6 +38,46 @@ public class CustomerThoughts : MonoBehaviour
             return;
         }
         UpdateThoughtState();
+
+        if(!bBlowingUp)
+        {
+            bBlowingUp = playerhandle.QueryPlayerInput(Constants.InputType.PIT_CAMERA_ZOOM_OUT);
+            if(bBlowingUp)
+                fScaleTimer = 0;
+        }
+        
+        if(bBlowingUp)
+        {
+            fScaleTimer += Time.deltaTime;
+
+            if(this.transform.localScale.x < Constants.ZoomInBubbleBlowUpAmount)
+            {
+                float fScale = Constants.ZoomInBubbleBlowUpAmount * Constants.Normalise(fScaleTimer, 0, Constants.ZoomIconFadeInTime);
+                fScale = Mathf.Max(1.0f, fScale);
+                this.transform.localScale = new Vector3(fScale,fScale,fScale);
+            }
+
+            bShrinkingDown = !playerhandle.QueryPlayerInput(Constants.InputType.PIT_CAMERA_ZOOM_OUT);
+            if(bShrinkingDown)
+            {
+                fScaleTimer = Constants.ZoomIconFadeInTime;
+                bBlowingUp = false;
+            }
+        }
+
+        if(bShrinkingDown)
+        {
+            fScaleTimer -= Time.deltaTime;
+
+            if(this.transform.localScale.x > 1)
+            {
+                float fScale = 4.0f * Constants.Normalise(fScaleTimer, 0, Constants.ZoomIconFadeInTime);
+                this.transform.localScale = new Vector3(fScale,fScale,fScale);
+            }
+            else bShrinkingDown = false;
+        }
+
+        
     }
 
     private void OnTriggerStay(Collider col)

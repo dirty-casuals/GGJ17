@@ -46,6 +46,11 @@ public class CustomerAnimator : MonoBehaviour
 
     void Update()
     {
+        if( Constants.bGameOver )
+        {
+            return;
+        }
+
         animator.SetFloat( ANIM_SPEED, pawn.speed );
         animator.SetBool( ANIM_HOLDING, pawn.isHoldingItem );
     }
