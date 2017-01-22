@@ -5,23 +5,22 @@ using UnityEngine.UI;
 
 public class LevelEndScript : MonoBehaviour
 {
+    public GameObject pauseButton;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
     private bool bSetEndScriptUp = false;
 
-	// Update is called once per frame
-	void Update ()
+    void Update()
     {
-		if(Constants.bGameOver && !bSetEndScriptUp)
+        if( Constants.bGameOver && pauseButton.activeInHierarchy )
+        {
+            pauseButton.SetActive(false);
+        }
+        if( Constants.bGameOver && !bSetEndScriptUp )
         {
             bSetEndScriptUp = true;
             foreach( Transform child in transform )
             {
-                if(child.tag == Constants.EndScoreUITag)
+                if( child.tag == Constants.EndScoreUITag )
                 {
                     GameObject.FindGameObjectWithTag(Constants.PlayerTag).GetComponent<PlayerController>().fPlayerScore *= Mathf.Max(1, PlayerAttack.iCountKilled / 2);
 
@@ -31,5 +30,5 @@ public class LevelEndScript : MonoBehaviour
                 child.gameObject.SetActive(true);
             }
         }
-	}
+    }
 }
