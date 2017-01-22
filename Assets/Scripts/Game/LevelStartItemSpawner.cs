@@ -25,11 +25,51 @@ public class LevelStartItemSpawner : MonoBehaviour {
         int iRandomItemOne = Random.Range(0, listOfFoodItemPrefabs.Count-1);
         int iRandomItemTwo = Random.Range(0, listOfFoodItemPrefabs.Count-1);
 
-        GameObject go = (GameObject)Instantiate(listOfFoodItemPrefabs[iRandomItemOne], randomSpawnpoints[iRandomPointOne]);
-        go.transform.localPosition = new Vector3(0,0,0);
+       // GameObject go = (GameObject)Instantiate(listOfFoodItemPrefabs[iRandomItemOne], randomSpawnpoints[iRandomPointOne]);
+        //go.transform.localPosition = new Vector3(0,0,0);
 
-        GameObject goTwo = (GameObject)Instantiate(listOfFoodItemPrefabs[iRandomItemTwo], randomSpawnpoints[iRandomPointTwo]);
-        goTwo.transform.localPosition = new Vector3(0,0,0);
+        //GameObject goTwo = (GameObject)Instantiate(listOfFoodItemPrefabs[iRandomItemTwo], randomSpawnpoints[iRandomPointTwo]);
+        //goTwo.transform.localPosition = new Vector3(0,0,0);
+
+        int iMod = randomSpawnpoints.Length / (listOfFoodItemPrefabs.Count * 2);
+        int iMin, iMax;
+
+        iMin = 0;
+        iMax = iMod;
+
+        int iIndex = 0;
+
+        for(int item = 0; item < listOfFoodItemPrefabs.Count; item++)
+        {
+            for(int i = 0; i < 2; i++)
+            {
+                int iSpawnPoint = Random.Range(iMin, iMax);
+                Debug.Log("ITEM " + item + "(" + i + ") min: " + iMin + ", max: " + iMax + ", actual: " + iSpawnPoint);
+
+                if(iSpawnPoint > -1 && iSpawnPoint < randomSpawnpoints.Length)
+                {
+                    GameObject go = (GameObject)Instantiate(listOfFoodItemPrefabs[iIndex], randomSpawnpoints[iSpawnPoint]);
+                    go.transform.localPosition = new Vector3(0,0,0);
+                }
+
+                iMin += iMod;
+                iMax += iMod;
+                iIndex++;
+
+                if(iIndex >= listOfFoodItemPrefabs.Count)
+                    iIndex = 0;
+            }
+        }
+
+
+
+
+
+
+
+
+
+
 	}
 	
 	

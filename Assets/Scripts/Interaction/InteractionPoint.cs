@@ -145,8 +145,23 @@ public class InteractionPoint : MonoBehaviour
             if (other.tag == Constants.PlayerTag)
             {
                 PlayerController controllerHandle = other.GetComponent<PlayerController>();
-                if(controllerHandle && controllerHandle.IsAbleToInteract() && controllerHandle.InteractionLockedTo == this)
+
+                if(eInteractionType == Constants.InteractionPointType.IPT_FOOD_RESTOCK)
                 {
+                    controllerHandle.bInsideResupplyZone = true;
+                }
+
+                if( (controllerHandle && controllerHandle.IsAbleToInteract() && controllerHandle.InteractionLockedTo == this) ||
+                    (controllerHandle.IsCarryingFoodItem() && eInteractionType == Constants.InteractionPointType.IPT_FOOD_RESTOCK) )
+                {
+                    if(eInteractionType == Constants.InteractionPointType.IPT_FOOD_RESTOCK)
+                    {
+                        if(!controllerHandle.IsCarryingFoodItem())
+                        {
+                            return;
+                        }
+                    }
+
                     if (controllerHandle.QueryPlayerInput(Constants.InputType.PIT_INTERACT, true))
                     {
                         other.SendMessage(Constants.PlayerInteractionFunction, this.gameObject);
@@ -171,31 +186,31 @@ public class InteractionPoint : MonoBehaviour
             
             if(bCanBePlaced)
             {
-                if(other.GetComponent<InteractionPoint>())
-                {
-                    if(other.GetComponent<InteractionPoint>().eInteractionType == Constants.InteractionPointType.IPT_FOOD_BIN)
-                    {
-                        bCanBePlaced = false;
-                        return;
-                    }
-                }
+                //if(other.GetComponent<InteractionPoint>())
+                //{
+                //    if(other.GetComponent<InteractionPoint>().eInteractionType == Constants.InteractionPointType.IPT_FOOD_BIN)
+                //    {
+                //        bCanBePlaced = false;
+                //        return;
+                //    }
+                //}
 
                 goShelfBeingPlacedOnTo = other.gameObject;
             }
         }
         else
         {
-            if (other.tag == Constants.PlayerTag)
-            {
-                PlayerController controllerHandle = other.GetComponent<PlayerController>();
-                if(controllerHandle.IsCarryingFoodItem() && eInteractionType == Constants.InteractionPointType.IPT_FOOD_BIN)
-                {
-                    if (controllerHandle.QueryPlayerInput(Constants.InputType.PIT_INTERACT, true))
-                    {
-                        other.SendMessage(Constants.PlayerInteractionFunction, this.gameObject);
-                    }
-                }
-            }
+            //if (other.tag == Constants.PlayerTag)
+            //{
+            //    PlayerController controllerHandle = other.GetComponent<PlayerController>();
+            //    if(controllerHandle.IsCarryingFoodItem() && eInteractionType == Constants.InteractionPointType.IPT_FOOD_BIN)
+            //    {
+            //        if (controllerHandle.QueryPlayerInput(Constants.InputType.PIT_INTERACT, true))
+            //        {
+            //            other.SendMessage(Constants.PlayerInteractionFunction, this.gameObject);
+            //        }
+            //    }
+            //}
         }
 
         //cashier progress bar
@@ -226,6 +241,10 @@ public class InteractionPoint : MonoBehaviour
 
         if (other.tag == Constants.PlayerTag)
         {
+            PlayerController controllerHandle = other.GetComponent<PlayerController>();
+            if(eInteractionType == Constants.InteractionPointType.IPT_FOOD_RESTOCK)
+                 controllerHandle.bInsideResupplyZone = false;
+
             if(goProgressBar && goProgressBarBG)
             {
                 if(goProgressBar.activeSelf && goProgressBarBG.activeSelf &&

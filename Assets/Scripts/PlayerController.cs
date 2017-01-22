@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour, IPawn
     private GameObject goInteractPrompt;
     private GameObject goPlacementErrorPrompt;
 
+    private GameObject goPlacementCorrectPrompt;
 
     private GameObject goRageBar;
     private Sprite sprRageBar;
@@ -39,6 +40,7 @@ public class PlayerController : MonoBehaviour, IPawn
 
 
     private float fItemPlacementErrorTimer = 0;
+    private float fItemPlacementCorrectTimer = 0;
 
     private float fTaskTime;
     private float fRageTimer = 0.0f;
@@ -56,6 +58,8 @@ public class PlayerController : MonoBehaviour, IPawn
         get; private set;
     }
 
+    public bool bInsideResupplyZone = false;
+
     public event Action onPickupItem;
     public event Action onLeaveItem;
     public event Action onItemSwipe;
@@ -65,6 +69,8 @@ public class PlayerController : MonoBehaviour, IPawn
         controller = GetComponent<CharacterController>();
         goInteractPrompt = GameObject.FindGameObjectWithTag(Constants.PlayerInteractionPromptTag);
         goPlacementErrorPrompt = GameObject.FindGameObjectWithTag(Constants.PlayerPlacementErrorPromptTag);
+
+        goPlacementCorrectPrompt = GameObject.FindGameObjectWithTag(Constants.PlayerPlacementCorrectPromptTag);
 
         //Find and store the hand position
         foreach( Transform child in transform )
@@ -109,8 +115,15 @@ public class PlayerController : MonoBehaviour, IPawn
             Debug.Break();
         }
 
+        if(!goPlacementCorrectPrompt)
+        {
+            Debug.LogError("failed here!");
+            Debug.Break();
+        }
+
         goInteractPrompt.SetActive(false);
         goPlacementErrorPrompt.SetActive(false);
+        goPlacementCorrectPrompt.SetActive(false);
     }
 
     void Update()
@@ -167,6 +180,17 @@ public class PlayerController : MonoBehaviour, IPawn
             {
                 fItemPlacementErrorTimer = 0;
                 goPlacementErrorPrompt.SetActive(false);
+            }
+        }
+
+        if(fItemPlacementCorrectTimer > 0)
+        {
+            fItemPlacementCorrectTimer += Time.deltaTime;
+
+            if(fItemPlacementCorrectTimer > 0.5f)
+            {
+                fItemPlacementCorrectTimer = 0;
+                goPlacementCorrectPrompt.SetActive(false);
             }
         }
     }
@@ -243,7 +267,7 @@ public class PlayerController : MonoBehaviour, IPawn
         }
     
         //Placing back down - timer to make sure we can't immediately place back down
-        if( fTaskTime > 0.5f )
+        if( fTaskTime > 0.5f && !bInsideResupplyZone)
         {
             if( QueryPlayerInput( Constants.InputType.PIT_INTERACT, true ) )
             {
@@ -381,15 +405,27 @@ public class PlayerController : MonoBehaviour, IPawn
     }
     void HandleInteraction( GameObject InteractGO )
     {
-        //If we got in here and we're carrying food, we've interacted with a trash bin
+        //If we got in here and we're carrying food, we've interacted restock
         if(IsCarryingFoodItem())
         {
-            if(currentInteractionGameObject)
+            ShoppingItem shopItem = currentInteractionGameObject.GetComponent<ShoppingItem>();
+            if(shopItem)
             {
-                currentInteractionScript = null;
+                if(InteractGO.GetComponent<InteractionPoint>().resupplyItemPrefabOverride.name + "(Clone)" == currentInteractionGameObject.name)
+                {
+                    fItemPlacementCorrectTimer += Time.deltaTime;
+                    goPlacementCorrectPrompt.transform.position = this.transform.position + new Vector3(-0.37f,3,0);
+                    goPlacementCorrectPrompt.SetActive(true);
 
-                Destroy(currentInteractionGameObject);
-                CleanupInteraction();
+                    currentInteractionScript.GetComponent<ShoppingItem>().Quantity = Constants.ShopItemResupplyAmount;
+                    //restocked
+                }
+                else
+                {
+                    fItemPlacementErrorTimer += Time.deltaTime;
+                    goPlacementErrorPrompt.transform.position = this.transform.position + new Vector3(-0.37f,3,0);
+                    goPlacementErrorPrompt.SetActive(true);
+                }
             }
             return;
         }
@@ -447,7 +483,8 @@ public class PlayerController : MonoBehaviour, IPawn
         }
 
         //if idle and prompt is not up
-        if(ePlayerState == Constants.PlayerState.PS_IDLE)
+        if(( ePlayerState == Constants.PlayerState.PS_IDLE && !bInsideResupplyZone)
+            || (IsCarryingFoodItem() && bInsideResupplyZone) )
         {
             if(!goInteractPrompt.activeSelf)
             {
@@ -465,6 +502,17 @@ public class PlayerController : MonoBehaviour, IPawn
                     goInteractPrompt.SetActive(true);
 
                     pointLockedTo = other.GetComponent<InteractionPoint>();
+                }
+            }
+        }
+        else if(ePlayerState == Constants.PlayerState.PS_CARRYING_FOODITEM)
+        {
+            //carrying food and arrived at a restock container
+            if(other.GetComponent<InteractionPoint>() && other.GetComponent<InteractionPoint>().eInteractionType != Constants.InteractionPointType.IPT_FOOD_RESTOCK)
+            {
+                if(QueryPlayerInput(Constants.InputType.PIT_INTERACT))
+                {
+                    Debug.Log("Got food, and interacting with the food restock");
                 }
             }
         }
