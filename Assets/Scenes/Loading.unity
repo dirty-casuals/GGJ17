@@ -927,9 +927,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: You goal is to last as long as you can in the endless struggle that is your
-    job, make sure neither yourself nor your customers become too enraged, else you'll
-    be canned; bean canned.
+  m_Text: Your goal is to last as long as you can in the endless struggle that is
+    your job, make sure neither yourself nor your customers become too enraged, else
+    you'll be canned; bean canned.
 --- !u!222 &1217530613
 CanvasRenderer:
   m_ObjectHideFlags: 0
