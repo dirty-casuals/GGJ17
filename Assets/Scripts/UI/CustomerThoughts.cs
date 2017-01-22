@@ -22,7 +22,7 @@ public class CustomerThoughts : MonoBehaviour
     private SpriteRenderer[] foodItems;
     private const float rageThreshold = 70.0f;
     private GameObject previousCustomerMood;
-
+    private bool isAlerted;
     private float fScaleTimer = 0;
     bool bBlowingUp, bShrinkingDown;
 
@@ -121,6 +121,7 @@ public class CustomerThoughts : MonoBehaviour
         switch(aiHandle.currentState)
         {
             case StateNames.Alerted:
+                isAlerted = true;
                 SetCustomerMood(scaredFace);
                 break;
             case StateNames.TakeItem:
@@ -134,7 +135,7 @@ public class CustomerThoughts : MonoBehaviour
                 SetCustomerMood(angryFace);
                 break;
             case StateNames.Leave:
-                if(aiHandle.Rage > 50.0f)
+                if(isAlerted || aiHandle.Rage > 50.0f)
                 {
                     return;
                 }
