@@ -23,7 +23,6 @@ public class CustomerThoughts : MonoBehaviour
 
         for(int i = 0; i < items.Length; i++)
         {
-            Debug.Log(items[i].name);
             foodItems[i].sprite = items[i].shoppingItemSprite;
             foodItems[i].gameObject.SetActive(true);
         }
