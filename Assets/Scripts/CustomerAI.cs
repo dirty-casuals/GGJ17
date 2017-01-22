@@ -346,6 +346,11 @@ public class LeaveStoreAIState : CustomerAIState
 
         if( customer.AtGate() )
         {
+            if( customer.isPanicked )
+            {
+                Constants.bGameOver = true;
+            }
+
             customer.Destroy();
         }
     }
