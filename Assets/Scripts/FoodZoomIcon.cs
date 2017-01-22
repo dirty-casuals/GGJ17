@@ -9,6 +9,7 @@ public class FoodZoomIcon : MonoBehaviour {
 
     private ShoppingItem shopItemHandle;
     private TextMesh outOfStockPrompt;
+    private AudioSource outOfStockPromptSfx;
 
     private float fOutOfStockTimer = 0;
     private float fBlinkingTimer = 0;
@@ -18,6 +19,7 @@ public class FoodZoomIcon : MonoBehaviour {
 
     private bool bDisplayingIcon = false;
     private bool bLastDisplayingIcon = false;
+    
 
 	// Use this for initialization
 	void Start () {
@@ -30,6 +32,7 @@ public class FoodZoomIcon : MonoBehaviour {
             if(child.tag == Constants.ShopItemOutOfStockTag)
             {
                 outOfStockPrompt = child.GetComponent<TextMesh>();
+                outOfStockPromptSfx = outOfStockPrompt.GetComponent<AudioSource>();
             }
         }
 
@@ -93,6 +96,7 @@ public class FoodZoomIcon : MonoBehaviour {
                     Color col = outOfStockPrompt.color;
                     col.a = 1;
                     outOfStockPrompt.color = col;
+                    outOfStockPromptSfx.Play();
                 }
             }
         }
