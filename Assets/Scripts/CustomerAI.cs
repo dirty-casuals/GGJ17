@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -494,6 +495,20 @@ public class CustomerAI : MonoBehaviour, IPawn
         {
             queue.ReleaseCustomer( this );
         }
+
+        var rag = GetComponentInChildren<Ragdoll>();
+        if( rag )
+        {
+            rag.SetRagdoll( true );
+        }
+
+        StartCoroutine( DestroyAfterTime( 10 ) );
+    }
+
+    private IEnumerator DestroyAfterTime( int time )
+    {
+        yield return new WaitForSeconds( time );
+        Destroy( gameObject );
     }
 
     public void Leave()
