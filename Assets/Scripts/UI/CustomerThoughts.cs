@@ -13,8 +13,13 @@ public class CustomerThoughts : MonoBehaviour
     [SerializeField]
     private GameObject scaredFace;
     [SerializeField]
+    private GameObject moneyThoughts;
+    [SerializeField]
+    private GameObject happyThoughts;
+    [SerializeField]
     private SpriteRenderer[] foodItems;
     private const float rageThreshold = 70.0f;
+    private GameObject previousCustomerMood;
 
     private void Start()
     {
@@ -32,18 +37,12 @@ public class CustomerThoughts : MonoBehaviour
 
     private void OnTriggerStay(Collider col)
     {
-        if(aiHandle.currentState == StateNames.GotoItem)
-        {
-            thoughtBubble.SetActive(false);
-        }
+        thoughtBubble.SetActive(false);
     }
 
     private void OnTriggerExit(Collider col)
     {
-        if(aiHandle.currentState == StateNames.GotoItem)
-        {
-            thoughtBubble.SetActive(true);
-        }
+        thoughtBubble.SetActive(true);
     }
 
     private void SetupItemThoughts()
@@ -61,22 +60,30 @@ public class CustomerThoughts : MonoBehaviour
     {
         if(aiHandle.isDead)
         {
-            DisplayDead();
+            SetCustomerMood(deadFace);
             return;
         }
         switch(aiHandle.currentState)
         {
             case StateNames.Alerted:
-                DisplayAlerted();
+                SetCustomerMood(scaredFace);
                 break;
             case StateNames.TakeItem:
                 CollectItem();
                 break;
             case StateNames.WaitInQueue:
-                if(aiHandle.Rage > rageThreshold)
+                if(aiHandle.Rage < rageThreshold)
                 {
-                    DisplayUnhappiness();
+                    return;
                 }
+                SetCustomerMood(angryFace);
+                break;
+            case StateNames.Leave:
+                if(aiHandle.Rage > 50.0f)
+                {
+                    return;
+                }
+                SetCustomerMood(happyThoughts);
                 break;
         }
     }
@@ -89,26 +96,8 @@ public class CustomerThoughts : MonoBehaviour
 
         if(index == itemList)
         {
-            thoughtBubble.SetActive(false);
+            SetCustomerMood(moneyThoughts);
         }
-    }
-
-    private void DisplayDead()
-    {
-        SetCustomerMood(deadFace);
-        angryFace.SetActive(false);
-        scaredFace.SetActive(false);
-    }
-
-    private void DisplayAlerted()
-    {
-        SetCustomerMood(scaredFace);
-        angryFace.SetActive(false);
-    }
-
-    private void DisplayUnhappiness()
-    {
-        SetCustomerMood(angryFace);
     }
 
     private void SetCustomerMood(GameObject mood)
@@ -117,6 +106,11 @@ public class CustomerThoughts : MonoBehaviour
         {
             return;
         }
+        if(previousCustomerMood)
+        {
+            previousCustomerMood.SetActive(false);
+        }
+        previousCustomerMood = mood;
         HideAllItems();
         thoughtBubble.SetActive(true);
         mood.SetActive(true);
