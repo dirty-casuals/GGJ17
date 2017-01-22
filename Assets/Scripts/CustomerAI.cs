@@ -176,6 +176,7 @@ public class AlertedAIState : CustomerAIState
     public override void OnEnter()
     {
         panicTimer = Random.Range( 2.0f, 4.0f );
+        customer.Panic();
     }
 
     public override void Update()
@@ -185,8 +186,7 @@ public class AlertedAIState : CustomerAIState
             panicTimer -= Time.deltaTime;
             if( panicTimer <= 0 )
             {
-                customer.panicked = true;
-                customer.Leave();
+                GotoState( StateNames.Leave );
             }
         }
     }
@@ -264,7 +264,7 @@ public class CustomerAI : MonoBehaviour, IPawn
 {
     public bool isDead { get; private set; }
 
-    const float ALERT_RADIUS = 5;
+    const float ALERT_RADIUS = 10;
     const float SIGHT_RADIUS = 3;
     const float DISTANCE_FROM_DESTINATION = 1.5f;
 
@@ -327,7 +327,7 @@ public class CustomerAI : MonoBehaviour, IPawn
         }
     }
 
-    public bool panicked { get; set; }
+    public bool isPanicked { get; private set; }
 
     public Vector3 itemExtectedLocation;
 
@@ -362,6 +362,7 @@ public class CustomerAI : MonoBehaviour, IPawn
     {
         stateHandler = new StateHandler( this );
         stateHandler.AddState( new InitAIState() );
+        stateHandler.AddState( new AlertedAIState() );
         stateHandler.AddState( new GotoItemAIState() );
         stateHandler.AddState( new GotoTillQueueAIState() );
         stateHandler.AddState( new TakeItemAIState() );
@@ -413,7 +414,16 @@ public class CustomerAI : MonoBehaviour, IPawn
         Vector3 itemPosition = item.position;
         charPosition.y = 0;
         itemPosition.y = 0;
-        return Vector3.Distance( charPosition, itemPosition ) < SIGHT_RADIUS;
+        bool isInSight = Vector3.Distance( charPosition, itemPosition ) < SIGHT_RADIUS;
+        bool isPickable = item.CanBePickedUp();
+        bool isOnShelf = item.IsOnShelf();
+        bool isInStock = item.Quantity > 0;
+
+        if( !isInStock )
+        {
+            GetComponent<CustomerRage>().Rage_FoundOutOfStockItem();
+        }
+        return isInSight && isPickable && isOnShelf && isInStock;
     }
 
     public bool NeedsMoreItems()
@@ -454,14 +464,13 @@ public class CustomerAI : MonoBehaviour, IPawn
 
     public void TakeItem()
     {
+        if( currentItem )
+            currentItem.Quantity--;
+
         if( onPickupItem != null )
         {
             onPickupItem();
         }
-
-        // pretend this does a thing
-        // TODO: actually take item from stock
-
     }
 
     internal void SetNextExpectedItemLocation()
@@ -506,7 +515,7 @@ public class CustomerAI : MonoBehaviour, IPawn
     }
 
     public void GoToGate()
-    {
+    {        
         agent.SetDestination( gate.transform.position );
     }
 
@@ -551,9 +560,19 @@ public class CustomerAI : MonoBehaviour, IPawn
         foreach( var collider in colliders )
         {
             CustomerAI ai = collider.GetComponent<CustomerAI>();
-            if( ai != this )
+            if( ai!=null && ai != this )
             {
-                ai.Alert();
+                Vector3 rayDir = ai.transform.position - transform.position;
+
+                // Line of sight
+                RaycastHit hit;
+                if( Physics.Raycast( transform.position, rayDir, out hit ) )
+                {
+                    if( hit.collider.transform.root == collider.transform.root )
+                    {
+                        ai.Alert();
+                    }
+                }
             }
         }
     }
@@ -578,5 +597,11 @@ public class CustomerAI : MonoBehaviour, IPawn
         {
             queue.ReleaseCustomer( this );
         }
+    }
+
+    internal void Panic()
+    {
+        isPanicked = true;
+        agent.ResetPath();
     }
 }
