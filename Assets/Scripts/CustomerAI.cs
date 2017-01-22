@@ -69,6 +69,8 @@ public abstract class CustomerAIState : AIState
 public static class StateNames
 {
     public const string Init = "Init";
+    public const string Wander = "Wander";
+    public const string Alerted = "Alerted";
     public const string GotoItem = "GotoItem";
     public const string TakeItem = "TakeItem";
     public const string GotoTillQueue = "GotoTillQueue";
@@ -163,6 +165,32 @@ public class TakeItemAIState : CustomerAIState
     }
 }
 
+public class AlertedAIState : CustomerAIState
+{
+    private float panicTimer = 2;
+    public override string state
+    {
+        get { return StateNames.Alerted; }
+    }
+
+    public override void OnEnter()
+    {
+        panicTimer = Random.Range( 2.0f, 4.0f );
+    }
+
+    public override void Update()
+    {
+        if( panicTimer > 0 )
+        {
+            panicTimer -= Time.deltaTime;
+            if( panicTimer <= 0 )
+            {
+                customer.panicked = true;
+                customer.Leave();
+            }
+        }
+    }
+}
 
 public class GotoTillQueueAIState : CustomerAIState
 {
@@ -236,8 +264,10 @@ public class CustomerAI : MonoBehaviour, IPawn
 {
     public bool isDead { get; private set; }
 
+    const float ALERT_RADIUS = 5;
     const float SIGHT_RADIUS = 3;
     const float DISTANCE_FROM_DESTINATION = 1.5f;
+
     StateHandler stateHandler;
     NavMeshAgent agent;
 
@@ -246,7 +276,7 @@ public class CustomerAI : MonoBehaviour, IPawn
     CustomerQueue queue;
 
     float fCustomerRage = 0; //Current rage 0-100
-    float fCustomerQueueTime = 0; //Time in the queue
+    float fCustomerQueueTime = 0; //Time in the queue    
 
     public float Rage
     {
@@ -297,6 +327,8 @@ public class CustomerAI : MonoBehaviour, IPawn
         }
     }
 
+    public bool panicked { get; set; }
+
     public Vector3 itemExtectedLocation;
 
     public event System.Action onPickupItem;
@@ -317,7 +349,7 @@ public class CustomerAI : MonoBehaviour, IPawn
     {
         if( Random.value < 0.000001f * Time.fixedDeltaTime )
         {
-            Die(); // of heart attack
+            Die(false); // of heart attack
         }
     }
 
@@ -337,7 +369,7 @@ public class CustomerAI : MonoBehaviour, IPawn
         stateHandler.AddState( new LeaveStoreAIState() );
 
         stateHandler.GotoState( StateNames.Init );
-    }    
+    }
 
     public void SetRandomItemTargets()
     {
@@ -473,7 +505,7 @@ public class CustomerAI : MonoBehaviour, IPawn
     }
 
     public void GoToGate()
-    {       
+    {
         agent.SetDestination( gate.transform.position );
     }
 
@@ -487,7 +519,7 @@ public class CustomerAI : MonoBehaviour, IPawn
         Destroy( gameObject );
     }
 
-    public void Die()
+    public void Die( bool alert )
     {
         isDead = true;
         agent.Stop();
@@ -505,6 +537,32 @@ public class CustomerAI : MonoBehaviour, IPawn
         }
 
         StartCoroutine( DestroyAfterTime( 10 ) );
+
+        if( alert )
+        {
+            AlertEveryone();
+        }
+    }
+
+    private void AlertEveryone()
+    {
+        Collider[] colliders = Physics.OverlapSphere( transform.position, ALERT_RADIUS );
+        foreach( var collider in colliders )
+        {
+            CustomerAI ai = collider.GetComponent<CustomerAI>();
+            if( ai != this )
+            {
+                ai.Alert();
+            }
+        }
+    }
+
+    private void Alert()
+    {
+        if( stateHandler.currentState != StateNames.Alerted )
+        {
+            stateHandler.GotoState( StateNames.Alerted );
+        }
     }
 
     private IEnumerator DestroyAfterTime( int time )
@@ -520,6 +578,4 @@ public class CustomerAI : MonoBehaviour, IPawn
             queue.ReleaseCustomer( this );
         }
     }
-
-    
 }
