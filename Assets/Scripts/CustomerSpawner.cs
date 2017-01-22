@@ -17,6 +17,11 @@ public class CustomerSpawner : MonoBehaviour
     {
         while( true )
         {
+            if( Constants.bGameOver )
+            {
+                yield return null;
+            }
+
             if( difficultyParams.gameMode == GameMode.Normal &&
                 currentWave > difficultyParams.numberOfWaves )
             {
@@ -42,6 +47,10 @@ public class CustomerSpawner : MonoBehaviour
 
             for( int i = 0; i < waveSize; i++ )
             {
+                if( Constants.bGameOver )
+                {
+                    yield return null;
+                }
                 float variation = Variation( spawnSpeedVariation );
                 yield return new WaitForSeconds( 1 / (spawnSpeed + variation) );
                 SpawnCustomer();                                  
