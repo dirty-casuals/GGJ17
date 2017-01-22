@@ -5,7 +5,7 @@ using UnityEngine;
 public static class Constants
 {
     public static bool bGameOver = false;
-
+    public static string sFailReason = "";
 
     public const float TickInterval = 1.0f;
 
@@ -70,6 +70,8 @@ public static class Constants
 
     public const string CustomerQueueTag = "CustomerQueue";
 
+    public const string ShopItemOutOfStockTag = "OutOfStock";
+
 
     public const string IPProgressBarTag = "ProgressBar";
     public const string IPProgressBarBGTag = "ProgressBarBG";
@@ -127,7 +129,7 @@ public static class Constants
     public const float PlayerRageDecreaseKilledCustomer = 11.5f;
 
     public const float CustomerRageIncreaseItemGotTakenWhileReaching = 20.0f;
-    public const float CustomerRageIncreaseItemNotWhereExpected = 1.5f;
+    public const float CustomerRageIncreaseItemNotWhereExpected = 5.5f;
     public const float CustomerRageIncreaseOutOfStockItem = 25.0f;
 
     public const float CustomerRageInQueueIncreasePerTick = AvgQueueRageForGameFail / MaxCustomerWaitTime;

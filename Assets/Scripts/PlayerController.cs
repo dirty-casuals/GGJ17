@@ -177,9 +177,10 @@ public class PlayerController : MonoBehaviour, IPawn
             goRageBar.transform.localScale = vNewScale;
         }
 
-        if(fCurrentRageForScaling >= Constants.PlayerTillProgressToReach)
+        if(fPlayerRage >= Constants.PlayerTillProgressToReach)
         {
             Constants.bGameOver = true;
+            Constants.sFailReason = "Too much player rage!";
         }
 
         if(fItemPlacementErrorTimer > 0)

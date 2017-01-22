@@ -33,6 +33,8 @@ TagManager:
   - ItemQuantity
   - EndScore
   - PlacementCorrectPrompt
+  - OutOfStock
+  - EndReason
   layers:
   - Default
   - TransparentFX
