@@ -7,7 +7,7 @@ public class SoundManager : MonoBehaviour
     [SerializeField]
     private AudioClip[] songs;
     private const string objectName = "SoundManager";
-    private const float songDuration = 10.0f;
+    private const float songDuration = 60.0f;
     private static SoundManager _instance;
     private AudioSource audioSource;
     private float songTimer;
