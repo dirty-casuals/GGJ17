@@ -429,6 +429,7 @@ public class CustomerAI : MonoBehaviour, IPawn
 
         // pretend this does a thing
         // TODO: actually take item from stock
+
     }
 
     internal void SetNextExpectedItemLocation()

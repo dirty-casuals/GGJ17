@@ -57,7 +57,7 @@ public class GameController : MonoBehaviour
 	void Update ()
     {
         fCalculateQueueRageTimer += Time.deltaTime;
-        if(fCalculateQueueRageTimer > Constants.PlayerTillIncreasePerTick)
+        if(fCalculateQueueRageTimer > Constants.TickInterval)
         {
             fCalculateQueueRageTimer = 0;
             fLastQueueRage = goCurrentQueueHandle.GetQueueRage();

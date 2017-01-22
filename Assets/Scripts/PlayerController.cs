@@ -166,6 +166,10 @@ public class PlayerController : MonoBehaviour, IPawn
     {
         //When putting items thru, the max score is decreased by customer rage and time waited
         fPlayerScore += Constants.PlayerScoreIncreaseForProcessingItems - (fCustomerRage * Constants.Normalise( fCustomerWaitingTime, 0, Constants.MaxCustomerWaitTime ));
+
+        //The angerier the customer is, the more rage the player can get rid of
+        fPlayerRage -= fCustomerRage / 10.0f;
+
         GameObject.FindGameObjectWithTag( Constants.UIControllerTag ).GetComponent<UIController>().UpdateScore( fPlayerScore );
     }
     public void Rage_ProcessedCustomerItems()
