@@ -235,13 +235,13 @@ public class LeaveStoreAIState : CustomerAIState
 public class CustomerAI : MonoBehaviour, IPawn
 {
     public bool isDead { get; private set; }
+    public ShoppingItem[] targetItems;
 
     const float SIGHT_RADIUS = 3;
     const float DISTANCE_FROM_DESTINATION = 1.5f;
     StateHandler stateHandler;
     NavMeshAgent agent;
 
-    ShoppingItem[] targetItems;
     int currentItemIdx = -1;
     CustomerQueue queue;
 

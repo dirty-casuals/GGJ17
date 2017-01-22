@@ -12,6 +12,8 @@ public class ShoppingItem : MonoBehaviour
 
     public Vector3 position { get { return transform.position; } }
 
+    public Sprite shoppingItemSprite;
+
     private TextMesh TextGameObject;
     private int iQuantity = 3;
     private int iOldQuantity = 3;
