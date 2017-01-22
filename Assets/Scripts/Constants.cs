@@ -122,7 +122,10 @@ public static class Constants
     public const float PlayerRageIncreaseProcessedItems = 5.5f;
     public const float PlayerRageDecreaseKilledCustomer = 11.5f;
 
+    public const float CustomerRageIncreaseItemGotTakenWhileReaching = 20.0f;
+    public const float CustomerRageIncreaseItemNotWhereExpected = 1.5f;
     public const float CustomerRageIncreaseOutOfStockItem = 25.0f;
+
     public const float CustomerRageInQueueIncreasePerTick = AvgQueueRageForGameFail / MaxCustomerWaitTime;
 
     public const float CustomerRageScaleFillRate = 3.5f;

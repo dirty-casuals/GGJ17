@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -82,5 +83,15 @@ public class CustomerRage : MonoBehaviour
     public void Rage_FoundOutOfStockItem()
     {
         aiHandle.Rage += Constants.CustomerRageIncreaseOutOfStockItem;
+    }
+
+    public void Rage_SomeoneTookItemWhileReaching()
+    {
+        aiHandle.Rage += Constants.CustomerRageIncreaseItemGotTakenWhileReaching;
+    }
+
+    internal void Rage_ItemNotWhereExpected()
+    {
+        aiHandle.Rage += Constants.CustomerRageIncreaseItemNotWhereExpected;
     }
 }

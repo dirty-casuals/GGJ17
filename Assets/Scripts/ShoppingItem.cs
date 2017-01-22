@@ -32,9 +32,9 @@ public class ShoppingItem : MonoBehaviour
         return (!this.GetComponent<InteractionPoint>().InUse());
     }
 
-    void Awake()
+    public bool CanBePickedUp()
     {
-        originalPlace = transform.position;
+        return (IsOnShelf() && Quantity >= 1);
     }
 
     void Start()
@@ -46,6 +46,8 @@ public class ShoppingItem : MonoBehaviour
                 TextGameObject = child.GetComponent<TextMesh>();
                 break;
             }
+
+            originalPlace = transform.position;
         }
 
         if(!TextGameObject)
