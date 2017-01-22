@@ -55,6 +55,8 @@ public static class Constants
     public const string PlayerCamPosTag = "PlayerCamPos";
     public const string PlayerCarryPos = "PlayerHandPos";
 
+    public const string FoodTextQuantityTag = "ItemQuantity";
+
     public const string FootItemTag = "FoodItem";
 
     public const string CustomerRageBarTag = "RageBar";
