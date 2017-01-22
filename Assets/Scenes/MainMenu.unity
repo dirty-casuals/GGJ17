@@ -772,7 +772,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: ebdde1151dd4d9a43b1eacdc2b6cbe2a, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 105b86673746d504caae7480e0570f1e, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -830,7 +830,7 @@ AudioSource:
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
-    m_RotationOrder: 4
+    m_RotationOrder: 0
   reverbZoneMixCustomCurve:
     serializedVersion: 2
     m_Curve:
@@ -868,9 +868,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   songs:
+  - {fileID: 8300000, guid: 105b86673746d504caae7480e0570f1e, type: 3}
   - {fileID: 8300000, guid: ebdde1151dd4d9a43b1eacdc2b6cbe2a, type: 3}
-  - {fileID: 8300000, guid: 8e9a889e5f00ee94f9ca9b74fd4a9148, type: 3}
-  - {fileID: 8300000, guid: a1a8229df86422b4b94cc7cf61fa2e7a, type: 3}
 --- !u!1 &1518865891
 GameObject:
   m_ObjectHideFlags: 0
@@ -904,7 +903,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.3111621, y: 0.26240763}
   m_AnchorMax: {x: 0.68320954, y: 0.9394077}
-  m_AnchoredPosition: {x: 2.7599945, y: -2.0789986}
+  m_AnchoredPosition: {x: 2.7599945, y: -2.0789948}
   m_SizeDelta: {x: 1, y: -5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1518865895
