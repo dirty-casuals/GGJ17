@@ -522,6 +522,9 @@ public class CustomerAI : MonoBehaviour, IPawn
 
     bool SeesItem( ShoppingItem item )
     {
+        if( item == null )
+            return true; 
+
         Vector3 charPosition = transform.position;
         Vector3 itemPosition = item.position;
         charPosition.y = 0;
@@ -535,6 +538,9 @@ public class CustomerAI : MonoBehaviour, IPawn
 
     public bool IsItemInStock()
     {
+        if( currentItem == null )
+            return false;
+
         bool isInStock = currentItem.Quantity > 0;
         if( !isInStock )
         {
