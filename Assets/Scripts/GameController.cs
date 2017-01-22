@@ -1,9 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
+    public GameObject gameOverUIObject;
+    public Text textGameOver;
+    public RawImage textGameOverBg;
+
     private CustomerQueue goCurrentQueueHandle;
 
     private GameObject goRageBar;
@@ -14,6 +20,9 @@ public class GameController : MonoBehaviour
 
     private float fCalculateQueueRageTimer = 0;
     private float fLastQueueRage = 0;
+
+    private float fFadeInTimer = 0;
+
 
 	void Start ()
     {
@@ -51,28 +60,67 @@ public class GameController : MonoBehaviour
             Debug.LogError("failed here!");
             Debug.Break();
         }
+
+        //Color col = textGameOver.color;
+        //col.a = 0;
+        //textGameOver.color = col;
+
+        //col = textGameOverBg.color;
+        //col.a = 0;
+        //textGameOverBg.color = col;
 	}
 
     
 	void Update ()
     {
-        fCalculateQueueRageTimer += Time.deltaTime;
-        if(fCalculateQueueRageTimer > Constants.TickInterval)
+        if(Input.GetKeyDown(KeyCode.Z))
+            Constants.bGameOver = true;
+
+        if(Constants.bGameOver)
         {
-            fCalculateQueueRageTimer = 0;
-            fLastQueueRage = goCurrentQueueHandle.GetQueueRage();
+
+            
+            //fFadeInTimer += Time.deltaTime;
+
+            //if(fFadeInTimer < Constants.ZoomIconFadeInTime)
+            //{
+                
+            //    Color col = textGameOver.color;
+            //    col.a = 1.0f * Constants.Normalise(fFadeInTimer, 0, Constants.ZoomIconFadeInTime);
+            //    textGameOver.color = col;
+
+            //    col = textGameOverBg.color;
+            //    col.a = 1.0f * Constants.Normalise(fFadeInTimer, 0, Constants.ZoomIconFadeInTime);
+            //    textGameOverBg.color = col;
+            //}
         }
-
-
-
-        fLastRageForScaling = fCurrentRageForScaling;
-        fCurrentRageForScaling = Mathf.Lerp(fCurrentRageForScaling, fLastQueueRage, Constants.CustomerRageScaleFillRate * Time.deltaTime);
-
-        if (fLastRageForScaling != fCurrentRageForScaling)
+        else
         {
-            Vector3 vNewScale = goRageBar.transform.localScale;
-            vNewScale.x = fRageBarMaxXScale * Constants.Normalise(fCurrentRageForScaling, 0, Constants.AvgQueueRageForGameFail);
-            goRageBar.transform.localScale = vNewScale;
+            fCalculateQueueRageTimer += Time.deltaTime;
+            if(fCalculateQueueRageTimer > Constants.TickInterval)
+            {
+                fCalculateQueueRageTimer = 0;
+                fLastQueueRage = goCurrentQueueHandle.GetQueueRage();
+            }
+
+
+
+            fLastRageForScaling = fCurrentRageForScaling;
+            fCurrentRageForScaling = Mathf.Lerp(fCurrentRageForScaling, fLastQueueRage, Constants.CustomerRageScaleFillRate * Time.deltaTime);
+
+            if (fLastRageForScaling != fCurrentRageForScaling)
+            {
+                Vector3 vNewScale = goRageBar.transform.localScale;
+                vNewScale.x = fRageBarMaxXScale * Constants.Normalise(fCurrentRageForScaling, 0, Constants.AvgQueueRageForGameFail);
+                goRageBar.transform.localScale = vNewScale;
+            }
+
+            //Use the scaling one so it's linked to the UI display
+            if(fCurrentRageForScaling >= Constants.AvgQueueRageForGameFail)
+            {
+                Debug.Log("bGameOver = true!! QueueRage over the game fail threshold.");
+                Constants.bGameOver = true;
+            }
         }
 	}
 }

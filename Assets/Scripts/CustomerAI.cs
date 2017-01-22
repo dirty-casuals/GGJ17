@@ -38,6 +38,11 @@ public class StateHandler
 
     public void Update()
     {
+        if(Constants.bGameOver)
+        {
+            return;
+        }
+
         if( !string.IsNullOrEmpty( currentState ) )
         {
             stateMap[currentState].Update();
@@ -69,6 +74,8 @@ public abstract class CustomerAIState : AIState
 public static class StateNames
 {
     public const string Init = "Init";
+    public const string Wander = "Wander";
+    public const string Alerted = "Alerted";
     public const string GotoItem = "GotoItem";
     public const string TakeItem = "TakeItem";
     public const string GotoTillQueue = "GotoTillQueue";
@@ -105,6 +112,10 @@ public class GotoItemAIState : CustomerAIState
 
     public override void Update()
     {
+        if(Constants.bGameOver)
+        {
+            return;
+        }
         if( customer.AtItemLocation() )
         {
             if( customer.SeesItem() )
@@ -138,6 +149,11 @@ public class TakeItemAIState : CustomerAIState
 
     public override void Update()
     {
+        if(Constants.bGameOver)
+        {
+            return;
+        }
+
         if( itemTime > 0 )
         {
             itemTime -= Time.deltaTime;
@@ -163,6 +179,32 @@ public class TakeItemAIState : CustomerAIState
     }
 }
 
+public class AlertedAIState : CustomerAIState
+{
+    private float panicTimer = 2;
+    public override string state
+    {
+        get { return StateNames.Alerted; }
+    }
+
+    public override void OnEnter()
+    {
+        panicTimer = Random.Range( 2.0f, 4.0f );
+        customer.Panic();
+    }
+
+    public override void Update()
+    {
+        if( panicTimer > 0 )
+        {
+            panicTimer -= Time.deltaTime;
+            if( panicTimer <= 0 )
+            {
+                GotoState( StateNames.Leave );
+            }
+        }
+    }
+}
 
 public class GotoTillQueueAIState : CustomerAIState
 {
@@ -179,6 +221,11 @@ public class GotoTillQueueAIState : CustomerAIState
 
     public override void Update()
     {
+        if(Constants.bGameOver)
+        {
+            return;
+        }
+
         if( !customer.IsInQueue() )
         {
             customer.UpdateQueueLocation();
@@ -224,6 +271,11 @@ public class LeaveStoreAIState : CustomerAIState
 
     public override void Update()
     {
+        if(Constants.bGameOver)
+        {
+            return;
+        }
+
         if( customer.AtGate() )
         {
             customer.LeaveBuilding();
@@ -237,8 +289,10 @@ public class CustomerAI : MonoBehaviour, IPawn
     public bool isDead { get; private set; }
     public ShoppingItem[] targetItems;
 
+    const float ALERT_RADIUS = 10;
     const float SIGHT_RADIUS = 3;
     const float DISTANCE_FROM_DESTINATION = 1.5f;
+
     StateHandler stateHandler;
     NavMeshAgent agent;
 
@@ -246,7 +300,7 @@ public class CustomerAI : MonoBehaviour, IPawn
     CustomerQueue queue;
 
     float fCustomerRage = 0; //Current rage 0-100
-    float fCustomerQueueTime = 0; //Time in the queue
+    float fCustomerQueueTime = 0; //Time in the queue    
 
     public float Rage
     {
@@ -299,6 +353,8 @@ public class CustomerAI : MonoBehaviour, IPawn
         }
     }
 
+    public bool isPanicked { get; private set; }
+
     public Vector3 itemExtectedLocation;
 
     public event System.Action onPickupItem;
@@ -317,14 +373,24 @@ public class CustomerAI : MonoBehaviour, IPawn
 
     private void FixedUpdate()
     {
+        if(Constants.bGameOver)
+        {
+            return;
+        }
+
         if( Random.value < 0.000001f * Time.fixedDeltaTime )
         {
-            Die(); // of heart attack
+            Die(false); // of heart attack
         }
     }
 
     private void Update()
     {
+        if(Constants.bGameOver)
+        {
+            return;
+        }
+
         stateHandler.Update();
     }
 
@@ -332,6 +398,7 @@ public class CustomerAI : MonoBehaviour, IPawn
     {
         stateHandler = new StateHandler( this );
         stateHandler.AddState( new InitAIState() );
+        stateHandler.AddState( new AlertedAIState() );
         stateHandler.AddState( new GotoItemAIState() );
         stateHandler.AddState( new GotoTillQueueAIState() );
         stateHandler.AddState( new TakeItemAIState() );
@@ -339,7 +406,7 @@ public class CustomerAI : MonoBehaviour, IPawn
         stateHandler.AddState( new LeaveStoreAIState() );
 
         stateHandler.GotoState( StateNames.Init );
-    }    
+    }
 
     public void SetRandomItemTargets()
     {
@@ -383,7 +450,16 @@ public class CustomerAI : MonoBehaviour, IPawn
         Vector3 itemPosition = item.position;
         charPosition.y = 0;
         itemPosition.y = 0;
-        return Vector3.Distance( charPosition, itemPosition ) < SIGHT_RADIUS;
+        bool isInSight = Vector3.Distance( charPosition, itemPosition ) < SIGHT_RADIUS;
+        bool isPickable = item.CanBePickedUp();
+        bool isOnShelf = item.IsOnShelf();
+        bool isInStock = item.Quantity > 0;
+
+        if( !isInStock )
+        {
+            GetComponent<CustomerRage>().Rage_FoundOutOfStockItem();
+        }
+        return isInSight && isPickable && isOnShelf && isInStock;
     }
 
     public bool NeedsMoreItems()
@@ -424,14 +500,13 @@ public class CustomerAI : MonoBehaviour, IPawn
 
     public void TakeItem()
     {
+        if( currentItem )
+            currentItem.Quantity--;
+
         if( onPickupItem != null )
         {
             onPickupItem();
         }
-
-        // pretend this does a thing
-        // TODO: actually take item from stock
-
     }
 
     internal void SetNextExpectedItemLocation()
@@ -476,7 +551,7 @@ public class CustomerAI : MonoBehaviour, IPawn
     }
 
     public void GoToGate()
-    {       
+    {        
         agent.SetDestination( gate.transform.position );
     }
 
@@ -490,7 +565,7 @@ public class CustomerAI : MonoBehaviour, IPawn
         Destroy( gameObject );
     }
 
-    public void Die()
+    public void Die( bool alert )
     {
         isDead = true;
         agent.Stop();
@@ -508,6 +583,42 @@ public class CustomerAI : MonoBehaviour, IPawn
         }
 
         StartCoroutine( DestroyAfterTime( 10 ) );
+
+        if( alert )
+        {
+            AlertEveryone();
+        }
+    }
+
+    private void AlertEveryone()
+    {
+        Collider[] colliders = Physics.OverlapSphere( transform.position, ALERT_RADIUS );
+        foreach( var collider in colliders )
+        {
+            CustomerAI ai = collider.GetComponent<CustomerAI>();
+            if( ai!=null && ai != this )
+            {
+                Vector3 rayDir = ai.transform.position - transform.position;
+
+                // Line of sight
+                RaycastHit hit;
+                if( Physics.Raycast( transform.position, rayDir, out hit ) )
+                {
+                    if( hit.collider.transform.root == collider.transform.root )
+                    {
+                        ai.Alert();
+                    }
+                }
+            }
+        }
+    }
+
+    private void Alert()
+    {
+        if( stateHandler.currentState != StateNames.Alerted )
+        {
+            stateHandler.GotoState( StateNames.Alerted );
+        }
     }
 
     private IEnumerator DestroyAfterTime( int time )
@@ -524,5 +635,9 @@ public class CustomerAI : MonoBehaviour, IPawn
         }
     }
 
-    
+    internal void Panic()
+    {
+        isPanicked = true;
+        agent.ResetPath();
+    }
 }

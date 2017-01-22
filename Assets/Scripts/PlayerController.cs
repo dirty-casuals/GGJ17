@@ -115,6 +115,11 @@ public class PlayerController : MonoBehaviour, IPawn
 
     void Update()
     {
+        if(Constants.bGameOver)
+        {
+            return;
+        }
+
         UpdatePlayerMovement();
 
         switch( ePlayerState )
@@ -147,6 +152,11 @@ public class PlayerController : MonoBehaviour, IPawn
             Vector3 vNewScale = goRageBar.transform.localScale;
             vNewScale.x = fRageBarMaxXScale * Constants.Normalise(fCurrentRageForScaling, 0, Constants.PlayerTillProgressToReach);
             goRageBar.transform.localScale = vNewScale;
+        }
+
+        if(fCurrentRageForScaling >= Constants.PlayerTillProgressToReach)
+        {
+            Constants.bGameOver = true;
         }
 
         if(fItemPlacementErrorTimer > 0)
@@ -290,6 +300,10 @@ public class PlayerController : MonoBehaviour, IPawn
     //Player movement and input
     public bool QueryPlayerInput( Constants.InputType eType, bool bJustPressed = false )
     {
+        if(Constants.bGameOver)
+        {
+            return false;
+        }
         switch( eType )
         {
             case Constants.InputType.PIT_UP: { return (!bJustPressed) ? Input.GetKey( Constants.upKey ) : Input.GetKeyDown( Constants.upKey ); }
@@ -306,6 +320,11 @@ public class PlayerController : MonoBehaviour, IPawn
     }
     private void UpdatePlayerMovement()
     {
+        if(Constants.bGameOver)
+        {
+            return;
+        }
+
         if( QueryPlayerInput( Constants.InputType.PIT_CAMERA_ZOOM_OUT ) )
         {
             isMoving = false;
@@ -422,6 +441,11 @@ public class PlayerController : MonoBehaviour, IPawn
 
     void OnTriggerStay(Collider other)
     {
+        if(Constants.bGameOver)
+        {
+            return;
+        }
+
         //if idle and prompt is not up
         if(ePlayerState == Constants.PlayerState.PS_IDLE)
         {
@@ -459,6 +483,11 @@ public class PlayerController : MonoBehaviour, IPawn
     }
     private void OnTriggerEnter(Collider other)
     {
+        if(Constants.bGameOver)
+        {
+            return;
+        }
+
         if(other.tag == Constants.PlayerPlacementExclusionZoneTag)
         {
             bInPlacementExclusionZone = true;
@@ -466,6 +495,11 @@ public class PlayerController : MonoBehaviour, IPawn
     }
     void OnTriggerExit(Collider other)
     {
+        if(Constants.bGameOver)
+        {
+            return;
+        }
+
         if(other.tag == Constants.PlayerPlacementExclusionZoneTag)
         {
             bInPlacementExclusionZone = false;
