@@ -429,11 +429,13 @@ public class CustomerAI : MonoBehaviour, IPawn
 
     public bool isPanicked { get; private set; }
 
+    public bool isSwippingItems { get { return false; } }
+
     public Vector3 itemExtectedLocation;
 
     public event System.Action onPickupItem;
     public event System.Action onLeaveItem;
-    public event System.Action onItemSwipe;
+    public event System.Action onHit;
 
     private GameObject gate;
 

@@ -78,6 +78,7 @@ public class PlayerAttack : MonoBehaviour {
                 //in attacked, reset and kill the target
                 if(controllerHandle.QueryPlayerInput(Constants.InputType.PIT_ATTACK))
                 {
+                    controllerHandle.OnHit();
                     tempAiHandle.Die( true );
                     iCountKilled++;
 

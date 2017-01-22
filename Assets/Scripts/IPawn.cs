@@ -4,8 +4,9 @@ public interface IPawn
 {
     event Action onPickupItem;
     event Action onLeaveItem;
-    event Action onItemSwipe;
+    event Action onHit;
 
     float speed { get; }
     bool isHoldingItem { get; }
+    bool isSwippingItems { get; }
 }
