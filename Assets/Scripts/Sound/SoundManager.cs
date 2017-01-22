@@ -82,7 +82,7 @@ public class SoundManager : MonoBehaviour
 
     private IEnumerator FadeMusicIn()
     {
-        while( audioSource.volume < 1.0f )
+        while( audioSource.volume < 0.5f )
         {
             audioSource.volume += 0.009f;
             yield return new WaitForSeconds(0.01f);
