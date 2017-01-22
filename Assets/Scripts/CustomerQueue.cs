@@ -53,6 +53,18 @@ public class CustomerQueue : MonoBehaviour
     /// <returns></returns>
     public float GetQueueRage()
     {
+        if( customerQueue.Count > 0 )
+        {
+            float fAverageRage = 0;
+            int iTimesAddedToRage = 0;
+            foreach(CustomerAI ai in customerQueue)
+            {
+                fAverageRage += ai.Rage;
+                iTimesAddedToRage++;
+            }
+
+            return (fAverageRage / iTimesAddedToRage);
+        }
         return 0;
     }
 

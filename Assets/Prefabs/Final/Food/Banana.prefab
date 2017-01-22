@@ -261,8 +261,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goShelfBeingPlacedOnTo: {fileID: 0}
+  resupplyItemPrefabOverride: {fileID: 0}
   eInteractionType: 2
-  fInteractionRadius: 1
+  fInteractionRadius: 1.5
+  vInteractionOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &114676438982421708
 MonoBehaviour:
   m_ObjectHideFlags: 1

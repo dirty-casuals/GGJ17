@@ -251,7 +251,7 @@ public class InteractionPoint : MonoBehaviour
             break;
         }
         
-        Gizmos.DrawWireSphere(transform.position + vInteractionOffset, fInteractionRadius * 2);
+        //Gizmos.DrawWireSphere(transform.position + vInteractionOffset, fInteractionRadius * 2);
     }
     public void SetInUse(bool inUse)
     {

@@ -81,6 +81,8 @@ public static class Constants
 
     public const string PlayerPlacementExclusionZoneTag = "PlacementExclusionZones";
 
+    public const string TillTag = "Checkout";
+
     public const float IPProgressTextBlinkTime = 0.75f;
 
 
