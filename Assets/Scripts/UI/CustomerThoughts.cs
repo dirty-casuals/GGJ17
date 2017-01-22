@@ -53,16 +53,16 @@ public class CustomerThoughts : MonoBehaviour
             if(bBlowingUp)
                 fScaleTimer = 0;
         }
-        
+
         if(bBlowingUp)
         {
             fScaleTimer += Time.deltaTime;
 
-            if(this.transform.localScale.x < Constants.ZoomInBubbleBlowUpAmount)
+            if(transform.localScale.x < Constants.ZoomInBubbleBlowUpAmount)
             {
                 float fScale = Constants.ZoomInBubbleBlowUpAmount * Constants.Normalise(fScaleTimer, 0, Constants.ZoomIconFadeInTime);
                 fScale = Mathf.Max(1.0f, fScale);
-                this.transform.localScale = new Vector3(fScale,fScale,fScale);
+                transform.localScale = new Vector3(fScale, fScale, fScale);
             }
 
             bShrinkingDown = !playerhandle.QueryPlayerInput(Constants.InputType.PIT_CAMERA_ZOOM_OUT);
@@ -77,19 +77,21 @@ public class CustomerThoughts : MonoBehaviour
         {
             fScaleTimer -= Time.deltaTime;
 
-            if(this.transform.localScale.x > 1)
+            if(transform.localScale.x > 1)
             {
                 float fScale = 4.0f * Constants.Normalise(fScaleTimer, 0, Constants.ZoomIconFadeInTime);
-                this.transform.localScale = new Vector3(fScale,fScale,fScale);
+                transform.localScale = new Vector3(fScale, fScale, fScale);
             }
             else bShrinkingDown = false;
         }
-
-        
     }
 
     private void OnTriggerStay(Collider col)
     {
+        if(bBlowingUp || bShrinkingDown)
+        {
+            return;
+        }
         thoughtBubble.SetActive(false);
     }
 
