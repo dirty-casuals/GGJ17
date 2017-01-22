@@ -43,6 +43,8 @@ public static class Constants
     public const int DefaultItemLayer = 0;
     public const int CarriedFoodItemLayer = 8;
 
+    public const string EndScoreUITag = "EndScore";
+
     public const string PlaceableShelfTag = "FoodShelf";
     public const string PlaceableShelfTagFlippedDepth = "FoodShelfFlippedDepth";
     public const string ShelfHeightTag = "ShelfHeightGO";
@@ -89,20 +91,20 @@ public static class Constants
     public const float IPProgressTextBlinkTime = 0.75f;
 
 
-    public const int PlayerSpeedX = 6;
-    public const int PlayerSpeedZ = 6;
+    public const int PlayerSpeedX = 9;
+    public const int PlayerSpeedZ = 9;
 
     public const int CameraSpeedX = 24;
     public const int CameraSpeedZ = 24;
 
-    public const float PlayerCamFollowSpeed = 2.0f;
-    public const float PlayerRotationSpeed = 5.0f;
+    public const float PlayerCamFollowSpeed = 6.0f;
+    public const float PlayerRotationSpeed = 7.5f;
 
 
-    public const float PlayerCameraOffsetY = 10.0f;
+    public const float PlayerCameraOffsetY = 12.5f;
     public const float PlayerCameraOffsetZ = -2.5f;
 
-    public const float PlayerCameraZoomOutOffsetY = 30.0f;
+    public const float PlayerCameraZoomOutOffsetY = 35.0f;
 
 
     public const float AvgQueueRageForGameFail = 75.0f;
@@ -113,20 +115,23 @@ public static class Constants
 
     public const float ZoomIconFadeInTime = 1.0f;
 
+    public const float ZoomInBubbleBlowUpAmount = 4.0f;
+
     public const float PlayerStartingRage = 15.0f;
     public const float PlayerRageIncreasePerTick = 0.5f;
-    public const float PlayerRageIncreaseProcessedItems = 7.5f;
-    public const float PlayerRageDecreaseKilledCustomer = 15.0f;
+    public const float PlayerRageIncreaseProcessedItems = 5.5f;
+    public const float PlayerRageDecreaseKilledCustomer = 11.5f;
 
-    public const float CustomerRageIncreaseOutOfStockItem = 20.0f;
     public const float CustomerRageIncreaseItemGotTakenWhileReaching = 20.0f;
     public const float CustomerRageIncreaseItemNotWhereExpected = 1.5f;
+    public const float CustomerRageIncreaseOutOfStockItem = 25.0f;
+
     public const float CustomerRageInQueueIncreasePerTick = AvgQueueRageForGameFail / MaxCustomerWaitTime;
 
-    public const float CustomerRageScaleFillRate = 2.5f;
+    public const float CustomerRageScaleFillRate = 3.5f;
 
 
-    public const float PlayerTillIncreasePerTick = 10.0f;
+    public const float PlayerTillIncreasePerTick = 25.0f;
     public const float PlayerTillProgressToReach = 100.0f;
 
 
