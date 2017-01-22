@@ -8,9 +8,12 @@ public class PawnSoundEffects : MonoBehaviour
     public AudioClip pickupSound;
     public AudioClip leaveSound;
     public AudioClip hitSound;
-    public AudioClip tillSwipe;
+    public AudioClip tillSwipe;    
 
     AudioSource audioSource;
+
+    public AudioSource stepsSource;
+
     IPawn pawn;
 
     void Start()
@@ -20,7 +23,7 @@ public class PawnSoundEffects : MonoBehaviour
         pawn.onPickupItem += OnPickupItem;
         pawn.onLeaveItem += OnLeaveItem;
         pawn.onHit += OnHit;
-    }
+    }    
 
     private void OnHit()
     {
@@ -40,6 +43,11 @@ public class PawnSoundEffects : MonoBehaviour
     public void OnSwipeSoundEffectPlay()
     {
         PlaySFX( tillSwipe );
+    }
+
+    private void OnPlayStepSoundEffect()
+    {
+        stepsSource.Play();
     }
 
     private void PlaySFX( AudioClip clip )
