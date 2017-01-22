@@ -24,6 +24,11 @@ public class GameController : MonoBehaviour
     private float fFadeInTimer = 0;
 
 
+    void Awake()
+    {
+        Constants.bGameOver = false;
+    }
+
 	void Start ()
     {
         foreach( Transform child in transform )
