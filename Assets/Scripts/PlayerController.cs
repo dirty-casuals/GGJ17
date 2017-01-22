@@ -59,11 +59,17 @@ public class PlayerController : MonoBehaviour, IPawn
         get; private set;
     }
 
+    public bool isSwippingItems
+    {
+        get {  return ePlayerState == Constants.PlayerState.PS_USING_TILL; }
+    }
+
     public bool bInsideResupplyZone = false;
+
 
     public event Action onPickupItem;
     public event Action onLeaveItem;
-    public event Action onItemSwipe;
+    public event Action onHit;
 
     void Start()
     {
@@ -122,6 +128,12 @@ public class PlayerController : MonoBehaviour, IPawn
         goInteractPrompt.SetActive(false);
         goPlacementErrorPrompt.SetActive(false);
         goPlacementCorrectPrompt.SetActive(false);
+    }
+
+    public void OnHit()
+    {
+        if( onHit != null )
+            onHit();
     }
 
     void Update()

@@ -140,6 +140,7 @@ public static class Constants
     public const float PlayerTillIncreasePerTick = 25.0f;
     public const float PlayerTillProgressToReach = 100.0f;
 
+    public const float AttackCooldown = 3f;
 
     public const float MinSpaceBetweenPlacedFoodItems = 1.0f;
     
