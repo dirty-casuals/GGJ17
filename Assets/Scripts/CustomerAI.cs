@@ -38,7 +38,7 @@ public class StateHandler
 
     public void Update()
     {
-        if(Constants.bGameOver)
+        if( Constants.bGameOver )
         {
             return;
         }
@@ -112,7 +112,7 @@ public class GotoItemAIState : CustomerAIState
 
     public override void Update()
     {
-        if(Constants.bGameOver)
+        if( Constants.bGameOver )
         {
             return;
         }
@@ -149,7 +149,7 @@ public class TakeItemAIState : CustomerAIState
 
     public override void Update()
     {
-        if(Constants.bGameOver)
+        if( Constants.bGameOver )
         {
             return;
         }
@@ -221,7 +221,7 @@ public class GotoTillQueueAIState : CustomerAIState
 
     public override void Update()
     {
-        if(Constants.bGameOver)
+        if( Constants.bGameOver )
         {
             return;
         }
@@ -271,7 +271,7 @@ public class LeaveStoreAIState : CustomerAIState
 
     public override void Update()
     {
-        if(Constants.bGameOver)
+        if( Constants.bGameOver )
         {
             return;
         }
@@ -364,6 +364,7 @@ public class CustomerAI : MonoBehaviour, IPawn
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        agent.speed = Random.Range( 2.8f, 4.3f );
         SetupStates();
 
         gate = GameObject.FindWithTag( "Gate" );
@@ -371,20 +372,20 @@ public class CustomerAI : MonoBehaviour, IPawn
 
     private void FixedUpdate()
     {
-        if(Constants.bGameOver)
+        if( Constants.bGameOver )
         {
             return;
         }
 
         if( Random.value < 0.000001f * Time.fixedDeltaTime )
         {
-            Die(false); // of heart attack
+            Die( false ); // of heart attack
         }
     }
 
     private void Update()
     {
-        if(Constants.bGameOver)
+        if( Constants.bGameOver )
         {
             return;
         }
@@ -412,7 +413,7 @@ public class CustomerAI : MonoBehaviour, IPawn
 
         ShoppingItem[] items = ShoppingItem.items;
 
-        int numTargets = 1;//Random.Range(2,3);
+        int numTargets = Random.Range(2,3);
         while( itemIds.Count < numTargets )
         {
             int id = Random.Range(0, items.Length-1 );
@@ -549,7 +550,7 @@ public class CustomerAI : MonoBehaviour, IPawn
     }
 
     public void GoToGate()
-    {        
+    {
         agent.SetDestination( gate.transform.position );
     }
 
@@ -594,7 +595,7 @@ public class CustomerAI : MonoBehaviour, IPawn
         foreach( var collider in colliders )
         {
             CustomerAI ai = collider.GetComponent<CustomerAI>();
-            if( ai!=null && ai != this )
+            if( ai != null && ai != this )
             {
                 Vector3 rayDir = ai.transform.position - transform.position;
 
