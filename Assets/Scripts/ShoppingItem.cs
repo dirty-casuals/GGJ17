@@ -12,20 +12,6 @@ public class ShoppingItem : MonoBehaviour
 
     public Vector3 position { get { return transform.position; } }
 
-    private int itemQuantity;
-    public int Quantity
-    {
-        get
-        {
-            return itemQuantity;
-        }
-
-        set
-        {
-            itemQuantity = value;
-        }
-    }
-
     void Awake()
     {
         originalPlace = transform.position;

@@ -7,7 +7,7 @@ public class StateHandler
     public Object context { get; private set; }
     private Dictionary<string, AIState> stateMap;
 
-    private string currentState;
+    public string currentState { get; private set; }
 
     public StateHandler( Object context )
     {
@@ -220,6 +220,14 @@ public class LeaveStoreAIState : CustomerAIState
     {
         customer.GoToGate();
     }
+
+    public override void Update()
+    {
+        if( customer.AtGate() )
+        {
+            customer.LeaveBuilding();
+        }
+    }
 }
 
 
@@ -227,8 +235,8 @@ public class CustomerAI : MonoBehaviour, IPawn
 {
     public bool isDead { get; private set; }
 
-    const int SIGHT_RADIUS = 1;
-    const int DISTANCE_FROM_DESTINATION = 1;
+    const float SIGHT_RADIUS = 3;
+    const float DISTANCE_FROM_DESTINATION = 1.5f;
     StateHandler stateHandler;
     NavMeshAgent agent;
 
@@ -259,8 +267,12 @@ public class CustomerAI : MonoBehaviour, IPawn
         }
     }
 
+    public string currentState
+    {
+        get { return stateHandler.currentState; }
+    }
 
-    private ShoppingItem currentItem
+    public ShoppingItem currentItem
     {
         get
         {
@@ -290,10 +302,14 @@ public class CustomerAI : MonoBehaviour, IPawn
     public event System.Action onLeaveItem;
     public event System.Action onItemSwipe;
 
+    private GameObject gate;
+
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         SetupStates();
+
+        gate = GameObject.FindWithTag( "Gate" );
     }
 
     private void FixedUpdate()
@@ -313,14 +329,14 @@ public class CustomerAI : MonoBehaviour, IPawn
     {
         stateHandler = new StateHandler( this );
         stateHandler.AddState( new InitAIState() );
-        stateHandler.AddState( new GotoItemAIState() );        
+        stateHandler.AddState( new GotoItemAIState() );
         stateHandler.AddState( new GotoTillQueueAIState() );
         stateHandler.AddState( new TakeItemAIState() );
         stateHandler.AddState( new WaitInQueueAIState() );
         stateHandler.AddState( new LeaveStoreAIState() );
 
         stateHandler.GotoState( StateNames.Init );
-    }
+    }    
 
     public void SetRandomItemTargets()
     {
@@ -348,7 +364,7 @@ public class CustomerAI : MonoBehaviour, IPawn
         Vector3 searchPosition = itemExtectedLocation;
         charPosition.y = 0;
         searchPosition.y = 0;
-        return Vector3.Distance( charPosition, searchPosition ) < SIGHT_RADIUS;
+        return Vector3.Distance( charPosition, searchPosition ) < DISTANCE_FROM_DESTINATION;
     }
 
     public bool SeesItem()
@@ -454,9 +470,18 @@ public class CustomerAI : MonoBehaviour, IPawn
     }
 
     public void GoToGate()
-    {
-        GameObject gate = GameObject.FindWithTag( "Gate" );
+    {       
         agent.SetDestination( gate.transform.position );
+    }
+
+    public bool AtGate()
+    {
+        return Vector3.Distance( transform.position, gate.transform.position ) <= 2;
+    }
+
+    public void LeaveBuilding()
+    {
+        Destroy( gameObject );
     }
 
     public void Die()
@@ -470,4 +495,14 @@ public class CustomerAI : MonoBehaviour, IPawn
             queue.ReleaseCustomer( this );
         }
     }
+
+    public void Leave()
+    {
+        if( queue != null && queue.Contains( this ) )
+        {
+            queue.ReleaseCustomer( this );
+        }
+    }
+
+    
 }
