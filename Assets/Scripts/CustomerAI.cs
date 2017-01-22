@@ -38,6 +38,11 @@ public class StateHandler
 
     public void Update()
     {
+        if(Constants.bGameOver)
+        {
+            return;
+        }
+
         if( !string.IsNullOrEmpty( currentState ) )
         {
             stateMap[currentState].Update();
@@ -107,6 +112,10 @@ public class GotoItemAIState : CustomerAIState
 
     public override void Update()
     {
+        if(Constants.bGameOver)
+        {
+            return;
+        }
         if( customer.AtItemLocation() )
         {
             if( customer.SeesItem() )
@@ -140,6 +149,11 @@ public class TakeItemAIState : CustomerAIState
 
     public override void Update()
     {
+        if(Constants.bGameOver)
+        {
+            return;
+        }
+
         if( itemTime > 0 )
         {
             itemTime -= Time.deltaTime;
@@ -207,6 +221,11 @@ public class GotoTillQueueAIState : CustomerAIState
 
     public override void Update()
     {
+        if(Constants.bGameOver)
+        {
+            return;
+        }
+
         if( !customer.IsInQueue() )
         {
             customer.UpdateQueueLocation();
@@ -252,6 +271,11 @@ public class LeaveStoreAIState : CustomerAIState
 
     public override void Update()
     {
+        if(Constants.bGameOver)
+        {
+            return;
+        }
+
         if( customer.AtGate() )
         {
             customer.LeaveBuilding();
@@ -263,6 +287,7 @@ public class LeaveStoreAIState : CustomerAIState
 public class CustomerAI : MonoBehaviour, IPawn
 {
     public bool isDead { get; private set; }
+    public ShoppingItem[] targetItems;
 
     const float ALERT_RADIUS = 10;
     const float SIGHT_RADIUS = 3;
@@ -271,7 +296,6 @@ public class CustomerAI : MonoBehaviour, IPawn
     StateHandler stateHandler;
     NavMeshAgent agent;
 
-    ShoppingItem[] targetItems;
     int currentItemIdx = -1;
     CustomerQueue queue;
 
@@ -347,6 +371,11 @@ public class CustomerAI : MonoBehaviour, IPawn
 
     private void FixedUpdate()
     {
+        if(Constants.bGameOver)
+        {
+            return;
+        }
+
         if( Random.value < 0.000001f * Time.fixedDeltaTime )
         {
             Die(false); // of heart attack
@@ -355,6 +384,11 @@ public class CustomerAI : MonoBehaviour, IPawn
 
     private void Update()
     {
+        if(Constants.bGameOver)
+        {
+            return;
+        }
+
         stateHandler.Update();
     }
 

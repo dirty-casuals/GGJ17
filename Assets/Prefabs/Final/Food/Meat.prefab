@@ -276,6 +276,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   originalPlace: {x: 0, y: 0, z: 0}
+  shoppingItemSprite: {fileID: 21300000, guid: cfa9f732f5528464eb676dbc9211793b, type: 3}
 --- !u!212 &212775242790124674
 SpriteRenderer:
   m_ObjectHideFlags: 1

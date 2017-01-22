@@ -52,6 +52,11 @@ public class CustomerRage : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
+        if(Constants.bGameOver)
+        {
+            return;
+        }
+
         if (aiHandle.IsInQueue() && !aiHandle.IsBeingServed())
         {
             fTimer += Time.deltaTime;

@@ -36,6 +36,11 @@ public class FoodZoomIcon : MonoBehaviour {
 	
 	void Update ()
     {
+        if(Constants.bGameOver)
+        {
+            return;
+        }
+
         bLastDisplayingIcon = bDisplayingIcon;
         bDisplayingIcon = controllerHandle.QueryPlayerInput(Constants.InputType.PIT_CAMERA_ZOOM_OUT);
 
