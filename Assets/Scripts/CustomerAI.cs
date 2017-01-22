@@ -273,6 +273,8 @@ public class CustomerAI : MonoBehaviour, IPawn
         get { return stateHandler.currentState; }
     }
 
+    public int CurrentItemIdx { get { return currentItemIdx; } }
+    
     public ShoppingItem currentItem
     {
         get
@@ -345,7 +347,7 @@ public class CustomerAI : MonoBehaviour, IPawn
 
         ShoppingItem[] items = ShoppingItem.items;
 
-        int numTargets = 1;//Random.Range(2,3);
+        int numTargets = Random.Range(2,3);
         while( itemIds.Count < numTargets )
         {
             int id = Random.Range(0, items.Length-1 );
