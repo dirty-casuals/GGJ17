@@ -38,6 +38,11 @@ public class StateHandler
 
     public void Update()
     {
+        if(Constants.bGameOver)
+        {
+            return;
+        }
+
         if( !string.IsNullOrEmpty( currentState ) )
         {
             stateMap[currentState].Update();
@@ -105,6 +110,10 @@ public class GotoItemAIState : CustomerAIState
 
     public override void Update()
     {
+        if(Constants.bGameOver)
+        {
+            return;
+        }
         if( customer.AtItemLocation() )
         {
             if( customer.SeesItem() )
@@ -138,6 +147,11 @@ public class TakeItemAIState : CustomerAIState
 
     public override void Update()
     {
+        if(Constants.bGameOver)
+        {
+            return;
+        }
+
         if( itemTime > 0 )
         {
             itemTime -= Time.deltaTime;
@@ -179,6 +193,11 @@ public class GotoTillQueueAIState : CustomerAIState
 
     public override void Update()
     {
+        if(Constants.bGameOver)
+        {
+            return;
+        }
+
         if( !customer.IsInQueue() )
         {
             customer.UpdateQueueLocation();
@@ -224,6 +243,11 @@ public class LeaveStoreAIState : CustomerAIState
 
     public override void Update()
     {
+        if(Constants.bGameOver)
+        {
+            return;
+        }
+
         if( customer.AtGate() )
         {
             customer.LeaveBuilding();
@@ -315,6 +339,11 @@ public class CustomerAI : MonoBehaviour, IPawn
 
     private void FixedUpdate()
     {
+        if(Constants.bGameOver)
+        {
+            return;
+        }
+
         if( Random.value < 0.000001f * Time.fixedDeltaTime )
         {
             Die(); // of heart attack
@@ -323,6 +352,11 @@ public class CustomerAI : MonoBehaviour, IPawn
 
     private void Update()
     {
+        if(Constants.bGameOver)
+        {
+            return;
+        }
+
         stateHandler.Update();
     }
 
@@ -429,6 +463,7 @@ public class CustomerAI : MonoBehaviour, IPawn
 
         // pretend this does a thing
         // TODO: actually take item from stock
+
 
     }
 

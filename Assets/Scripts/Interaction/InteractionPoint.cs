@@ -94,6 +94,11 @@ public class InteractionPoint : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
+        if(Constants.bGameOver)
+        {
+            return;
+        }
+
         if (bInUse && eInteractionType == Constants.InteractionPointType.IPT_CASHIER_TILL)
         {
             fLastProgressForScaling = fCurrentProgressForScaling;
@@ -123,6 +128,11 @@ public class InteractionPoint : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
+        if(Constants.bGameOver)
+        {
+            return;
+        }
+
         if(other.tag == Constants.PlayerKillAreaTag)
         {
             Debug.Log("PlayerKillAreaTag");

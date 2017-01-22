@@ -4,6 +4,9 @@ using UnityEngine;
 
 public static class Constants
 {
+    public static bool bGameOver = false;
+
+
     public const float TickInterval = 1.0f;
 
     public enum PlayerState

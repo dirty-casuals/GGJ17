@@ -37,6 +37,11 @@ public class PlayerAttack : MonoBehaviour {
 
     void OnTriggerStay(Collider other)
     {
+        if(Constants.bGameOver)
+        {
+            return;
+        }
+
         if(other.tag == Constants.CustomerTag)
         {
             CustomerAI tempAiHandle = other.GetComponent<CustomerAI>();
