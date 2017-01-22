@@ -104,7 +104,7 @@ GameObject:
   - component: {fileID: 114648089535007224}
   m_Layer: 12
   m_Name: CashierTill 1
-  m_TagString: Untagged
+  m_TagString: Checkout
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -267,8 +267,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goShelfBeingPlacedOnTo: {fileID: 0}
+  resupplyItemPrefabOverride: {fileID: 0}
   eInteractionType: 1
   fInteractionRadius: 1.53
+  vInteractionOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &114619687181830138
 MonoBehaviour:
   m_ObjectHideFlags: 1
