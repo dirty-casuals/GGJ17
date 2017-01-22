@@ -292,6 +292,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   originalPlace: {x: 0, y: 0, z: 0}
+  shoppingItemSprite: {fileID: 21300000, guid: 8dd38146b798d41438ac40f89f1a6a22, type: 3}
 --- !u!114 &114607938379227616
 MonoBehaviour:
   m_ObjectHideFlags: 1
