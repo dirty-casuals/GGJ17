@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour, IPawn
 
     private GameObject goCarryPosition; //Position where the player carries stuff
     private GameObject goInteractPrompt;
-    private GameObject goPlacementErrorPrompt;
+    private GameObject goPlacementErrorPrompt;    
 
 
     private GameObject goRageBar;
@@ -37,6 +37,7 @@ public class PlayerController : MonoBehaviour, IPawn
     public float fPlayerRage = Constants.PlayerStartingRage;
     public float fPlayerScore = 0;
 
+    public GameObject rightHand;
 
     private float fItemPlacementErrorTimer = 0;
 
@@ -66,14 +67,11 @@ public class PlayerController : MonoBehaviour, IPawn
         goInteractPrompt = GameObject.FindGameObjectWithTag(Constants.PlayerInteractionPromptTag);
         goPlacementErrorPrompt = GameObject.FindGameObjectWithTag(Constants.PlayerPlacementErrorPromptTag);
 
+        goCarryPosition = rightHand;
+
         //Find and store the hand position
         foreach( Transform child in transform )
-        {
-            if( child.tag == Constants.PlayerCarryPos )
-            {
-                goCarryPosition = child.gameObject;
-            }
-
+        {            
             foreach (Transform childChildren in child)
             {
                 if (childChildren.tag == Constants.CustomerRageBarTag)
