@@ -227,6 +227,14 @@ public class PlayerController : MonoBehaviour, IPawn
                 onLeaveItem();
         }
     }
+    private void SpawnNewFoodItemIntoHand(GameObject itemPrefab)
+    {
+        GameObject go = (GameObject)Instantiate(itemPrefab);
+        go.layer = Constants.CarriedFoodItemLayer;
+        currentInteractionGameObject = go;
+        currentInteractionScript = go.GetComponent<InteractionPoint>();
+        go.GetComponent<InteractionPoint>().DoStart();
+    }
 
     //Getters
     public bool IsAbleToInteract()
@@ -236,6 +244,10 @@ public class PlayerController : MonoBehaviour, IPawn
     public bool IsServingCustomer()
     {
         return (ePlayerState == Constants.PlayerState.PS_USING_TILL);
+    }
+    public bool IsCarryingFoodItem()
+    {
+        return (ePlayerState == Constants.PlayerState.PS_CARRYING_FOODITEM);
     }
 
     //Player movement and input
@@ -297,8 +309,12 @@ public class PlayerController : MonoBehaviour, IPawn
     {
         currentInteractionGameObject.layer = Constants.DefaultItemLayer;
 
-        currentInteractionScript.SetInUse( false );
-        currentInteractionScript.ResetProgress( true );
+        if(currentInteractionScript)
+        {
+            currentInteractionScript.SetInUse( false );
+            currentInteractionScript.ResetProgress( true );
+        }
+
         ePlayerState = Constants.PlayerState.PS_IDLE;
 
         fTaskTime = 0;
@@ -309,20 +325,41 @@ public class PlayerController : MonoBehaviour, IPawn
     }
     void HandleInteraction( GameObject InteractGO )
     {
+        //If we got in here and we're carrying food, we've interacted with a trash bin
+        if(IsCarryingFoodItem())
+        {
+            if(currentInteractionGameObject)
+            {
+                currentInteractionScript = null;
+
+                Destroy(currentInteractionGameObject);
+                CleanupInteraction();
+            }
+            return;
+        }
+
         currentInteractionScript = InteractGO.GetComponent<InteractionPoint>();
 
         if( currentInteractionScript )
         {
             currentInteractionGameObject = InteractGO;
-            currentInteractionScript.SetInUse( true );
+            
             fTaskTime = 0;
 
             switch( currentInteractionScript.eInteractionType )
             {
+                case Constants.InteractionPointType.IPT_FOOD_RESTOCK:
+                    {
+                        ePlayerState = Constants.PlayerState.PS_CARRYING_FOODITEM;
+                        SpawnNewFoodItemIntoHand(currentInteractionScript.resupplyItemPrefabOverride);
+                        currentInteractionScript.SetInUse( true );
+                        break;
+                    }
                 case Constants.InteractionPointType.IPT_FOOD_PRODUCT:
                     {
                         ePlayerState = Constants.PlayerState.PS_CARRYING_FOODITEM;
                         currentInteractionGameObject.layer = Constants.CarriedFoodItemLayer;
+                        currentInteractionScript.SetInUse( true );
 
                         break;
                     }
@@ -337,6 +374,7 @@ public class PlayerController : MonoBehaviour, IPawn
                             return;
                         }
 
+                        currentInteractionScript.SetInUse( true );
                         ePlayerState = Constants.PlayerState.PS_USING_TILL;
 
                         break;
@@ -353,7 +391,7 @@ public class PlayerController : MonoBehaviour, IPawn
             if(!goInteractPrompt.activeSelf)
             {
                 //If we're in an interaction point
-                if(other.GetComponent<InteractionPoint>())
+                if(other.GetComponent<InteractionPoint>() && other.GetComponent<InteractionPoint>().eInteractionType != Constants.InteractionPointType.IPT_FOOD_BIN)
                 {
                     if(other.GetComponent<InteractionPoint>().CustomInteraction == new Vector3(-1,-1,-1))
                     {
@@ -382,7 +420,6 @@ public class PlayerController : MonoBehaviour, IPawn
             }
         }
     }
-
     private void OnTriggerEnter(Collider other)
     {
         if(other.tag == Constants.PlayerPlacementExclusionZoneTag)
@@ -390,7 +427,6 @@ public class PlayerController : MonoBehaviour, IPawn
             bInPlacementExclusionZone = true;
         }
     }
-
     void OnTriggerExit(Collider other)
     {
         if(other.tag == Constants.PlayerPlacementExclusionZoneTag)
