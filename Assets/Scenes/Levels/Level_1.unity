@@ -2188,6 +2188,14 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1417977657268032, guid: 0ef318327124c464999d2331b4b30f43, type: 2}
+      propertyPath: m_TagString
+      value: PlayerRageBar
+      objectReference: {fileID: 0}
+    - target: {fileID: 1615390687970160, guid: 0ef318327124c464999d2331b4b30f43, type: 2}
+      propertyPath: m_TagString
+      value: PlayerRageBarBG
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0ef318327124c464999d2331b4b30f43, type: 2}
   m_IsPrefabParent: 0

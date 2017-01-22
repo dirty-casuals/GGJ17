@@ -35,6 +35,8 @@ TagManager:
   - PlacementCorrectPrompt
   - OutOfStock
   - EndReason
+  - PlayerRageBar
+  - PlayerRageBarBG
   layers:
   - Default
   - TransparentFX

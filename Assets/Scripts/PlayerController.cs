@@ -86,7 +86,7 @@ public class PlayerController : MonoBehaviour, IPawn
         {            
             foreach (Transform childChildren in child)
             {
-                if (childChildren.tag == Constants.CustomerRageBarTag)
+                if (childChildren.tag == "PlayerRageBar")
                 {
                     goRageBar = childChildren.gameObject;
                     sprRageBar = childChildren.GetComponent<Sprite>();
