@@ -21,6 +21,7 @@ public class InteractionPoint : MonoBehaviour
     private bool bInUse;
 
     private bool bCanBePlaced = false;
+    private bool bShelfToPlaceDepthFlipped = false;
     public GameObject goShelfBeingPlacedOnTo;
 
 
@@ -122,7 +123,7 @@ public class InteractionPoint : MonoBehaviour
             {
                 Debug.Log("PlayerTag");
                 PlayerController controllerHandle = other.GetComponent<PlayerController>();
-                if(controllerHandle && controllerHandle.IsAbleToInteract())
+                if(controllerHandle && controllerHandle.IsAbleToInteract() && controllerHandle.InteractionLockedTo == this)
                 {
                     if (controllerHandle.QueryPlayerInput(Constants.InputType.PIT_INTERACT, true))
                     {
@@ -134,8 +135,18 @@ public class InteractionPoint : MonoBehaviour
         //in use and we're a food product, we're being carried and placed onto a shelf
         else if(eInteractionType == Constants.InteractionPointType.IPT_FOOD_PRODUCT)
         {
-            bCanBePlaced = (other.tag == Constants.PlaceableShelfTag);
+            if(other.tag == Constants.PlaceableShelfTag)
+            {
+                bCanBePlaced = true;
+                bShelfToPlaceDepthFlipped = false;
+            }
+            else if(other.tag == Constants.PlaceableShelfTagFlippedDepth)
+            {
+                bCanBePlaced = true;
+                bShelfToPlaceDepthFlipped = true;
+            }
 
+            
             if(bCanBePlaced)
             {
                 goShelfBeingPlacedOnTo = other.gameObject;
@@ -217,7 +228,27 @@ public class InteractionPoint : MonoBehaviour
     }
     public bool CanBePlaced()
     {
-        return bCanBePlaced;
+        if( bCanBePlaced )
+        {
+            GameObject[] allFoodstuff = GameObject.FindGameObjectsWithTag(Constants.FootItemTag);
+
+            Vector3 vReturnPos = _GetReturnPlacement();
+
+            for(int i = 0; i < allFoodstuff.Length; i++)
+            {
+                if(allFoodstuff[i] != this.gameObject)
+                {
+                    if(Vector3.Distance(allFoodstuff[i].transform.position, vReturnPos) < Constants.MinSpaceBetweenPlacedFoodItems)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        return false;
     }
     public void AddProgress(float prog)
     {
@@ -257,42 +288,67 @@ public class InteractionPoint : MonoBehaviour
         //Match it to the shelf height
         if(goShelfBeingPlacedOnTo != null)
         {
-            Vector3 vNewPos = this.transform.position;
-                    
-            //Height
-            foreach (Transform child in goShelfBeingPlacedOnTo.transform)
-            {
-                if (child.tag == Constants.ShelfHeightTag)
-                {
-                    vNewPos.y = child.gameObject.transform.position.y;
-                    break;
-                }
-            }
-
-            Vector3 shelfPos = goShelfBeingPlacedOnTo.transform.position;
-            Vector3 shelfScale = goShelfBeingPlacedOnTo.GetComponent<BoxCollider>().size;
-
-            //top side of shelf
-            if(vNewPos.z > shelfPos.z)
-            {
-                vNewPos.z = shelfPos.z + shelfScale.z / 2;
-            }
-            else
-            {
-                vNewPos.z = shelfPos.z - shelfScale.z / 2;
-            }
-
-            //make sure the thing is on the shelf - more to the right
-            if(vNewPos.x > shelfPos.x + (shelfScale.x / 2))
-            {
-                vNewPos.x = (shelfPos.x + (shelfScale.x / 2)) - this.transform.localScale.x;
-            }
-            else if(vNewPos.x < shelfPos.x - (shelfScale.x / 2))
-            {
-                vNewPos.x = (shelfPos.x - (shelfScale.x / 2)) + this.transform.localScale.x;
-            }
+            Vector3 vNewPos = _GetReturnPlacement();
 
             this.transform.position = vNewPos;
         }
+    }
+
+    private Vector3 _GetReturnPlacement()
+    {
+        Vector3 vNewPos = this.transform.position;
+        float fCustomDepthPos = 0;
+        bool bHasCustomDepth = false;
+        
+
+        //Height
+        foreach (Transform child in goShelfBeingPlacedOnTo.transform)
+        {
+            if (child.tag == Constants.ShelfHeightTag)
+            {
+                vNewPos.y = child.gameObject.transform.position.y + this.GetComponent<BoxCollider>().size.z /2;
+            }
+
+            if(child.tag == Constants.ShelfDepthTag)
+            {
+                bHasCustomDepth = true;
+                fCustomDepthPos = child.gameObject.transform.position.z;
+            }
+        }
+
+        Vector3 shelfPos = goShelfBeingPlacedOnTo.transform.position;
+        Vector3 shelfScale = goShelfBeingPlacedOnTo.GetComponent<BoxCollider>().size;
+
+        //bShelfToPlaceDepthFlipped
+        float shelfDepth = (bShelfToPlaceDepthFlipped ? shelfScale.y : shelfScale.z);
+
+        //top side of shelf
+        if(!bHasCustomDepth)
+        {
+            if(vNewPos.z > shelfPos.z + (shelfDepth * 0.4f))
+            {
+                vNewPos.z = shelfPos.z + shelfDepth * 0.35f;
+            }
+            else if(vNewPos.z < shelfPos.z - (shelfDepth * 0.4f))
+            {
+                vNewPos.z = shelfPos.z - shelfDepth * 0.35f;
+            }
+        }
+        else
+        {
+            vNewPos.z = fCustomDepthPos;
+        }
+
+        //make sure the thing is on the shelf - more to the right
+        if(vNewPos.x > shelfPos.x + (shelfScale.x * 0.4f))
+        {
+            vNewPos.x = (shelfPos.x + (shelfScale.x * 0.4f));
+        }
+        else if(vNewPos.x < shelfPos.x - (shelfScale.x * 0.4f))
+        {
+            vNewPos.x = (shelfPos.x - (shelfScale.x * 0.4f));
+        }
+
+        return vNewPos;
     }
 }

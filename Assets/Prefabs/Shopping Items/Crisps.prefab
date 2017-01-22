@@ -9,47 +9,47 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1184984081672104}
+  m_RootGameObject: {fileID: 1860573206021550}
   m_IsPrefabParent: 1
---- !u!1 &1184984081672104
+--- !u!1 &1860573206021550
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 4700242778916406}
-  - component: {fileID: 33240782345332756}
-  - component: {fileID: 23198103729598190}
-  - component: {fileID: 65472227044392514}
-  - component: {fileID: 114709299478497484}
-  - component: {fileID: 114831588550405694}
+  - component: {fileID: 4771886629907604}
+  - component: {fileID: 33470508620230720}
+  - component: {fileID: 23900691802080488}
+  - component: {fileID: 114563759927015686}
+  - component: {fileID: 65543354441554214}
+  - component: {fileID: 114474555498194330}
   m_Layer: 0
-  m_Name: Meat
+  m_Name: Crisps
   m_TagString: FoodItem
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4700242778916406
+--- !u!4 &4771886629907604
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1184984081672104}
-  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 1.84, y: 1.482, z: 18.376}
+  m_GameObject: {fileID: 1860573206021550}
+  m_LocalRotation: {x: -1, y: -0, z: -0, w: 0.0000004768371}
+  m_LocalPosition: {x: 7.06, y: 1.4, z: 18.288}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!23 &23198103729598190
+  m_LocalEulerAnglesHint: {x: -180, y: 0, z: 0}
+--- !u!23 &23900691802080488
 MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1184984081672104}
+  m_GameObject: {fileID: 1860573206021550}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -57,7 +57,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 60e0b58128f4fff44a3ee5319262dca3, type: 2}
+  - {fileID: 2100000, guid: b4a874c7e4fb618489113bf95955f5f8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -75,31 +75,31 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
---- !u!33 &33240782345332756
+--- !u!33 &33470508620230720
 MeshFilter:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1184984081672104}
-  m_Mesh: {fileID: 4300000, guid: ba06ce3f1a7e640438e9aef947cfe14f, type: 3}
---- !u!65 &65472227044392514
+  m_GameObject: {fileID: 1860573206021550}
+  m_Mesh: {fileID: 4300000, guid: a2f6d17dc7a28451f8b38ee6bc365631, type: 3}
+--- !u!65 &65543354441554214
 BoxCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1184984081672104}
+  m_GameObject: {fileID: 1860573206021550}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.334568, y: 0.6730742, z: 0.3283201}
-  m_Center: {x: 0, y: -0.08027201, z: 0}
---- !u!114 &114709299478497484
+  m_Size: {x: 0.24540001, y: 0.11281803, z: 0.29143506}
+  m_Center: {x: 0.0009110011, y: 0, z: 0.000011503699}
+--- !u!114 &114474555498194330
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1184984081672104}
+  m_GameObject: {fileID: 1860573206021550}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 10a2b948d3fedf140bdbde00d911853a, type: 3}
@@ -107,13 +107,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   goShelfBeingPlacedOnTo: {fileID: 0}
   eInteractionType: 2
-  fInteractionRadius: 1.57
---- !u!114 &114831588550405694
+  fInteractionRadius: 0.8
+--- !u!114 &114563759927015686
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1184984081672104}
+  m_GameObject: {fileID: 1860573206021550}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ac5b0310a6a28b74bbd93f0cec30f3d9, type: 3}

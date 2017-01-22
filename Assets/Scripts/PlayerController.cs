@@ -10,6 +10,16 @@ public class PlayerController : MonoBehaviour, IPawn
 
     private GameObject goCarryPosition; //Position where the player carries stuff
     private GameObject goInteractPrompt;
+    private GameObject goPlacementErrorPrompt;
+
+    private InteractionPoint pointLockedTo;
+
+    public InteractionPoint InteractionLockedTo
+    {
+        get {
+            return pointLockedTo;
+        }
+    }
 
     private GameObject currentInteractionGameObject; //Gameobject that the player is interacting with
     private InteractionPoint currentInteractionScript; //Handle to the interaction script
@@ -20,6 +30,8 @@ public class PlayerController : MonoBehaviour, IPawn
     public float fPlayerRage = Constants.PlayerStartingRage;
     public float fPlayerScore = 0;
 
+
+    private float fItemPlacementErrorTimer = 0;
 
     private float fTaskTime;
     private float fRageTimer = 0.0f;
@@ -44,6 +56,7 @@ public class PlayerController : MonoBehaviour, IPawn
     {
         controller = GetComponent<CharacterController>();
         goInteractPrompt = GameObject.FindGameObjectWithTag(Constants.PlayerInteractionPromptTag);
+        goPlacementErrorPrompt = GameObject.FindGameObjectWithTag(Constants.PlayerPlacementErrorPromptTag);
 
         //Find and store the hand position
         foreach( Transform child in transform )
@@ -66,7 +79,14 @@ public class PlayerController : MonoBehaviour, IPawn
             Debug.Break();
         }
 
+        if(!goPlacementErrorPrompt)
+        {
+            Debug.LogError("failed here!");
+            Debug.Break();
+        }
+
         goInteractPrompt.SetActive(false);
+        goPlacementErrorPrompt.SetActive(false);
     }
 
     void Update()
@@ -93,6 +113,17 @@ public class PlayerController : MonoBehaviour, IPawn
         {
             fRageTimer = 0.0f;
             fPlayerRage += Constants.PlayerRageIncreasePerTick;
+        }
+
+        if(fItemPlacementErrorTimer > 0)
+        {
+            fItemPlacementErrorTimer += Time.deltaTime;
+
+            if(fItemPlacementErrorTimer > 0.5f)
+            {
+                fItemPlacementErrorTimer = 0;
+                goPlacementErrorPrompt.SetActive(false);
+            }
         }
     }
 
@@ -164,11 +195,20 @@ public class PlayerController : MonoBehaviour, IPawn
         }
     
         //Placing back down - timer to make sure we can't immediately place back down
-        if( currentInteractionScript.CanBePlaced() && fTaskTime > 0.5f )
+        if( fTaskTime > 0.5f )
         {
             if( QueryPlayerInput( Constants.InputType.PIT_INTERACT, true ) )
             {
-                ProcessPutItemOnShelf();
+                if(currentInteractionScript.CanBePlaced())
+                {
+                    ProcessPutItemOnShelf();
+                }
+                else
+                {
+                    fItemPlacementErrorTimer += Time.deltaTime;
+                    goPlacementErrorPrompt.transform.position = this.transform.position + new Vector3(-0.37f,3,0);
+                    goPlacementErrorPrompt.SetActive(true);
+                }
             }
         }
     }
@@ -314,20 +354,17 @@ public class PlayerController : MonoBehaviour, IPawn
                 //If we're in an interaction point
                 if(other.GetComponent<InteractionPoint>())
                 {
-                    //Have to do this as 
-                    //if(Vector3.Distance(this.transform.position, other.transform.position) < other.GetComponent<InteractionPoint>().fInteractionRadius)
-                   // {
-                        //either default placement, or a custom one
-                        if(other.GetComponent<InteractionPoint>().CustomInteraction == new Vector3(-1,-1,-1))
-                        {
-                            goInteractPrompt.transform.position = other.transform.position + new Vector3(0,1,0);
-                        }
-                        else
-                        {
-                            goInteractPrompt.transform.position = other.GetComponent<InteractionPoint>().CustomInteraction;
-                        }
-                        goInteractPrompt.SetActive(true);
-                   // }
+                    if(other.GetComponent<InteractionPoint>().CustomInteraction == new Vector3(-1,-1,-1))
+                    {
+                        goInteractPrompt.transform.position = other.transform.position + new Vector3(0,1,0);
+                    }
+                    else
+                    {
+                        goInteractPrompt.transform.position = other.GetComponent<InteractionPoint>().CustomInteraction;
+                    }
+                    goInteractPrompt.SetActive(true);
+
+                    pointLockedTo = other.GetComponent<InteractionPoint>();
                 }
             }
         }
@@ -339,6 +376,7 @@ public class PlayerController : MonoBehaviour, IPawn
                 if(other.GetComponent<InteractionPoint>())
                 {
                     goInteractPrompt.SetActive(false);
+                    pointLockedTo = null;
                 }
             }
         }

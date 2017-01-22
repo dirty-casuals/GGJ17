@@ -39,7 +39,13 @@ public static class Constants
     public const int CarriedFoodItemLayer = 8;
 
     public const string PlaceableShelfTag = "FoodShelf";
+    public const string PlaceableShelfTagFlippedDepth = "FoodShelfFlippedDepth";
     public const string ShelfHeightTag = "ShelfHeightGO";
+    public const string ShelfDepthTag = "ShelfDepthGO";
+
+    public const string ShelfLineATag = "ShelfLineA";
+    public const string ShelfLineBTag = "ShelfLineB";
+
 
     public const string CustomInteractionUIPointTag = "CustomInteractionButtonPlacement";
 
@@ -48,6 +54,8 @@ public static class Constants
     public const string CustomerTag = "Pawn";
     public const string PlayerCamPosTag = "PlayerCamPos";
     public const string PlayerCarryPos = "PlayerHandPos";
+
+    public const string FootItemTag = "FoodItem";
 
     public const string CustomerRageBarTag = "RageBar";
 
@@ -64,6 +72,7 @@ public static class Constants
     public const string UIControllerTag = "UIController";
 
     public const string PlayerInteractionPromptTag = "InteractionPrompt";
+    public const string PlayerPlacementErrorPromptTag = "PlacementErrorPrompt";
     public const string PlayerKillPromptTag = "KillPrompt";
 
     public const float IPProgressTextBlinkTime = 0.75f;
@@ -104,6 +113,9 @@ public static class Constants
 
     public const float PlayerTillIncreasePerTick = 10.0f;
     public const float PlayerTillProgressToReach = 100.0f;
+
+
+    public const float MinSpaceBetweenPlacedFoodItems = 1.0f;
     
 
     public const KeyCode upKey = KeyCode.W;
