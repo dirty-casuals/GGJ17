@@ -491,7 +491,7 @@ public class CustomerAI : MonoBehaviour, IPawn
         ShoppingItem[] items = ShoppingItem.items;
 
         int numTargets = Random.Range(2,3);
-        while( itemIds.Count < numTargets )
+        while( itemIds.Count < numTargets && itemIds.Count < items.Length )
         {
             int id = Random.Range(0, items.Length-1 );
             itemIds.Add( items[id] );
