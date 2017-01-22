@@ -9,47 +9,47 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1648158666243114}
+  m_RootGameObject: {fileID: 1062062931737026}
   m_IsPrefabParent: 1
---- !u!1 &1648158666243114
+--- !u!1 &1062062931737026
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 4886893126062614}
-  - component: {fileID: 33594861382118794}
-  - component: {fileID: 135113905596660020}
-  - component: {fileID: 23621622907414802}
-  - component: {fileID: 114537164383954452}
-  - component: {fileID: 114129932162825556}
+  - component: {fileID: 4317547884969622}
+  - component: {fileID: 33993766686141910}
+  - component: {fileID: 23697566328354612}
+  - component: {fileID: 114554228751783238}
+  - component: {fileID: 65615029545201588}
+  - component: {fileID: 114547320955885352}
   m_Layer: 0
-  m_Name: Canoworms
-  m_TagString: Untagged
+  m_Name: Bacon
+  m_TagString: FoodItem
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4886893126062614
+--- !u!4 &4317547884969622
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1648158666243114}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -13.7, y: 1.61, z: 17.43}
+  m_GameObject: {fileID: 1062062931737026}
+  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 10.31, y: 1.341, z: 18.288}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!23 &23621622907414802
+--- !u!23 &23697566328354612
 MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1648158666243114}
+  m_GameObject: {fileID: 1062062931737026}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -57,7 +57,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 3ebb53f2e5427744db7100870b286307, type: 2}
+  - {fileID: 2100000, guid: 60e0b58128f4fff44a3ee5319262dca3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -65,7 +65,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
-  m_PreserveUVs: 1
+  m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
   m_SelectedEditorRenderState: 3
@@ -75,19 +75,31 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
---- !u!33 &33594861382118794
+--- !u!33 &33993766686141910
 MeshFilter:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1648158666243114}
-  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &114129932162825556
+  m_GameObject: {fileID: 1062062931737026}
+  m_Mesh: {fileID: 4300000, guid: c61df1a58ddc54647bb6a53b8930b14e, type: 3}
+--- !u!65 &65615029545201588
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1062062931737026}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.143988, y: 0.40189508, z: 0.034531005}
+  m_Center: {x: 0, y: -0.004313507, z: 0.016178504}
+--- !u!114 &114547320955885352
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1648158666243114}
+  m_GameObject: {fileID: 1062062931737026}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 10a2b948d3fedf140bdbde00d911853a, type: 3}
@@ -95,28 +107,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   goShelfBeingPlacedOnTo: {fileID: 0}
   eInteractionType: 2
-  fInteractionRadius: 1.44
---- !u!114 &114537164383954452
+  fInteractionRadius: 0.8
+--- !u!114 &114554228751783238
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1648158666243114}
+  m_GameObject: {fileID: 1062062931737026}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ac5b0310a6a28b74bbd93f0cec30f3d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   originalPlace: {x: 0, y: 0, z: 0}
---- !u!135 &135113905596660020
-SphereCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1648158666243114}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}

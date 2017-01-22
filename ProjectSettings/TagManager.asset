@@ -23,6 +23,12 @@ TagManager:
   - PlayerKillArea
   - KillPrompt
   - CustomInteractionButtonPlacement
+  - FoodShelfFlippedDepth
+  - FoodItem
+  - PlacementErrorPrompt
+  - ShelfDepthGO
+  - ShelfLineA
+  - ShelfLineB
   layers:
   - Default
   - TransparentFX
