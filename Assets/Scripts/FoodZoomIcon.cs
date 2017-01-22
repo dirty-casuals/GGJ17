@@ -81,7 +81,7 @@ public class FoodZoomIcon : MonoBehaviour {
         {
             fOutOfStockTimer += Time.deltaTime;
 
-            if(fOutOfStockTimer > 0.2f)
+            if(fOutOfStockTimer > 0.5f)
             {
                 fOutOfStockTimer = 0;
 
