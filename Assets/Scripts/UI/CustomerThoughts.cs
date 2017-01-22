@@ -9,9 +9,12 @@ public class CustomerThoughts : MonoBehaviour
     [SerializeField]
     private GameObject angryFace;
     [SerializeField]
+    private GameObject deadFace;
+    [SerializeField]
+    private GameObject scaredFace;
+    [SerializeField]
     private SpriteRenderer[] foodItems;
     private const float rageThreshold = 70.0f;
-    private int currentItem = 0;
 
     private void Start()
     {
@@ -56,8 +59,16 @@ public class CustomerThoughts : MonoBehaviour
 
     private void UpdateThoughtState()
     {
+        if(aiHandle.isDead)
+        {
+            DisplayDead();
+            return;
+        }
         switch(aiHandle.currentState)
         {
+            case StateNames.Alerted:
+                DisplayAlerted();
+                break;
             case StateNames.TakeItem:
                 CollectItem();
                 break;
@@ -82,9 +93,40 @@ public class CustomerThoughts : MonoBehaviour
         }
     }
 
+    private void DisplayDead()
+    {
+        SetCustomerMood(deadFace);
+        angryFace.SetActive(false);
+        scaredFace.SetActive(false);
+    }
+
+    private void DisplayAlerted()
+    {
+        SetCustomerMood(scaredFace);
+        angryFace.SetActive(false);
+    }
+
     private void DisplayUnhappiness()
     {
+        SetCustomerMood(angryFace);
+    }
+
+    private void SetCustomerMood(GameObject mood)
+    {
+        if(mood.activeInHierarchy)
+        {
+            return;
+        }
+        HideAllItems();
         thoughtBubble.SetActive(true);
-        angryFace.SetActive(true);
+        mood.SetActive(true);
+    }
+
+    private void HideAllItems()
+    {
+        for(int i = 0; i < foodItems.Length; i++)
+        {
+            foodItems[i].gameObject.SetActive(false);
+        }
     }
 }
