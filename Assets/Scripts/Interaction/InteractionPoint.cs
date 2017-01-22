@@ -121,7 +121,6 @@ public class InteractionPoint : MonoBehaviour
             //Is a player near me?
             if (other.tag == Constants.PlayerTag)
             {
-                Debug.Log("PlayerTag");
                 PlayerController controllerHandle = other.GetComponent<PlayerController>();
                 if(controllerHandle && controllerHandle.IsAbleToInteract() && controllerHandle.InteractionLockedTo == this)
                 {
@@ -166,6 +165,10 @@ public class InteractionPoint : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
     }
 
     private void OnTriggerExit(Collider other)
@@ -299,6 +302,11 @@ public class InteractionPoint : MonoBehaviour
         Vector3 vNewPos = this.transform.position;
         float fCustomDepthPos = 0;
         bool bHasCustomDepth = false;
+
+        bool bFacingLeft = (goShelfBeingPlacedOnTo.GetComponent<PropFacingLeft>());
+        bool bFacingRight = (goShelfBeingPlacedOnTo.GetComponent<PropFacingRight>());
+
+        bool bTighterBounds = (goShelfBeingPlacedOnTo.GetComponent<TighterPlacementBounds>());
         
 
         //Height
@@ -312,7 +320,11 @@ public class InteractionPoint : MonoBehaviour
             if(child.tag == Constants.ShelfDepthTag)
             {
                 bHasCustomDepth = true;
-                fCustomDepthPos = child.gameObject.transform.position.z;
+
+                if(bFacingLeft || bFacingRight)
+                    fCustomDepthPos = child.gameObject.transform.position.x;
+                else
+                    fCustomDepthPos = child.gameObject.transform.position.z;
             }
         }
 
@@ -320,33 +332,70 @@ public class InteractionPoint : MonoBehaviour
         Vector3 shelfScale = goShelfBeingPlacedOnTo.GetComponent<BoxCollider>().size;
 
         //bShelfToPlaceDepthFlipped
-        float shelfDepth = (bShelfToPlaceDepthFlipped ? shelfScale.y : shelfScale.z);
+        float shelfDepth = (bFacingLeft || bFacingRight ? shelfScale.x : shelfScale.z);
 
-        //top side of shelf
-        if(!bHasCustomDepth)
+        //shelf depth positioning
+        if(bFacingLeft || bFacingRight)
         {
-            if(vNewPos.z > shelfPos.z + (shelfDepth * 0.4f))
+            if(!bHasCustomDepth)
             {
-                vNewPos.z = shelfPos.z + shelfDepth * 0.35f;
+                if(vNewPos.x < shelfPos.x - (shelfDepth * (bTighterBounds ? 0.365f : 0.5f)))
+                {
+                    vNewPos.x = shelfPos.x + shelfDepth * (bTighterBounds ? -0.01f : 0.125f);
+                }
+                else if(vNewPos.x > shelfPos.x + (shelfDepth * (bTighterBounds ? 0.365f : 0.5f)))
+                {
+                    vNewPos.x = shelfPos.x - shelfDepth * (bTighterBounds ? -0.01f : 0.125f);
+                }
             }
-            else if(vNewPos.z < shelfPos.z - (shelfDepth * 0.4f))
+            else
             {
-                vNewPos.z = shelfPos.z - shelfDepth * 0.35f;
+                vNewPos.x = fCustomDepthPos;
             }
         }
         else
         {
-            vNewPos.z = fCustomDepthPos;
+            //top side of shelf
+            if(!bHasCustomDepth)
+            {
+                if(vNewPos.z > shelfPos.z + (shelfDepth * (bTighterBounds ? 0.35f : 0.5f)))
+                {
+                    vNewPos.z = shelfPos.z + shelfDepth * (bTighterBounds ? 0.35f : 0.5f);
+                }
+                else if(vNewPos.z < shelfPos.z - (shelfDepth * (bTighterBounds ? 0.35f : 0.5f)))
+                {
+                    vNewPos.z = shelfPos.z - shelfDepth * (bTighterBounds ? 0.35f : 0.5f);
+                }
+            }
+            else
+            {
+                vNewPos.z = fCustomDepthPos;
+            }
         }
-
-        //make sure the thing is on the shelf - more to the right
-        if(vNewPos.x > shelfPos.x + (shelfScale.x * 0.4f))
+        
+        //shelf width positioning
+        if(bFacingLeft || bFacingRight)
         {
-            vNewPos.x = (shelfPos.x + (shelfScale.x * 0.4f));
+            if(vNewPos.z > shelfPos.z + (shelfScale.z * (bTighterBounds ? 0.35f : 0.5f)))
+            {
+                vNewPos.z = (shelfPos.z + (shelfScale.z * (bTighterBounds ? 0.35f : 0.5f)));
+            }
+            else if(vNewPos.z < shelfPos.z - (shelfScale.z * (bTighterBounds ? 0.35f : 0.5f)))
+            {
+                vNewPos.z = (shelfPos.z - (shelfScale.z * (bTighterBounds ? 0.35f : 0.5f)));
+            }
         }
-        else if(vNewPos.x < shelfPos.x - (shelfScale.x * 0.4f))
+        else
         {
-            vNewPos.x = (shelfPos.x - (shelfScale.x * 0.4f));
+            //make sure the thing is on the shelf - more to the right
+            if(vNewPos.x > shelfPos.x + (shelfScale.x * (bTighterBounds ? 0.35f : 0.5f)))
+            {
+                vNewPos.x = (shelfPos.x + (shelfScale.x * (bTighterBounds ? 0.35f : 0.5f)));
+            }
+            else if(vNewPos.x < shelfPos.x - (shelfScale.x * (bTighterBounds ? 0.35f : 0.5f)))
+            {
+                vNewPos.x = (shelfPos.x - (shelfScale.x * (bTighterBounds ? 0.35f : 0.5f)));
+            }
         }
 
         return vNewPos;

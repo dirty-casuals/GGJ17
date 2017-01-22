@@ -29,6 +29,7 @@ TagManager:
   - ShelfDepthGO
   - ShelfLineA
   - ShelfLineB
+  - PlacementExclusionZones
   layers:
   - Default
   - TransparentFX
@@ -44,7 +45,7 @@ TagManager:
   - KillArea
   - Tills
   - Customer
-  - 
+  - InvisiblePlayerCollision
   - 
   - 
   - 

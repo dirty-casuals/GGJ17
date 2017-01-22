@@ -75,6 +75,8 @@ public static class Constants
     public const string PlayerPlacementErrorPromptTag = "PlacementErrorPrompt";
     public const string PlayerKillPromptTag = "KillPrompt";
 
+    public const string PlayerPlacementExclusionZoneTag = "PlacementExclusionZones";
+
     public const float IPProgressTextBlinkTime = 0.75f;
 
 
@@ -89,7 +91,7 @@ public static class Constants
 
 
     public const float PlayerCameraOffsetY = 10.0f;
-    public const float PlayerCameraOffsetZ = -3.5f;
+    public const float PlayerCameraOffsetZ = -2.5f;
 
     public const float PlayerCameraZoomOutOffsetY = 30.0f;
 

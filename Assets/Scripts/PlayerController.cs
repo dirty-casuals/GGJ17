@@ -37,6 +37,7 @@ public class PlayerController : MonoBehaviour, IPawn
     private float fRageTimer = 0.0f;
 
     private bool isMoving = false;
+    private bool bInPlacementExclusionZone = false;
 
     public float speed
     {
@@ -199,7 +200,7 @@ public class PlayerController : MonoBehaviour, IPawn
         {
             if( QueryPlayerInput( Constants.InputType.PIT_INTERACT, true ) )
             {
-                if(currentInteractionScript.CanBePlaced())
+                if(currentInteractionScript.CanBePlaced() && !bInPlacementExclusionZone)
                 {
                     ProcessPutItemOnShelf();
                 }
@@ -382,8 +383,21 @@ public class PlayerController : MonoBehaviour, IPawn
         }
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == Constants.PlayerPlacementExclusionZoneTag)
+        {
+            bInPlacementExclusionZone = true;
+        }
+    }
+
     void OnTriggerExit(Collider other)
     {
+        if(other.tag == Constants.PlayerPlacementExclusionZoneTag)
+        {
+            bInPlacementExclusionZone = false;
+        }
+
         if(goInteractPrompt.activeSelf)
         {
             //If we're in an interaction point

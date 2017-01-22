@@ -6,7 +6,7 @@ public class CustomerSpawner : MonoBehaviour
 {
     public GameObject customerPrefab;    
     public DifficultyParams difficultyParams;
-    int currentWave;
+    int currentWave = 0;
 
     void Start()
     {
@@ -46,6 +46,7 @@ public class CustomerSpawner : MonoBehaviour
                 float variation = Variation( spawnSpeedVariation );                
                 yield return new WaitForSeconds( 1 / (spawnSpeed + variation) );
             }
+
 
             yield return new WaitForSeconds( timeBetweenWaves );
         }
