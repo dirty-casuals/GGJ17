@@ -11,10 +11,36 @@ public class CustomerThoughts : MonoBehaviour
     [SerializeField]
     private SpriteRenderer[] foodItems;
     private const float rageThreshold = 70.0f;
+    private int currentItem = 0;
 
     private void Start()
     {
         SetupItemThoughts();
+    }
+
+    private void Update()
+    {
+        if(aiHandle == null)
+        {
+            return;
+        }
+        UpdateThoughtState();
+    }
+
+    private void OnTriggerStay(Collider col)
+    {
+        if(aiHandle.currentState == StateNames.GotoItem)
+        {
+            thoughtBubble.SetActive(false);
+        }
+    }
+
+    private void OnTriggerExit(Collider col)
+    {
+        if(aiHandle.currentState == StateNames.GotoItem)
+        {
+            thoughtBubble.SetActive(true);
+        }
     }
 
     private void SetupItemThoughts()
@@ -28,34 +54,37 @@ public class CustomerThoughts : MonoBehaviour
         }
     }
 
-    private void Update()
+    private void UpdateThoughtState()
     {
-        if(aiHandle == null)
+        switch(aiHandle.currentState)
         {
-            return;
+            case StateNames.TakeItem:
+                CollectItem();
+                break;
+            case StateNames.WaitInQueue:
+                if(aiHandle.Rage > rageThreshold)
+                {
+                    DisplayUnhappiness();
+                }
+                break;
         }
-        DisplayUnhappiness();
     }
 
-    private void OnTriggerStay(Collider col)
+    private void CollectItem()
     {
-        thoughtBubble.SetActive(false);
-    }
+        int index = aiHandle.CurrentItemIdx;
+        int itemList = aiHandle.targetItems.Length - 1;
+        foodItems[index].gameObject.SetActive(false);
 
-    private void OnTriggerExit(Collider col)
-    {
-        thoughtBubble.SetActive(true);
+        if(index == itemList)
+        {
+            thoughtBubble.SetActive(false);
+        }
     }
 
     private void DisplayUnhappiness()
     {
-        if(aiHandle.Rage > rageThreshold && !angryFace.activeSelf)
-        {
-            angryFace.SetActive(true);
-            for(int i = 0; i < foodItems.Length; i++)
-            {
-                foodItems[i].gameObject.SetActive(false);
-            }
-        }
+        thoughtBubble.SetActive(true);
+        angryFace.SetActive(true);
     }
 }

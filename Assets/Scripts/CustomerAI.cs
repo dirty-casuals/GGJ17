@@ -327,6 +327,8 @@ public class CustomerAI : MonoBehaviour, IPawn
         get { return stateHandler.currentState; }
     }
 
+    public int CurrentItemIdx { get { return currentItemIdx; } }
+    
     public ShoppingItem currentItem
     {
         get
