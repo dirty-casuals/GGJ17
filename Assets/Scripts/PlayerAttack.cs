@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerAttack : MonoBehaviour {
 
     public static int iCountKilled = 0;
+    public float attackCooldown = 0;
 
     private PlayerController controllerHandle;
     private GameObject killPromptGameObject;
@@ -34,7 +35,10 @@ public class PlayerAttack : MonoBehaviour {
 	
 	void Update ()
     {
-		
+		if( attackCooldown>0 )
+        {
+            attackCooldown -= Time.deltaTime;
+        }
 	}
 
     void OnTriggerStay(Collider other)
@@ -76,10 +80,11 @@ public class PlayerAttack : MonoBehaviour {
                 }
 
                 //in attacked, reset and kill the target
-                if(controllerHandle.QueryPlayerInput(Constants.InputType.PIT_ATTACK))
+                if(controllerHandle.QueryPlayerInput(Constants.InputType.PIT_ATTACK) && attackCooldown <= 0)
                 {
+                    attackCooldown = Constants.AttackCooldown;
                     controllerHandle.OnHit();
-                    tempAiHandle.Die( true );
+                    tempAiHandle.Die(true);
                     iCountKilled++;
 
                     controllerHandle.Rage_KilledCustomer();
