@@ -349,6 +349,7 @@ public class LeaveStoreAIState : CustomerAIState
             if( customer.isPanicked )
             {
                 Constants.bGameOver = true;
+                Constants.sFailReason = "Customer saw a murder and escaped!";
             }
 
             customer.Destroy();

@@ -70,15 +70,15 @@ public class GameController : MonoBehaviour
     
 	void Update ()
     {
-        if(Input.GetKeyDown(KeyCode.Z)) //take this out
-            Constants.bGameOver = true;
+        //if(Input.GetKeyDown(KeyCode.Z)) //take this out
+         //   Constants.bGameOver = true;
 
         if(Constants.bGameOver)
         {
-            if(Input.GetKeyDown(KeyCode.Space))
-            {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-            }
+           // if(Input.GetKeyDown(KeyCode.Space))
+           // {
+           //     SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+           // }
         }
         else
         {
@@ -102,7 +102,7 @@ public class GameController : MonoBehaviour
             //Use the scaling one so it's linked to the UI display
             if(fCurrentRageForScaling >= Constants.AvgQueueRageForGameFail)
             {
-                Debug.Log("bGameOver = true!! QueueRage over the game fail threshold.");
+                Constants.sFailReason = "Too much customer rage in the queue!";
                 Constants.bGameOver = true;
             }
         }
