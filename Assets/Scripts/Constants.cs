@@ -82,6 +82,7 @@ public static class Constants
 
     public const string PlayerInteractionPromptTag = "InteractionPrompt";
     public const string PlayerPlacementErrorPromptTag = "PlacementErrorPrompt";
+    public const string PlayerPlacementCorrectPromptTag = "PlacementCorrectPrompt";
     public const string PlayerKillPromptTag = "KillPrompt";
 
     public const string PlayerPlacementExclusionZoneTag = "PlacementExclusionZones";
@@ -89,6 +90,9 @@ public static class Constants
     public const string TillTag = "Checkout";
 
     public const float IPProgressTextBlinkTime = 0.75f;
+
+    public const int ShopItemStartingAmount = 1;
+    public const int ShopItemResupplyAmount = 2;
 
 
     public const int PlayerSpeedX = 9;

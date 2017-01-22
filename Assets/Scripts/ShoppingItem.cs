@@ -15,8 +15,8 @@ public class ShoppingItem : MonoBehaviour
     public Sprite shoppingItemSprite;
 
     private TextMesh TextGameObject;
-    private int iQuantity = 3;
-    private int iOldQuantity = 3;
+    private int iQuantity = Constants.ShopItemStartingAmount;
+    private int iOldQuantity = 3; //make this 3 so it will update the text
     public int Quantity
     {
         get {
