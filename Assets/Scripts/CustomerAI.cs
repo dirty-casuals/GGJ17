@@ -343,11 +343,13 @@ public class CustomerAI : MonoBehaviour, IPawn
     {
         HashSet<ShoppingItem> itemIds = new HashSet<ShoppingItem>();
 
+        ShoppingItem[] items = ShoppingItem.items;
+
         int numTargets = 1;//Random.Range(2,3);
-        while( itemIds.Count <= numTargets )
+        while( itemIds.Count < numTargets )
         {
-            int id = Random.Range(0, ShoppingItem.items.Length-1 );
-            itemIds.Add( ShoppingItem.items[id] );
+            int id = Random.Range(0, items.Length-1 );
+            itemIds.Add( items[id] );
         }
 
         targetItems = new ShoppingItem[itemIds.Count];
