@@ -220,6 +220,14 @@ public class LeaveStoreAIState : CustomerAIState
     {
         customer.GoToGate();
     }
+
+    public override void Update()
+    {
+        if( customer.AtGate() )
+        {
+            customer.LeaveBuilding();
+        }
+    }
 }
 
 
@@ -294,10 +302,14 @@ public class CustomerAI : MonoBehaviour, IPawn
     public event System.Action onLeaveItem;
     public event System.Action onItemSwipe;
 
+    private GameObject gate;
+
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         SetupStates();
+
+        gate = GameObject.FindWithTag( "Gate" );
     }
 
     private void FixedUpdate()
@@ -458,9 +470,18 @@ public class CustomerAI : MonoBehaviour, IPawn
     }
 
     public void GoToGate()
-    {
-        GameObject gate = GameObject.FindWithTag( "Gate" );
+    {       
         agent.SetDestination( gate.transform.position );
+    }
+
+    public bool AtGate()
+    {
+        return Vector3.Distance( transform.position, gate.transform.position ) <= 2;
+    }
+
+    public void LeaveBuilding()
+    {
+        Destroy( gameObject );
     }
 
     public void Die()
@@ -474,4 +495,14 @@ public class CustomerAI : MonoBehaviour, IPawn
             queue.ReleaseCustomer( this );
         }
     }
+
+    public void Leave()
+    {
+        if( queue != null && queue.Contains( this ) )
+        {
+            queue.ReleaseCustomer( this );
+        }
+    }
+
+    
 }
