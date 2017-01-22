@@ -37,11 +37,6 @@ public class ShoppingItem : MonoBehaviour
         return (IsOnShelf() && Quantity >= 1);
     }
 
-    void Awake()
-    {
-        originalPlace = transform.position;
-    }
-
     void Start()
     {
         foreach( Transform child in transform )
@@ -51,6 +46,8 @@ public class ShoppingItem : MonoBehaviour
                 TextGameObject = child.GetComponent<TextMesh>();
                 break;
             }
+
+            originalPlace = transform.position;
         }
 
         if(!TextGameObject)
