@@ -226,6 +226,7 @@ GameObject:
   - component: {fileID: 4014579535440944}
   - component: {fileID: 114740321825168650}
   - component: {fileID: 65516006000098596}
+  - component: {fileID: 114465445902823990}
   m_Layer: 0
   m_Name: Thoughts
   m_TagString: Untagged
@@ -1052,6 +1053,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b2472336435b8d74c8c492595864c55a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114465445902823990
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1334822488338950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f710cf9319f2a54d9a767097a33d582, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &114518320831918858

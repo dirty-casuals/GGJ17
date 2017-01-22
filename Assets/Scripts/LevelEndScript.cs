@@ -23,6 +23,8 @@ public class LevelEndScript : MonoBehaviour
             {
                 if(child.tag == Constants.EndScoreUITag)
                 {
+                    GameObject.FindGameObjectWithTag(Constants.PlayerTag).GetComponent<PlayerController>().fPlayerScore *= Mathf.Max(1, PlayerAttack.iCountKilled / 2);
+
                     child.GetComponent<Text>().text = "sCORE: " + GameObject.FindGameObjectWithTag(Constants.PlayerTag).GetComponent<PlayerController>().fPlayerScore;
                 }
 

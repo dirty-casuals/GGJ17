@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour {
 
+    public static int iCountKilled = 0;
+
     private PlayerController controllerHandle;
     private GameObject killPromptGameObject;
     private GameObject currentKillTargetHandle;
@@ -77,6 +79,7 @@ public class PlayerAttack : MonoBehaviour {
                 if(controllerHandle.QueryPlayerInput(Constants.InputType.PIT_ATTACK))
                 {
                     tempAiHandle.Die( true );
+                    iCountKilled++;
 
                     controllerHandle.Rage_KilledCustomer();
 
