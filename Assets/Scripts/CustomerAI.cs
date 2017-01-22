@@ -227,8 +227,8 @@ public class CustomerAI : MonoBehaviour, IPawn
 {
     public bool isDead { get; private set; }
 
-    const int SIGHT_RADIUS = 1;
-    const int DISTANCE_FROM_DESTINATION = 2;
+    const float SIGHT_RADIUS = 3;
+    const float DISTANCE_FROM_DESTINATION = 1.5f;
     StateHandler stateHandler;
     NavMeshAgent agent;
 
@@ -352,7 +352,7 @@ public class CustomerAI : MonoBehaviour, IPawn
         Vector3 searchPosition = itemExtectedLocation;
         charPosition.y = 0;
         searchPosition.y = 0;
-        return Vector3.Distance( charPosition, searchPosition ) < SIGHT_RADIUS;
+        return Vector3.Distance( charPosition, searchPosition ) < DISTANCE_FROM_DESTINATION;
     }
 
     public bool SeesItem()
