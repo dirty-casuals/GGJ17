@@ -42,9 +42,9 @@ public class CustomerSpawner : MonoBehaviour
 
             for( int i = 0; i < waveSize; i++ )
             {
-                SpawnCustomer();
-                float variation = Variation( spawnSpeedVariation );                
+                float variation = Variation( spawnSpeedVariation );
                 yield return new WaitForSeconds( 1 / (spawnSpeed + variation) );
+                SpawnCustomer();                                  
             }
 
 

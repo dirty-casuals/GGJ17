@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ShoppingItem : MonoBehaviour
 {
-    public static ShoppingItem[] items;
+    public static ShoppingItem[] items { get { return FindObjectsOfType<ShoppingItem>(); } }
 
     public Vector3 originalPlace;
 
@@ -28,11 +28,6 @@ public class ShoppingItem : MonoBehaviour
     void Awake()
     {
         originalPlace = transform.position;
-
-        if( items == null || items.Length == 0 || items[0] == null )
-        {
-            items = FindObjectsOfType<ShoppingItem>();
-        }
     }
 
     void Start()
