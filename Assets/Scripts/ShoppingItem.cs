@@ -12,6 +12,18 @@ public class ShoppingItem : MonoBehaviour
 
     public Vector3 position { get { return transform.position; } }
 
+    private int iQuantity;
+    private int iOldQuantity;
+    public int Quantity
+    {
+        get {
+            return iQuantity;
+        }
+        set {
+            iQuantity = value;
+        }
+    }
+
     void Awake()
     {
         originalPlace = transform.position;
@@ -20,5 +32,10 @@ public class ShoppingItem : MonoBehaviour
         {
             items = FindObjectsOfType<ShoppingItem>();
         }
+    }
+
+    void Update()
+    {
+
     }
 }

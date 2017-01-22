@@ -102,6 +102,8 @@ public static class Constants
     public const float MaxCustomerWaitTime = 30.0f;
 
 
+    public const float ZoomIconFadeInTime = 1.0f;
+
     public const float PlayerStartingRage = 15.0f;
     public const float PlayerRageIncreasePerTick = 0.5f;
     public const float PlayerRageIncreaseProcessedItems = 7.5f;
