@@ -2,5 +2,5 @@
 {
     public const string MainMenuScene = "MainMenu";
     public const string LoadingScene = "Loading";
-    public const string GameScene = "Game";
+    public const string LevelOneScene = "Level_1";
 }

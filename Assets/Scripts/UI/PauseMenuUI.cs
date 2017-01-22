@@ -30,7 +30,7 @@ public class PauseMenuUI : MonoBehaviour
     public void RestartGame()
     {
         UnPauseGame();
-        SceneLoadManagement.Instance.LoadNewSceneImmediate(SceneNames.GameScene);
+        SceneLoadManagement.Instance.LoadNewSceneImmediate(SceneNames.LevelOneScene);
     }
 
     private void PauseGame()
