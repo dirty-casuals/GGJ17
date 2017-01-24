@@ -124,7 +124,7 @@ public static class Constants
     public const float ZoomInBubbleBlowUpAmount = 4.0f;
 
     public const float PlayerStartingRage = 15.0f;
-    public const float PlayerRageIncreasePerTick = 0.5f;
+    public const float PlayerRageIncreasePerTick = 0.1f;
     public const float PlayerRageIncreaseProcessedItems = 5.5f;
     public const float PlayerRageDecreaseKilledCustomer = 11.5f;
 
