@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Name: NormalGame
   m_EditorClassIdentifier: 
   numberOfWaves: 10
-  gameMode: 0
+  minCustomerCount: 2
+  gameMode: 1
   timeBetweenWaves:
     serializedVersion: 2
     m_Curve:
